@@ -1,0 +1,28 @@
+# genel
+.DS_Store
+Thumbs.db
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# ortam dosyaları
+.env
+.env.*.local
+frontend/.env
+backend/.env
+
+# derleme çıktıları
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# upload/cache
+uploads/
+backend/uploads/
+frontend/uploads/
+
+# IDE
+.vscode/
+.idea/

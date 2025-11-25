@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="tr" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=overlays-content"
+    />
+
+    <!-- Base: tüm göreli yolları köke sabitler -->
+    <base href="/" />
+
+    <title>E-Doğrula | İşletme Doğrulama ve Güvenlik</title>
+
+    <!-- Canonical & Robots -->
+    <link rel="canonical" href="https://edogrula.org/" />
+    <meta
+      name="robots"
+      content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"
+    />
+
+    <!-- SEO -->
+    <meta
+      name="description"
+      content="E-Doğrula ile işletmelerin güvenilirliğini kolayca kontrol edin. Doğrulanmış işletmeler güvenli alışverişin adresidir."
+    />
+    <meta
+      name="keywords"
+      content="e-doğrula, işletme doğrulama, güvenilir işletmeler, instagram doğrulama, dolandırıcılık ihbarı, edogrula"
+    />
+    <meta name="author" content="E-Doğrula" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edogrula.org/" />
+    <meta property="og:title" content="E-Doğrula | İşletme Doğrulama ve Güvenlik" />
+    <meta
+      property="og:description"
+      content="İşletmelerin güvenilirliğini E-Doğrula ile kontrol edin. Doğrulanmış işletmeler güvenli alışverişin adresidir."
+    />
+    <!-- Mutlak URL kullan (crawler'lar için kritik) -->
+    <meta property="og:image" content="https://edogrula.org/og-image.png" />
+    <meta property="og:image:alt" content="E-Doğrula tanıtım görseli" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="E-Doğrula" />
+    <meta property="og:locale" content="tr_TR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="E-Doğrula | İşletme Doğrulama ve Güvenlik" />
+    <meta
+      name="twitter:description"
+      content="İşletmelerin güvenilirliğini E-Doğrula ile kontrol edin. Dolandırıcılık ihbarı yapın ve güvenli alışveriş yapın."
+    />
+    <meta name="twitter:image" content="https://edogrula.org/og-image.png" />
+
+    <!-- PWA / Icons -->
+    <link rel="manifest" href="/manifest.json?v=2" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="EDogrula" />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="msapplication-TileColor" content="#111827" />
+
+    <!-- Performance -->
+    <!-- API'ye erken handshake -->
+    <link rel="preconnect" href="https://api.edogrula.org" />
+    <link rel="dns-prefetch" href="//api.edogrula.org" />
+
+    <!-- Fonts (Google görünümü için Roboto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome: Pro varsa Kit yüklenir, yoksa Free CSS fallback -->
+    <!-- (Pro kullanacaksan KİT_ID'ni aşağıya yaz) -->
+    <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin />
+    <link rel="preconnect" href="https://ka-f.fontawesome.com" crossorigin />
+    <script>
+      (function () {
+        // FA Pro kullanıyorsan buraya kit ID gir: örn: "abcd1234ef56"
+        const KIT_ID = ""; // boş bırakılırsa fallback kullanılacak
+        if (KIT_ID) {
+          const s = document.createElement("script");
+          s.defer = true;
+          s.crossOrigin = "anonymous";
+          s.src = "https://kit.fontawesome.com/" + KIT_ID + ".js";
+          document.head.appendChild(s);
+          document.documentElement.classList.add("fa-pro-intended");
+        }
+      })();
+    </script>
+    <!-- Free (fallback) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      referrerpolicy="no-referrer"
+    />
+    <script>
+      // Pro kit yoksa .fa-light sınıfını .fa-regular'a çevir (ikonlar görünür olsun)
+      document.addEventListener("DOMContentLoaded", function () {
+        const wantsPro = document.documentElement.classList.contains("fa-pro-intended");
+        const kitLoaded = document.documentElement.classList.contains("fa-kit-loaded");
+        if (wantsPro && !kitLoaded) {
+          document.querySelectorAll(".fa-light").forEach((el) => {
+            el.classList.remove("fa-light");
+            el.classList.add("fa-regular");
+          });
+        }
+      });
+    </script>
+
+    <!-- Base CSS -->
+    <style>
+      :root { color-scheme: light dark; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        background: #f9f9f9;
+        font-family: Roboto, Arial, sans-serif; /* Google font */
+        color: #1f2d3d;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { background: #0b1220; color: #e5e7eb; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      #root { min-height: 100%; display: flex; flex-direction: column; }
+      /* iOS notch güvenli alanları */
+      body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+    </style>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "E-Doğrula",
+        "url": "https://edogrula.org/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://edogrula.org/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <noscript>Bu uygulamayı kullanmak için JavaScript etkin olmalıdır.</noscript>
+    <div id="root"></div>
+
+    <!-- Vite entry -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

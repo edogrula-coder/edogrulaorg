@@ -1,0 +1,463 @@
+/* frontend/src/index.css — Ultra Pro Global Styles (v2)
+   Not: Mevcut class isimleri korunur, üstüne güçlendirme yapılır.
+*/
+
+/* ==========================================================================
+   1. TASARIM SİSTEMİ / CSS DEĞİŞKENLERİ
+   ========================================================================== */
+:root {
+  /* Colors */
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-color: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+
+  --brand-blue: #2563eb;
+  --brand-blue-hover: #1d4ed8;
+  --brand-blue-soft: #eff6ff;
+
+  --verified-green: #16a34a;
+  --verified-green-soft: #ecfdf3;
+
+  --warning-red: #dc2626;
+  --warning-red-hover: #b91c1c;
+  --warning-red-soft: #fef2f2;
+
+  --star-yellow: #f59e0b;
+  --star-yellow-soft: #fffbeb;
+
+  /* Layout */
+  --header-height: 65px;
+
+  /* Radius */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+
+  /* Shadow */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  /* Typography */
+  --font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Helvetica, Arial, sans-serif;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 17px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+  --lh: 1.6;
+
+  /* Motion */
+  --t-fast: 120ms;
+  --t-base: 180ms;
+  --ease: cubic-bezier(.2,.8,.2,1);
+}
+
+/* Dark theme (documentElement.dataset.theme = "dark") */
+:root[data-theme="dark"] {
+  --bg-color: #0b1220;
+  --card-bg: #0f172a;
+  --text-color: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-color: #243244;
+
+  --brand-blue: #60a5fa;
+  --brand-blue-hover: #3b82f6;
+  --brand-blue-soft: #0b1b33;
+
+  --verified-green: #22c55e;
+  --verified-green-soft: #052e1a;
+
+  --warning-red: #f87171;
+  --warning-red-hover: #ef4444;
+  --warning-red-soft: #2b0a0a;
+
+  --star-yellow: #fbbf24;
+  --star-yellow-soft: #2a1d05;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.35);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.45);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.55);
+}
+
+/* ==========================================================================
+   2. MODERN RESET / TEMEL ELEMENT AYARLARI
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--lh);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 2px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: var(--space-5) 0;
+}
+
+/* Reduced motion saygısı */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   3. GENEL YARDIMCI SINIFLAR / GLOBAL KOMPONENTLER
+   ========================================================================== */
+
+/* Container: sayfa genel sarmal */
+.container {
+  width: min(1140px, 94vw);
+  margin-inline: auto;
+  padding-top: clamp(16px, 2.2vw, 28px);
+  padding-bottom: clamp(48px, 6vw, 80px);
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-lg);
+  padding: clamp(14px, 2vw, 20px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chip / Badge helper */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--brand-blue-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+/* Text helpers */
+.text-muted { color: var(--text-muted); }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Layout helpers */
+.flex { display: flex; }
+.grid { display: grid; }
+.gap-1 { gap: var(--space-2); }
+.gap-2 { gap: var(--space-3); }
+.gap-3 { gap: var(--space-4); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 10px 18px;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  user-select: none;
+
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-base) var(--ease),
+    background var(--t-base) var(--ease),
+    border-color var(--t-base) var(--ease),
+    opacity var(--t-base) var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn[disabled],
+.btn.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: var(--brand-blue);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--brand-blue-hover);
+}
+
+.btn-danger {
+  background-color: var(--warning-red);
+  color: white;
+}
+.btn-danger:hover {
+  background-color: var(--warning-red-hover);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-color);
+}
+.btn-outline:hover {
+  border-color: color-mix(in srgb, var(--border-color) 70%, var(--text-color));
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--card-bg);
+  transition: border-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease);
+}
+.input:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-blue) 20%, transparent);
+  outline: none;
+}
+
+/* Tables general */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+th {
+  text-align: left;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-weight: 900;
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   4. MOBİL UYUM (BREAKPOINTS)
+   ========================================================================== */
+
+/* -------------------- TABLET (992px ve altı) -------------------- */
+@media (max-width: 992px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-sidebar {
+    position: static;
+    margin-top: var(--space-6);
+  }
+
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* -------------------- TELEFON (768px ve altı) -------------------- */
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.5rem; }
+
+  .container {
+    padding-top: 1rem;
+    padding-bottom: 4rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  /* Search.jsx */
+  .search-page-logo { max-width: 80vw; }
+  .search-bar-wrapper {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 24px;
+  }
+  .search-input {
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+  }
+  .search-page-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* SapancaBungalov.jsx */
+  .sponsored-card { flex: 0 0 180px; }
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* BlacklistProfile.jsx */
+  .profile-header .business-name { font-size: 1.8rem; }
+  .stats-box {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Dashboard.jsx (Admin) */
+  .dashboard-header, .dashboard-tabs {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* -------------------- KÜÇÜK TELEFON (480px ve altı) -------------------- */
+@media (max-width: 480px) {
+  .btn { width: 100%; }
+  th, td { padding: 8px 10px; }
+}
+
+/* ==========================================================================
+   5. KÜÇÜK DOKUNUŞLAR (SCROLLBAR, SELECTION, ETC.)
+   ========================================================================== */
+
+::selection {
+  background: color-mix(in srgb, var(--brand-blue) 25%, transparent);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--border-color) 70%, transparent);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Admin geniş tablolar sağdan kırpılmasın */
+.admin-table-wrapper{
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+}
+
+/* Tablo genişleyince taşsın ve scroll çıksın */
+.admin-table{
+  width: 100%;
+  min-width: 1250px;  /* sağdaki butonlar için alan açıyor */
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Sağ kolonu her zaman görünür tut */
+.sticky-right{
+  position: sticky;
+  right: 0;
+  background: var(--card-bg, #fff);
+  z-index: 3;
+  box-shadow: -8px 0 12px rgba(0,0,0,.04);
+  border-left: 1px solid var(--border-color, #e2e8f0);
+}

@@ -1,0 +1,19 @@
+﻿{
+  "success": true,
+  "message": "Giriş başarılı",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
+  "tokenType": "Bearer",
+  "expiresIn": 604800,
+  "issuedAt": "2025-11-21T13:35:10.123Z",
+  "user": {
+    "id": "68e1330a4987ea47d6c0131e",
+    "email": "admin@edogrula.org",
+    "role": "admin",
+    "name": "Admin",
+    "isAdmin": true
+  },
+  "next": {
+    "redirect": "/dashboard",
+    "redirectAfterMs": 0
+  }
+}

@@ -1,0 +1,56 @@
+# ================== GENEL ==================
+.DS_Store
+Thumbs.db
+
+# ================== NODE ===================
+node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Lock dosyaları (npm kullanıyorsan package-lock.json'ı commit edebilirsin)
+yarn.lock
+pnpm-lock.yaml
+
+# =============== ORTAM (.env) ===============
+.env
+.env.*.local
+
+# frontend & backend tüm .env* dosyalarını gizle (dev/prod dâhil)
+frontend/.env*
+backend/.env*
+
+# .env örneklerini takipte tut
+!.env.example
+!frontend/.env.example
+!backend/.env.example
+
+# ============ DERLEME ÇIKTILARI ============
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# ============== CACHE / TEMP ===============
+.vite/
+frontend/.vite/
+backend/.vite/
+.cache/
+frontend/.cache/
+backend/.cache/
+.parcel-cache/
+
+# ============ UPLOAD / STORAGE =============
+uploads/
+backend/uploads/
+frontend/uploads/
+
+# =============== TEST/TOOLS =================
+coverage/
+
+# ================ IDE/EDITÖR ===============
+.vscode/
+.idea/
+*.code-workspace

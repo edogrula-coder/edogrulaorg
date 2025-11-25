@@ -1,0 +1,6242 @@
+{
+  "generatedAt": "2025-11-15T15:28:46.365Z",
+  "summary": {
+    "total": 840,
+    "hasReal": 395,
+    "onlyDefault": 445,
+    "noGallery": 0
+  },
+  "onlyDefault": [
+    {
+      "_id": "690e02740b9deb654ef93ba7",
+      "name": "SAPANCA KONAKLAMABLACK WHİTE BUNGALOW SAPANCA",
+      "slug": "sapanca-konaklamablack-whi-te-bungalow-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05321586885",
+      "instagramUsername": "sapancaakonaklama",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bac",
+      "name": "ZİRVE BUNGALOV  UZUNKUM ZİRVE BUNGALOV",
+      "slug": "zi-rve-bungalov-uzunkum-zi-rve-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05314877301",
+      "instagramUsername": "sapancazirvebungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93baf",
+      "name": "NATURAL SELECTİON SAPANCA",
+      "slug": "natural-selecti-on-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326478554",
+      "instagramUsername": "naturalselectionsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bb0",
+      "name": "SAPANCA ZİALAND",
+      "slug": "sapanca-zi-aland",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326568094",
+      "instagramUsername": "sapancazialand",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bb1",
+      "name": "MRV HİLL SAPANCA",
+      "slug": "mrv-hi-ll-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05443545478",
+      "instagramUsername": "mrvhillsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bb3",
+      "name": "RENKLİ EVLER  SAPANCA PREMİUM",
+      "slug": "renkli-evler-sapanca-premi-um",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323655496",
+      "instagramUsername": "renklievler.sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bb7",
+      "name": "YANIK LİFE BUNGALOV",
+      "slug": "yanik-li-fe-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05334541684",
+      "instagramUsername": "yaniklifebungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bb8",
+      "name": "EMİL'S HOUSES",
+      "slug": "emi-l-s-houses",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05336360850",
+      "instagramUsername": "emilshouses",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bba",
+      "name": "MAVİ BONCUK SERENİTY BUNGALOW",
+      "slug": "mavi-boncuk-sereni-ty-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323965758",
+      "instagramUsername": "maviboncukserenitybungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bbd",
+      "name": "VALİOSO SAPANCA",
+      "slug": "vali-oso-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322608017",
+      "instagramUsername": "valiososapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bc2",
+      "name": "BLOOM HİLL BUNGALOV SAPANCA",
+      "slug": "bloom-hi-ll-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05376048928",
+      "instagramUsername": "bloomhillbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bc3",
+      "name": "SAPANCA SİRİUS NİGHT BUNGALOW",
+      "slug": "sapanca-si-ri-us-ni-ght-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05334935954",
+      "instagramUsername": "sapancasiriusbungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bc5",
+      "name": "SWİSS HAUS SAPANCA",
+      "slug": "swi-ss-haus-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324634748",
+      "instagramUsername": "swisshaussapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bca",
+      "name": "CASA VERA VİLLA",
+      "slug": "casa-vera-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05525114840",
+      "instagramUsername": "casaveravilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bcb",
+      "name": "SAPANCA DEREKÖŞK BUNGALOV",
+      "slug": "sapanca-derekosk-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324088654",
+      "instagramUsername": "sapancaderekoskbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bce",
+      "name": "LAMASİA SUİTES BUNGALOV",
+      "slug": "lamasi-a-sui-tes-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304014101",
+      "instagramUsername": "lamasiasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bcf",
+      "name": "GÜLÜM BUNGALOV",
+      "slug": "gulum-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05397850066",
+      "instagramUsername": "gulumbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd1",
+      "name": "MFS VİLLA & BUNGALOV",
+      "slug": "mfs-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05400858997",
+      "instagramUsername": "sapancamfsvillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd2",
+      "name": "SAPANCA ELZA GÖLEVİ",
+      "slug": "sapanca-elza-golevi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05528536460",
+      "instagramUsername": "sapancaelzagolevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd3",
+      "name": "BUNGAVİLLAS",
+      "slug": "bungavi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05398567555",
+      "instagramUsername": "bungavillassapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd4",
+      "name": "SAPANCA SELİSA BUNGALOW",
+      "slug": "sapanca-seli-sa-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "03588628723",
+      "instagramUsername": "sapancaselisabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd6",
+      "name": "DOĞADA VİEW",
+      "slug": "dogada-vi-ew",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05066068455",
+      "instagramUsername": "dogadaview",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd8",
+      "name": "SAPANCA YEŞİLVADİ DAĞ EVİ",
+      "slug": "sapanca-yesi-lvadi-dag-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05327071540",
+      "instagramUsername": "sapanca_yesilvadi_dagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bd9",
+      "name": "SAPANCA GÖLKÖY BUNGALOV",
+      "slug": "sapanca-golkoy-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05442349554",
+      "instagramUsername": "sapancagolkoy",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bde",
+      "name": "GÖLVADİ RESORT",
+      "slug": "golvadi-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "08502420054",
+      "instagramUsername": "golvadiresort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bdf",
+      "name": "SAPANCA FAMİLY RESORT",
+      "slug": "sapanca-fami-ly-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323640154",
+      "instagramUsername": "sapancafamilyresort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be1",
+      "name": "RAVİNE BUNGALOV",
+      "slug": "ravi-ne-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05303399454",
+      "instagramUsername": "sapancaravinebungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be2",
+      "name": "SAPANCA BUNGALOV GÖNÜL SOFRAM",
+      "slug": "sapanca-bungalov-gonul-sofram",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05052111134",
+      "instagramUsername": "sapancagonulsoframtr",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be3",
+      "name": "MEŞELİKPARK BUNGALOV",
+      "slug": "meseli-kpark-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "08503080454",
+      "instagramUsername": "sapancameselikpark",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be5",
+      "name": "LAKE VİEW HOUSE SAPANCA",
+      "slug": "lake-vi-ew-house-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05327356582",
+      "instagramUsername": "lakeviewhousesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be6",
+      "name": "STONE HOME SAPANCA  SAPANCA ELİTE BUNGALOW",
+      "slug": "stone-home-sapanca-sapanca-eli-te-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339490054",
+      "instagramUsername": "stonehomesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be7",
+      "name": "SAPANCA NADİR BUNGALOV",
+      "slug": "sapanca-nadi-r-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308993454",
+      "instagramUsername": "sapancanadirbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93be9",
+      "name": "SAPANCA SİLVA BUNGALOV",
+      "slug": "sapanca-si-lva-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05333299022",
+      "instagramUsername": "sapancavillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bea",
+      "name": "SAPANCA LİONSUİT",
+      "slug": "sapanca-li-onsui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324700454",
+      "instagramUsername": "sapanca.lionsuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93beb",
+      "name": "AcAr SUİT BUNGALOV",
+      "slug": "acar-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": "acarsuitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bec",
+      "name": "TEN TİNY SAPANCA",
+      "slug": "ten-ti-ny-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05415941010",
+      "instagramUsername": "tentinysapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bed",
+      "name": "BELLA VİSTA BUNGALOV",
+      "slug": "bella-vi-sta-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05448417742",
+      "instagramUsername": "bellavistabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bef",
+      "name": "SAPANCA FİTOS DELUXE  SAPANCA FİTOS BUNGALOV",
+      "slug": "sapanca-fi-tos-deluxe-sapanca-fi-tos-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05373701458",
+      "instagramUsername": "sapancafitosbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bf2",
+      "name": "SAPANCA SİLENTHİLL BUNGALOW",
+      "slug": "sapanca-si-lenthi-ll-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05517244872",
+      "instagramUsername": "sapancasilenthillbungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bf3",
+      "name": "BATALİKOO TİNY HOUSE'S",
+      "slug": "batali-koo-ti-ny-house-s",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905321731173",
+      "instagramUsername": "sapanca_batalikoo",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bf6",
+      "name": "SAPANCA KİBAR BUNGALOV",
+      "slug": "sapanca-ki-bar-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "02645826565",
+      "instagramUsername": "sapancakibarbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bf7",
+      "name": "PELİT SAPANCA",
+      "slug": "peli-t-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335130414",
+      "instagramUsername": "pelitsapancabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bf8",
+      "name": "B&B SAPANCA",
+      "slug": "b-b-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05313386416",
+      "instagramUsername": "bnbsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bf9",
+      "name": "DİLEKLİ BUNGALOV",
+      "slug": "di-lekli-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05424916186",
+      "instagramUsername": "sapancadileklibungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bfa",
+      "name": "YÜKSEL BUNGALOVS",
+      "slug": "yuksel-bungalovs",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05447312754",
+      "instagramUsername": "yukselbungolovs",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93bfd",
+      "name": "SAPANCA VİLLAGGİO BUNGALOV",
+      "slug": "sapanca-vi-llaggi-o-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05382796581",
+      "instagramUsername": "sapancavillaggiobungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c01",
+      "name": "STAR LİFE SAPANCA",
+      "slug": "star-li-fe-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05058885255",
+      "instagramUsername": "starlifesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c03",
+      "name": "VİSAL SAPANCA",
+      "slug": "vi-sal-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324894154",
+      "instagramUsername": "visalsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c08",
+      "name": "KARAGÖL BUNGALOV",
+      "slug": "karagol-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322523054",
+      "instagramUsername": "karagolbungalovs",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c09",
+      "name": "SİSORTİ SAPANCA",
+      "slug": "si-sorti-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324091627",
+      "instagramUsername": "sisortisapancabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c0b",
+      "name": "EFTELYA TİNY HOUSE",
+      "slug": "eftelya-ti-ny-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324859985",
+      "instagramUsername": "eftelya.tinyhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c0e",
+      "name": "ELİTE LİFE BUNGALOV  SAPANCA",
+      "slug": "eli-te-li-fe-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05398437629",
+      "instagramUsername": "elitelifebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c10",
+      "name": "SAPANCA MAVİŞ BUNGALOV",
+      "slug": "sapanca-mavi-s-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335547357",
+      "instagramUsername": "sapancamavisbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c12",
+      "name": "SAPANCA SİNDOMAN BUNGALOV",
+      "slug": "sapanca-si-ndoman-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339696654",
+      "instagramUsername": "sindoman_bungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c13",
+      "name": "HİLL HOUSE SAPANCA",
+      "slug": "hi-ll-house-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05398323345",
+      "instagramUsername": "hillhousesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c14",
+      "name": "DAY LİGHT SAPANCA",
+      "slug": "day-li-ght-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05302467702",
+      "instagramUsername": "daylightsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c18",
+      "name": "MOLEGİNZE DAĞ EVİ",
+      "slug": "molegi-nze-dag-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05337678722",
+      "instagramUsername": "moleginze.dagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c1a",
+      "name": "MİYOS BUNGALOV SAPANCA",
+      "slug": "mi-yos-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05442038982",
+      "instagramUsername": "miyosbungalov_sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c1e",
+      "name": "LOST PARADİSE DAĞ EVİ SAPANCA",
+      "slug": "lost-paradi-se-dag-evi-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05443545493",
+      "instagramUsername": "lostparadisedagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c22",
+      "name": "SAPANCA BİZİM KONAK",
+      "slug": "sapanca-bi-zi-m-konak",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905344813242",
+      "instagramUsername": "sapancabizimkonak",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c23",
+      "name": "ALPHA VİLLA SAPANCA",
+      "slug": "alpha-vi-lla-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05330259354",
+      "instagramUsername": "alphavillasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c26",
+      "name": "SAPANCA BİBER BUNGALOV",
+      "slug": "sapanca-bi-ber-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322770739",
+      "instagramUsername": "sapancabiberbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c27",
+      "name": "SAPANCA FAVELA SUİT",
+      "slug": "sapanca-favela-sui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05318849497",
+      "instagramUsername": "sapancafavelasuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c28",
+      "name": "NİSH VADİ SAPANCA",
+      "slug": "ni-sh-vadi-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05303499699",
+      "instagramUsername": "nishvadi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c29",
+      "name": "LİVOR BUNGALOV",
+      "slug": "li-vor-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05366057353",
+      "instagramUsername": "livorbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c2f",
+      "name": "TURKUAZ SAPANCA SUİT VİLLAS",
+      "slug": "turkuaz-sapanca-sui-t-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05334178454",
+      "instagramUsername": "turkuazsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c32",
+      "name": "SAPANCA KONAK İLMİYE",
+      "slug": "sapanca-konak-i-lmi-ye",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05305451706",
+      "instagramUsername": "konakilmiye",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c38",
+      "name": "ÇATI SAPANCA VİLLA RESORT",
+      "slug": "cati-sapanca-vi-lla-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05010827070",
+      "instagramUsername": "catisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c3b",
+      "name": "DAĞALTI BUNGALOV  DAĞALTI SUİT BUNGALOV",
+      "slug": "dagalti-bungalov-dagalti-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339502473",
+      "instagramUsername": "sapancadagaltisuite",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c3c",
+      "name": "SAPANCA GÖLGEM BUNGALOV",
+      "slug": "sapanca-golgem-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05396474177",
+      "instagramUsername": "sapancagolgembungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c3d",
+      "name": "DOA BUTİK EVLER",
+      "slug": "doa-buti-k-evler",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05385875794",
+      "instagramUsername": "doabutikevler",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c3e",
+      "name": "DOSA VİLLA SAPANCA",
+      "slug": "dosa-vi-lla-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326762751",
+      "instagramUsername": "dosavillasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c3f",
+      "name": "AYAN BUNGALOV SAPANCA  SAPANCA VİLLA AYAN",
+      "slug": "ayan-bungalov-sapanca-sapanca-vi-lla-ayan",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05397134801",
+      "instagramUsername": "ayanbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c41",
+      "name": "BİCA SUİT",
+      "slug": "bi-ca-sui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05384975054",
+      "instagramUsername": "sapancabicasuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c43",
+      "name": "MG SUİT BUNGALOV",
+      "slug": "mg-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05527823254",
+      "instagramUsername": "mgsuitsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c45",
+      "name": "SAPANCA LORESİMA BUNGALOV",
+      "slug": "sapanca-loresi-ma-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05468963878",
+      "instagramUsername": "sapancaloresimabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c48",
+      "name": "SAPANCA ASTERİA BUNGALOV",
+      "slug": "sapanca-asteri-a-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304166054",
+      "instagramUsername": "sapancaasteria",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c4a",
+      "name": "SAPANCA ELYSİAN HOUSES",
+      "slug": "sapanca-elysi-an-houses",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05415925454",
+      "instagramUsername": "elysianhouses",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c4b",
+      "name": "SAPANCA ASPİRAS HOUSE",
+      "slug": "sapanca-aspi-ras-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05521766437",
+      "instagramUsername": "sapancaaspirashouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c4f",
+      "name": "BİBAHA BUNGALOW SAPANCA",
+      "slug": "bi-baha-bungalow-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905312724454",
+      "instagramUsername": "bibahabungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c51",
+      "name": "ENOVİS BUNGALOV SAPANCA",
+      "slug": "enovi-s-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322643899",
+      "instagramUsername": "enovisbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c52",
+      "name": "WHİTE STONE BUNGALOV SAPANCA",
+      "slug": "whi-te-stone-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05071731491",
+      "instagramUsername": "whitestonebungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c59",
+      "name": "MUCİZE BUNGALOV",
+      "slug": "muci-ze-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05454710328",
+      "instagramUsername": "mucizebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c5b",
+      "name": "ARMONİA BUNGALOV",
+      "slug": "armoni-a-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335684154",
+      "instagramUsername": "armoniabungalows",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c5c",
+      "name": "GÜMÜŞ VADİ BUNGALOV",
+      "slug": "gumus-vadi-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05425477075",
+      "instagramUsername": "sapancagumusvadibungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c60",
+      "name": "ADALİFE BUNGALOV",
+      "slug": "adali-fe-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05355554144",
+      "instagramUsername": "adalifebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c61",
+      "name": "SAPANCA GOLDEN LİFE SUİT BUNGALOV",
+      "slug": "sapanca-golden-li-fe-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05058105454",
+      "instagramUsername": "sapancagoldenlifebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c62",
+      "name": "SAPANCA DAİSY BUNGALOW",
+      "slug": "sapanca-dai-sy-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05464263454",
+      "instagramUsername": "sapancadaisybungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c63",
+      "name": "REYYAN BAHÇE  LİDYA BUNGALOVS",
+      "slug": "reyyan-bahce-li-dya-bungalovs",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05434796442",
+      "instagramUsername": "sapancalidyabungalows",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c64",
+      "name": "ROOMY TİNY HOUSE",
+      "slug": "roomy-ti-ny-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05327859680",
+      "instagramUsername": "roomytinyhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c67",
+      "name": "ORLİN BUNGALOV",
+      "slug": "orli-n-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905382744354",
+      "instagramUsername": "sapancaorlinbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c6a",
+      "name": "DERİN HOUSE SAPANCA",
+      "slug": "deri-n-house-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05540181854",
+      "instagramUsername": "derinhousesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c6b",
+      "name": "TWİN BİRDS SAPANCA",
+      "slug": "twi-n-bi-rds-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339179500",
+      "instagramUsername": "twinbirdsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c6c",
+      "name": "SAPANCA PİNE LİFE",
+      "slug": "sapanca-pi-ne-li-fe",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05491227463",
+      "instagramUsername": "sapancapinelife",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c6e",
+      "name": "SAPANCA TRİO BUNGALOV",
+      "slug": "sapanca-tri-o-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05050425454",
+      "instagramUsername": "sapancatriobungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c70",
+      "name": "BUNGALOV KEYİF",
+      "slug": "bungalov-keyi-f",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05011555454",
+      "instagramUsername": "bungalovkeyif",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c72",
+      "name": "SAPANCA HİDALAL BUNGALOV",
+      "slug": "sapanca-hi-dalal-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05377264130",
+      "instagramUsername": "sapancahidalalbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c74",
+      "name": "SAPANCA OTTO SUİT BUNGALOV",
+      "slug": "sapanca-otto-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05313036886",
+      "instagramUsername": "ottosuitbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c76",
+      "name": "ALİS PARADİSE BUNGALOV",
+      "slug": "ali-s-paradi-se-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05496915400",
+      "instagramUsername": "alisparadisebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c78",
+      "name": "NİOS BUNGALOV SAPANCA",
+      "slug": "ni-os-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05364989997",
+      "instagramUsername": "niosbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c79",
+      "name": "LAVİNİA BUNGALOW",
+      "slug": "lavi-ni-a-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05377775848",
+      "instagramUsername": "laviniabungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c7a",
+      "name": "ALP'İN BUNGALOV SAPANCA",
+      "slug": "alp-i-n-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05541282746",
+      "instagramUsername": "alpin.bungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c7b",
+      "name": "SİMA BUNGALOV SAPANCA",
+      "slug": "si-ma-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05521413454",
+      "instagramUsername": "simabungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c7d",
+      "name": "SAPANCA COCO SERENİTY BUNGALOV",
+      "slug": "sapanca-coco-sereni-ty-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05419704154",
+      "instagramUsername": "sapancacocoserenitybungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c7f",
+      "name": "RİVA SAPANCA",
+      "slug": "ri-va-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05070193998",
+      "instagramUsername": "rivasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c80",
+      "name": "SAPANCA AYZA BUNGALOV",
+      "slug": "sapanca-ayza-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05320522820",
+      "instagramUsername": "sapanca_ayza.bungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c81",
+      "name": "ZK WOODEN VİLLAGE",
+      "slug": "zk-wooden-vi-llage",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05309107654",
+      "instagramUsername": "zkwoodenvillage",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c83",
+      "name": "JUNO BUNGALOVMAJALİS BUNGALOV",
+      "slug": "juno-bungalovmajali-s-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05356378370",
+      "instagramUsername": "junobungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c84",
+      "name": "ARMONİ LİFE BUNGALOV",
+      "slug": "armoni-li-fe-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05313582584",
+      "instagramUsername": "armonilifebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c85",
+      "name": "SAPANCA EFENDY SUİT 2",
+      "slug": "sapanca-efendy-sui-t-2",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05426530492",
+      "instagramUsername": "efendysuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c86",
+      "name": "SAPANCA MAVİ YEŞİL BUNGALOV",
+      "slug": "sapanca-mavi-yesi-l-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05336337782",
+      "instagramUsername": "sapancamaviyesilbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c89",
+      "name": "ÇİFTLİK BUNGALOV & RESTAURANT",
+      "slug": "ci-ftli-k-bungalov-restaurant",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "08503088418",
+      "instagramUsername": "sapancaciftlikbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c8f",
+      "name": "SAPANCA VİVA LA VİDA DAĞ EVİ",
+      "slug": "sapanca-vi-va-la-vi-da-dag-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05386432077",
+      "instagramUsername": "sapancavivalavida_dagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c90",
+      "name": "GMA FAMİLY VİLLA & BUNGALOV",
+      "slug": "gma-fami-ly-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05316676856",
+      "instagramUsername": "gmafamilyvillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c91",
+      "name": "CORNER LİFE BUNGALOW",
+      "slug": "corner-li-fe-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05497661771",
+      "instagramUsername": "sapancacornerlifebungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c92",
+      "name": "VİTALİS SAPANCA BUNGALOV",
+      "slug": "vi-tali-s-sapanca-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05446759727",
+      "instagramUsername": "vitalissapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c93",
+      "name": "STAY İN SAPANCA",
+      "slug": "stay-i-n-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05316413633",
+      "instagramUsername": "stayinsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c94",
+      "name": "SEBİLLA SAPANCA",
+      "slug": "sebi-lla-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05467969033",
+      "instagramUsername": "sebillasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c9b",
+      "name": "SAPANCA VANİLLA BUNGALOV",
+      "slug": "sapanca-vani-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05358558431",
+      "instagramUsername": "sapancavanillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c9c",
+      "name": "GÖL EVİM SAPANCA",
+      "slug": "gol-evi-m-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05301155454",
+      "instagramUsername": "golevimsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93c9d",
+      "name": "SAPANCA MARİNE HOUSE",
+      "slug": "sapanca-mari-ne-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05491215454",
+      "instagramUsername": "sapancamarinehouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ca0",
+      "name": "VİOLA RESORT SAPANCA",
+      "slug": "vi-ola-resort-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05468423906",
+      "instagramUsername": "violaresortsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ca1",
+      "name": "HİDDEN HEAVEN BUNGALOV",
+      "slug": "hi-dden-heaven-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05074121518",
+      "instagramUsername": "hiddenheavensapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ca3",
+      "name": "TELESKOP SUİT",
+      "slug": "teleskop-sui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905300791503",
+      "instagramUsername": "sapancateleskopsuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ca5",
+      "name": "RİSE'N SHİNE BUNGALOW SAPANCA",
+      "slug": "ri-se-n-shi-ne-bungalow-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05421301654",
+      "instagramUsername": "shinesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ca8",
+      "name": "PİERRE ROR SAPANCA",
+      "slug": "pi-erre-ror-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05356175493",
+      "instagramUsername": "pierrerorsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93caa",
+      "name": "SAPANCA LARA VİLLA BUNGALOW",
+      "slug": "sapanca-lara-vi-lla-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05337369909",
+      "instagramUsername": "larabungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cae",
+      "name": "GREEN LİFE SAPANCA",
+      "slug": "green-li-fe-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05333748051",
+      "instagramUsername": "greenlifebagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cb2",
+      "name": "SAPANCA MİMOZA GARDEN BUNGALOV",
+      "slug": "sapanca-mi-moza-garden-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05445304331",
+      "instagramUsername": "sapancamimozagardenbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cb3",
+      "name": "PYRAMİD SAPANCA",
+      "slug": "pyrami-d-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326291715",
+      "instagramUsername": "pyramidsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cb8",
+      "name": "SAPANCA NO:1 BUNGALOW",
+      "slug": "sapanca-no-1-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05452549901",
+      "instagramUsername": "no1bungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cb9",
+      "name": "SAPANCA HAPPY LİFE",
+      "slug": "sapanca-happy-li-fe",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05364193411",
+      "instagramUsername": "sapancahappylife",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cbe",
+      "name": "SAPANCA GREEN LİKE BUNGALOV",
+      "slug": "sapanca-green-li-ke-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05383667884",
+      "instagramUsername": "sapancagreenlikebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cbf",
+      "name": "SERENDER KARADENİZ EVİ",
+      "slug": "serender-karadeni-z-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05375586346",
+      "instagramUsername": "serenderkaradenizevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc0",
+      "name": "SAPANCA DESTİNA BUNGALOW",
+      "slug": "sapanca-desti-na-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05382134857",
+      "instagramUsername": "sapancadestinabungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc2",
+      "name": "BLİSS BUNGALOV",
+      "slug": "bli-ss-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05373496639",
+      "instagramUsername": "blissapancaa",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc4",
+      "name": "LİNA BUNGALOV SAPANCA",
+      "slug": "li-na-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304811454",
+      "instagramUsername": "linabungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc5",
+      "name": "LA CASİTA BUNGALOW",
+      "slug": "la-casi-ta-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05535724169",
+      "instagramUsername": "lacasitabungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc7",
+      "name": "ÇINAR ÜSSÜ BUNGALOW",
+      "slug": "cinar-ussu-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05393259359",
+      "instagramUsername": "cinarussubungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc8",
+      "name": "MİLAGRO & SUENO SUİT BUNGALOW SAPANCA",
+      "slug": "mi-lagro-sueno-sui-t-bungalow-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05469295454",
+      "instagramUsername": "sapancamilagrosuitbungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cc9",
+      "name": "SRN SUİTE & HOUSE",
+      "slug": "srn-sui-te-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05451315454",
+      "instagramUsername": "sapancasrnsuite",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cca",
+      "name": "SAPANCA AKSA SUİT BUNGALOV",
+      "slug": "sapanca-aksa-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308922662",
+      "instagramUsername": "sapancaaksabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ccb",
+      "name": "SAPANCA AGİA BUNGALOV",
+      "slug": "sapanca-agi-a-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05425438303",
+      "instagramUsername": "sapancaagiabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ccf",
+      "name": "SAPANCA SAZLIGÖL BUNGALOV",
+      "slug": "sapanca-sazligol-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "02645820011",
+      "instagramUsername": "sazligolbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cd3",
+      "name": "SAPANCA ÖZEN BUNGALOV",
+      "slug": "sapanca-ozen-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05453552928",
+      "instagramUsername": "sapancaozenbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cd7",
+      "name": "MAHMUDİYE RESORT",
+      "slug": "mahmudi-ye-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326513912",
+      "instagramUsername": "mahmudiyeresort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cd9",
+      "name": "SAPANCA SİLENCE BUNGALOV",
+      "slug": "sapanca-si-lence-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05010639620",
+      "instagramUsername": "sapancasilencebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cdf",
+      "name": "OASİS WOODEN HOUSE",
+      "slug": "oasi-s-wooden-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05011614154",
+      "instagramUsername": "oasiswoodenhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ce2",
+      "name": "GÜLER BUNGALOV",
+      "slug": "guler-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05393499742",
+      "instagramUsername": "gulerbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ce3",
+      "name": "NO:95 DELUXE BUNGALOV",
+      "slug": "no-95-deluxe-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905071819595",
+      "instagramUsername": "no95deluxebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ce6",
+      "name": "İNCE BUNGALOV",
+      "slug": "i-nce-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05301093054",
+      "instagramUsername": "sapancaincebungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ce9",
+      "name": "BUNGALOV DEREİÇİ",
+      "slug": "bungalov-derei-ci",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05306155441",
+      "instagramUsername": "bungalovdereici",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ced",
+      "name": "STAR HİLL SAPANCA",
+      "slug": "star-hi-ll-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05386174242",
+      "instagramUsername": "starhillsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cee",
+      "name": "ÇİNİLİ MAVİ KÖŞK",
+      "slug": "ci-ni-li-mavi-kosk",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05415633037",
+      "instagramUsername": "cinilimavikosk",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cf1",
+      "name": "NORTH LİFE BUNGALOV SAPANCA",
+      "slug": "north-li-fe-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05300948443",
+      "instagramUsername": "northlifebungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cf2",
+      "name": "LİVADİ SAPANCA",
+      "slug": "li-vadi-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05345479753",
+      "instagramUsername": "livadisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cf4",
+      "name": "DİAVA SAPANCA",
+      "slug": "di-ava-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05300442826",
+      "instagramUsername": "diavasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cf8",
+      "name": "MİNTİNİ TAŞ EV",
+      "slug": "mi-nti-ni-tas-ev",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05302094882",
+      "instagramUsername": "sapancamintinitasev",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93cfd",
+      "name": "TİNY PALAS BUNGALOV EVLERİ",
+      "slug": "ti-ny-palas-bungalov-evleri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905072591818",
+      "instagramUsername": "tinypalas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d02",
+      "name": "AYS SUİT BUNGALOV",
+      "slug": "ays-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05316455145",
+      "instagramUsername": "ays.suitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d06",
+      "name": "KEİL BUNGALOV",
+      "slug": "kei-l-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05344053454",
+      "instagramUsername": "keilbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d07",
+      "name": "BLUE WHİTE CAMPİNG BUNGALOV",
+      "slug": "blue-whi-te-campi-ng-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05330529541",
+      "instagramUsername": "bluewhitecamping_bungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d09",
+      "name": "İSTANBULDERE BUNGALOV (Sıcak havuz & Jakuzi)",
+      "slug": "i-stanbuldere-bungalov-sicak-havuz-jakuzi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05052105406",
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d0c",
+      "name": "SAPANCA OFİDİ BUNGALOV",
+      "slug": "sapanca-ofi-di-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05530176405",
+      "instagramUsername": "sapancaofidibungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d0f",
+      "name": "MÜENBA BUNGALOW",
+      "slug": "muenba-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05343134644",
+      "instagramUsername": "sapancamuenbabungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d10",
+      "name": "SAPANCA ÖZFER BUNGALOV",
+      "slug": "sapanca-ozfer-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "0533231231905309016654",
+      "instagramUsername": "sapancaozferbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d13",
+      "name": "CABİN BUNGALOV SAPANCA",
+      "slug": "cabi-n-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05398800870",
+      "instagramUsername": "sapancacabinbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d15",
+      "name": "SAPANCA JASMİNE BUNGALOV",
+      "slug": "sapanca-jasmi-ne-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05379133331",
+      "instagramUsername": "sapancajasminebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d1a",
+      "name": "MAMA'S PALACE BUNGALOW HOTEL",
+      "slug": "mama-s-palace-bungalow-hotel",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05399474343",
+      "instagramUsername": "mamaspalace",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d1b",
+      "name": "SAPANCA WOOD SİDE BUNGALOV",
+      "slug": "sapanca-wood-si-de-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05320583654",
+      "instagramUsername": "sapancawoodsidebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d1f",
+      "name": "KÖYLÜ BUNGALOV CAFE RESTOURANT",
+      "slug": "koylu-bungalov-cafe-restourant",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325858247",
+      "instagramUsername": "koylubungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d21",
+      "name": "PREMİUM GOLD SAPANCA",
+      "slug": "premi-um-gold-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05364994154",
+      "instagramUsername": "premiumgoldsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d22",
+      "name": "SANNORA SUİTE & RİTA HOUSE",
+      "slug": "sannora-sui-te-ri-ta-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308183747",
+      "instagramUsername": "sannorasuite",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d23",
+      "name": "SİMURG BUNGALOV",
+      "slug": "si-murg-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05052179608",
+      "instagramUsername": "sapancasimurgbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d24",
+      "name": "SAPANCA YEŞİL KÖY BUNGALOV",
+      "slug": "sapanca-yesi-l-koy-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05315058254",
+      "instagramUsername": "sapancayesilkoybungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d28",
+      "name": "SAPANCA İMROZ VE POSEDİON",
+      "slug": "sapanca-i-mroz-ve-posedi-on",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05052584061",
+      "instagramUsername": "https:instagram.comottosuitsapancaimrozveposedion",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d2c",
+      "name": "SAPANCA SAHRA KÜTÜK EV",
+      "slug": "sapanca-sahra-kutuk-ev",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05442352554",
+      "instagramUsername": "sapancasahrakutukev",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d2f",
+      "name": "BABİL BAHÇE BUNGALOV",
+      "slug": "babi-l-bahce-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05431519191",
+      "instagramUsername": "babilbahcebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d30",
+      "name": "WHİTE DELUXE SAPANCA",
+      "slug": "whi-te-deluxe-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": "sapancawhitedeluxe",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d31",
+      "name": "SAPANCA DOĞANIN İNCİSİ",
+      "slug": "sapanca-doganin-i-nci-si",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05369123269",
+      "instagramUsername": "sapancadoganinincisi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d32",
+      "name": "BLACK WHİTE BUNGALOV SAPANCA",
+      "slug": "black-whi-te-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05393600642",
+      "instagramUsername": "blackwhitebungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d36",
+      "name": "MOONLİGTH HOUSE",
+      "slug": "moonli-gth-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05356711854",
+      "instagramUsername": "moonlightsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d37",
+      "name": "HİLLTOP BUNGALOV SAPANCA",
+      "slug": "hi-lltop-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05423913751",
+      "instagramUsername": "hilltopbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d39",
+      "name": "LİVAM BUNGALOV  GAİA BUNGALOV",
+      "slug": "li-vam-bungalov-gai-a-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05310875900",
+      "instagramUsername": "sapancalivambungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d3a",
+      "name": "WİLLA MİO BUNGALOV SAPANCA",
+      "slug": "wi-lla-mi-o-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05426066680",
+      "instagramUsername": "willamiobungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d3d",
+      "name": "SAPANCA LİTTLE HOUSE",
+      "slug": "sapanca-li-ttle-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05072571054",
+      "instagramUsername": "sapancalittlehouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d3e",
+      "name": "MEGA LİVADİ BUNGALOV",
+      "slug": "mega-li-vadi-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324184854",
+      "instagramUsername": "megalivadibungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d3f",
+      "name": "MEŞEALTI SUİT BUNGALOV",
+      "slug": "mesealti-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05327031311",
+      "instagramUsername": "mesealtisuitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d40",
+      "name": "KOZALAK VİLLA BUNGALOV",
+      "slug": "kozalak-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05063062154",
+      "instagramUsername": "sapancakozalakbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d44",
+      "name": "SAPANCA LAKE HİLL",
+      "slug": "sapanca-lake-hi-ll",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05456601514",
+      "instagramUsername": "sapancalakehill",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d45",
+      "name": "FOREST  MİNİ FOREST BUNGALOV",
+      "slug": "forest-mi-ni-forest-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905414026366",
+      "instagramUsername": "sapancaforestbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d46",
+      "name": "MOUNTAİN DREAM HOUSE SAPANCA",
+      "slug": "mountai-n-dream-house-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322362776",
+      "instagramUsername": "mountaindreamhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d47",
+      "name": "THE KAİA SAPANCA",
+      "slug": "the-kai-a-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05451256054",
+      "instagramUsername": "thekaiasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d49",
+      "name": "SAPANCA MARADİDİ RESORT",
+      "slug": "sapanca-maradi-di-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05334500154",
+      "instagramUsername": "sapancamaradidiresort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d4a",
+      "name": "GRAND PARADİSE SAPANCA",
+      "slug": "grand-paradi-se-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304212750",
+      "instagramUsername": "grandparadisesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d4e",
+      "name": "SAPANCA MİRA TİNY HOUSE",
+      "slug": "sapanca-mi-ra-ti-ny-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05415533635",
+      "instagramUsername": "miratinyhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d4f",
+      "name": "TWİNS BUNGALOW",
+      "slug": "twi-ns-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05053527240",
+      "instagramUsername": "twinsbungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d53",
+      "name": "SAPANCA TİME BUNGALOV",
+      "slug": "sapanca-ti-me-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905066720255",
+      "instagramUsername": "sapancatime",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d58",
+      "name": "SAPANCA KAİROS BUNGALOV",
+      "slug": "sapanca-kai-ros-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05451515424",
+      "instagramUsername": "sapancakairosbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d59",
+      "name": "RS SUİT BUNGALOV",
+      "slug": "rs-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05374658724",
+      "instagramUsername": "rssuitbungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d5c",
+      "name": "BERKDENİZ BUNGALOV",
+      "slug": "berkdeni-z-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322036020",
+      "instagramUsername": "sapancaberkdenizbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d5d",
+      "name": "SAPANCA FİNE DELUXE",
+      "slug": "sapanca-fi-ne-deluxe",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05356595454",
+      "instagramUsername": "sapancafinedeluxe",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d5f",
+      "name": "SAPANCA LADİN BUNGALOV",
+      "slug": "sapanca-ladi-n-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05445442357",
+      "instagramUsername": "sapancaladinbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d61",
+      "name": "SHİMA BUNGALOV",
+      "slug": "shi-ma-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05062840384",
+      "instagramUsername": "sapancashimabungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d63",
+      "name": "SAPANCA EKC SUİT BUNGALOV",
+      "slug": "sapanca-ekc-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324498754",
+      "instagramUsername": "sapancaekcsuitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d66",
+      "name": "BİLDA BUNGALOV",
+      "slug": "bi-lda-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339621054",
+      "instagramUsername": "bildabungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d68",
+      "name": "CHİLL SAPANCA",
+      "slug": "chi-ll-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05436700580",
+      "instagramUsername": "chillsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d6b",
+      "name": "SAPANCA B&K BUNGALOV  LİFE DOME SAPANCA LÜKS GLAMPİNG",
+      "slug": "sapanca-b-k-bungalov-li-fe-dome-sapanca-luks-glampi-ng",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05444480254",
+      "instagramUsername": "bkbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d6d",
+      "name": "HİLLORİA TATİL KÖYÜ SAPANCA",
+      "slug": "hi-llori-a-tati-l-koyu-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322720011",
+      "instagramUsername": "hilloriatatilkoyu",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d6e",
+      "name": "HAN SUİT SAPANCA",
+      "slug": "han-sui-t-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05315059926",
+      "instagramUsername": "hansuitsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d72",
+      "name": "DAVİLLA SAPANCA",
+      "slug": "davi-lla-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325250118",
+      "instagramUsername": "davilla_sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d75",
+      "name": "VİSTA BUNGALOV",
+      "slug": "vi-sta-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05362193559",
+      "instagramUsername": "vistabungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d76",
+      "name": "VİLLA DEM",
+      "slug": "vi-lla-dem",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905303798754",
+      "instagramUsername": "villadems",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d77",
+      "name": "SAPANCA MELEN SUİT VİLLA BUNGALOV",
+      "slug": "sapanca-melen-sui-t-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05377346641",
+      "instagramUsername": "sapancamelensuitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d78",
+      "name": "SUNLİGHT BUNGALOV",
+      "slug": "sunli-ght-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05330883454",
+      "instagramUsername": "sunlightbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d7a",
+      "name": "SAPANCA YEŞİLTEPE DAĞ EVİ",
+      "slug": "sapanca-yesi-ltepe-dag-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05516427667",
+      "instagramUsername": "sapancayesiltepedagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d7c",
+      "name": "DÖRT MEVSİM SAPANCA RESORT",
+      "slug": "dort-mevsi-m-sapanca-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05464628938",
+      "instagramUsername": "sapancadortmevsimresort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d7d",
+      "name": "ZENİT BUNGALOV SAPANCA",
+      "slug": "zeni-t-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308866227",
+      "instagramUsername": "zenitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d7e",
+      "name": "JARDİN BUNGALOV SAPANCA",
+      "slug": "jardi-n-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05427798008",
+      "instagramUsername": "jardin_bungalov_sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d82",
+      "name": "GREEN LİFE BUNGALOW",
+      "slug": "green-li-fe-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05467383341",
+      "instagramUsername": "green_lifebungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d89",
+      "name": "KARTAL VADİSİ DAĞ EVLERİ",
+      "slug": "kartal-vadi-si-dag-evleri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05378978473",
+      "instagramUsername": "kartalvadisidagevleri",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d8a",
+      "name": "LİVZA BUNGALOV",
+      "slug": "li-vza-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05531994972",
+      "instagramUsername": "livza.bungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d8d",
+      "name": "ROLLİNG HOUSE",
+      "slug": "rolli-ng-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05330468554",
+      "instagramUsername": "rollinghousesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d8e",
+      "name": "KİWİ GARDEN HOUSE",
+      "slug": "ki-wi-garden-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324316354",
+      "instagramUsername": "kiwigardenhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d90",
+      "name": "SAPANCA ÇİÇEK BUNGALOV",
+      "slug": "sapanca-ci-cek-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05396948566",
+      "instagramUsername": "sapancacicekbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d93",
+      "name": "SAPANCA BONİTA BUNGALOV",
+      "slug": "sapanca-boni-ta-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304257269",
+      "instagramUsername": "bonitabungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d96",
+      "name": "LİFE iS HERE SAPANCA",
+      "slug": "li-fe-is-here-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339207084",
+      "instagramUsername": "lifeisheresapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d98",
+      "name": "SAPANCA GÖLDİBİ SUİT BUNGALOV",
+      "slug": "sapanca-goldi-bi-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "02645920054",
+      "instagramUsername": "sapancagoldibisuitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d99",
+      "name": "AİLE BUNGALOV",
+      "slug": "ai-le-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05457996955",
+      "instagramUsername": "ailebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d9b",
+      "name": "BUTİK EVLER SAPANCA",
+      "slug": "buti-k-evler-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05526071886",
+      "instagramUsername": "butikevlersapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93d9c",
+      "name": "SAPANCA UPSİDE BUNGALOV",
+      "slug": "sapanca-upsi-de-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905530857793",
+      "instagramUsername": "sapancaupsidebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da0",
+      "name": "SAPANCA EFENDY SUİT",
+      "slug": "sapanca-efendy-sui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05418124134",
+      "instagramUsername": "sapancaefendysuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da1",
+      "name": "SAPANCA BELİS BUNGALOV",
+      "slug": "sapanca-beli-s-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05540225460",
+      "instagramUsername": "sapancabelisbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da2",
+      "name": "SAPANCA OLİVİA BUNGALOV",
+      "slug": "sapanca-oli-vi-a-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05320522723",
+      "instagramUsername": "sapancaoliviabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da3",
+      "name": "SAPANCA BUNGALOW LİFE",
+      "slug": "sapanca-bungalow-li-fe",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05321761875",
+      "instagramUsername": "sapancabungalowlife",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da5",
+      "name": "SİZMARİ DAĞ EVİ",
+      "slug": "si-zmari-dag-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05438638300",
+      "instagramUsername": "sizmaridagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da6",
+      "name": "BUNGALOV NO:111",
+      "slug": "bungalov-no-111",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05309460254",
+      "instagramUsername": "bungalovno111",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da7",
+      "name": "MİRUS SAPANCA",
+      "slug": "mi-rus-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05491225454",
+      "instagramUsername": "mirussapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93da8",
+      "name": "BİGİNN SAPANCA",
+      "slug": "bi-gi-nn-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05059237211",
+      "instagramUsername": "bungalov_sapanca_biginn",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93daa",
+      "name": "MY RESORT PRİVE OTEL",
+      "slug": "my-resort-pri-ve-otel",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05497748354",
+      "instagramUsername": "myresortprive",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dac",
+      "name": "CBC PLUS BUNGALOV & VİLLA",
+      "slug": "cbc-plus-bungalov-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05337040354",
+      "instagramUsername": "sapancacbcplus",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93daf",
+      "name": "MSC SUİTES BUNGALOW",
+      "slug": "msc-sui-tes-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325210592",
+      "instagramUsername": "mscsuitesbungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93db1",
+      "name": "SAPANCA YEŞİLTEPE SARAYLARI & BUNGALOV",
+      "slug": "sapanca-yesi-ltepe-saraylari-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05431685132",
+      "instagramUsername": "sapancayesiltepebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93db6",
+      "name": "BARİA SAPANCA",
+      "slug": "bari-a-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05550548754",
+      "instagramUsername": "bariasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dba",
+      "name": "SAPANCA MT SUİT BUNGALOV",
+      "slug": "sapanca-mt-sui-t-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05316435554",
+      "instagramUsername": "sapancamtsuitbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dbb",
+      "name": "PRİCE HOUSE SAPANCA",
+      "slug": "pri-ce-house-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05333313454",
+      "instagramUsername": "pricehousesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dbd",
+      "name": "SAPANCA NİRVANA BUNGALOV",
+      "slug": "sapanca-ni-rvana-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324074354",
+      "instagramUsername": "sapancanirvanabungalovv",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dbe",
+      "name": "MAGİC BUNGALOV",
+      "slug": "magi-c-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325451227",
+      "instagramUsername": "magicbungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dbf",
+      "name": "SAPANCA MYSTİC BUNGALOW",
+      "slug": "sapanca-mysti-c-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05383904465",
+      "instagramUsername": "sapancamysticbungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dc1",
+      "name": "FOREST VİEW SAPANCA",
+      "slug": "forest-vi-ew-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05518947070",
+      "instagramUsername": "forestviewsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dc7",
+      "name": "PRİVE BUNGALOV SAPANCA",
+      "slug": "pri-ve-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905010097624",
+      "instagramUsername": "privebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dc9",
+      "name": "SEYRİGÖL BUNGALOV SAPANCA",
+      "slug": "seyri-gol-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05357031887",
+      "instagramUsername": "seyrigolbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dca",
+      "name": "RÜZGAR BUNGALOV",
+      "slug": "ruzgar-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05452430854",
+      "instagramUsername": "ruzgarbungalovsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dcb",
+      "name": "SAPANCA TİNY HOME",
+      "slug": "sapanca-ti-ny-home",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05497842400",
+      "instagramUsername": "sapancatinyhome",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dcc",
+      "name": "RİVERSİDE BUNGALOV",
+      "slug": "ri-versi-de-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05334764086",
+      "instagramUsername": "riversidebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dcd",
+      "name": "SİLVER LİFE BUNGALOV",
+      "slug": "si-lver-li-fe-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05517040016",
+      "instagramUsername": "silverlifebungalovs",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dce",
+      "name": "SAPANCA SİS VADİ BUNGALOV",
+      "slug": "sapanca-si-s-vadi-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05388691842",
+      "instagramUsername": "sapancasisvadibungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dd2",
+      "name": "WONDER HİLL BUNGALOV",
+      "slug": "wonder-hi-ll-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325705441",
+      "instagramUsername": "sapancawonderhillbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dd3",
+      "name": "ŞİFAKÖY BUNGALOV",
+      "slug": "si-fakoy-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05313155790",
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dd6",
+      "name": "ÇETİN GARDEN BUNGALOV",
+      "slug": "ceti-n-garden-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05387783828",
+      "instagramUsername": "cetingardenbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dd8",
+      "name": "SAPANCA CARPE DİEM BUNGALOV",
+      "slug": "sapanca-carpe-di-em-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05442565600",
+      "instagramUsername": "sapancacarpediembungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dd9",
+      "name": "MÜNZEVİ BUNGALOV",
+      "slug": "munzevi-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05306769054",
+      "instagramUsername": "munzevibungalov#",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ddd",
+      "name": "İCB DİAMOND SAPANCA",
+      "slug": "i-cb-di-amond-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05350267188",
+      "instagramUsername": "icbdiamondsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ddf",
+      "name": "SANTE VİTA SAPANCA",
+      "slug": "sante-vi-ta-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": "santevitasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93de1",
+      "name": "SAPANCA GEZGİN SUİTES  GEZGİN HOUSE",
+      "slug": "sapanca-gezgi-n-sui-tes-gezgi-n-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05419257108",
+      "instagramUsername": "sapancagezginsuites",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93de8",
+      "name": "SAPANCA LİTHA BUNGALOV",
+      "slug": "sapanca-li-tha-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339635683",
+      "instagramUsername": "sapancalithabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dec",
+      "name": "İNCİ TİNY HOUSE",
+      "slug": "i-nci-ti-ny-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05346005141",
+      "instagramUsername": "incitinyhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ded",
+      "name": "ASİL BUNGALOV",
+      "slug": "asi-l-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05359776929",
+      "instagramUsername": "asilbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93df0",
+      "name": "SAPANCA VİNEYARD HOUSE",
+      "slug": "sapanca-vi-neyard-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05417710254",
+      "instagramUsername": "sapancavineyardhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93df2",
+      "name": "PALVİA  SUİT BUNGALOV SAPANCA",
+      "slug": "palvi-a-sui-t-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05054951086",
+      "instagramUsername": "palviasuitebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93df5",
+      "name": "ELİT HOME'SS SAPANCA",
+      "slug": "eli-t-home-ss-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05364258960",
+      "instagramUsername": "elithomessapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93df8",
+      "name": "SAPANCA BRONO SUİT BUNGALOW",
+      "slug": "sapanca-brono-sui-t-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905461193554",
+      "instagramUsername": "bronosapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93df9",
+      "name": "SAPANCA KÜÇÜK GÖL KÖY",
+      "slug": "sapanca-kucuk-gol-koy",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308982453",
+      "instagramUsername": "sapancakucukgolkoy",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dfe",
+      "name": "HHZ GREEN LİFE STALL",
+      "slug": "hhz-green-li-fe-stall",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05301744365",
+      "instagramUsername": "greenlifesimasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93dff",
+      "name": "SOFHANLI VADİSİ",
+      "slug": "sofhanli-vadi-si",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05383160071",
+      "instagramUsername": "sofhanlivadisibungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e01",
+      "name": "SAPANCA KURUÇEŞME TINY HOUSE",
+      "slug": "sapanca-kuruc-es-me-tiny-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05306425489",
+      "instagramUsername": "sapancakurucesmetinyhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e04",
+      "name": "SAPANCA KESKİN LİFE BUNGALOV",
+      "slug": "sapanca-keski-n-li-fe-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05413023307",
+      "instagramUsername": "sapancakeskinlifebungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e06",
+      "name": "SAPANCA İNFİNİTY HOUSE",
+      "slug": "sapanca-i-nfi-ni-ty-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05356554848",
+      "instagramUsername": "sapancainfinityhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e07",
+      "name": "SAPANCA DEREİÇİ BUNGALOV",
+      "slug": "sapanca-derei-ci-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05301393454",
+      "instagramUsername": "sapancadereicibungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e08",
+      "name": "SAPANCA BUNGALİFE",
+      "slug": "sapanca-bungali-fe",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322648703",
+      "instagramUsername": "sapancabungalife",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e0e",
+      "name": "FOREST HİLL BUNGALOW",
+      "slug": "forest-hi-ll-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05306054997",
+      "instagramUsername": "foresthillbungalowsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e10",
+      "name": "GREEN HİLL BUNGALOV SAPANCA",
+      "slug": "green-hi-ll-bungalov-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05052179812",
+      "instagramUsername": "greenhillbungalow",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e15",
+      "name": "SAPANCA HAYALLERİM BUNGALOV",
+      "slug": "sapanca-hayalleri-m-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05350564681",
+      "instagramUsername": "sapancahayallerimbungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e17",
+      "name": "Ferhat Göçer Konseri",
+      "slug": "ferhat-gocer-konseri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e18",
+      "name": "Gökhan Türkmen",
+      "slug": "gokhan-turkmen",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e19",
+      "name": "Cem Adrian Konseri",
+      "slug": "cem-adrian-konseri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e1a",
+      "name": "CEM ADRİAN KONSERİ",
+      "slug": "cem-adri-an-konseri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e1b",
+      "name": "Sapanca El Sanatları Festivali",
+      "slug": "sapanca-el-sanatlari-festivali",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e1c",
+      "name": "SEMİCENK Konseri",
+      "slug": "semi-cenk-konseri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05321731109",
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e1d",
+      "name": "PSB Anatolia Uluslararası Peyzaj Süs Bitkileri Bahçe Sanatları ve Ekipmanları Fuarı",
+      "slug": "psb-anatolia-uluslararasi-peyzaj-sus-bitkileri-bahce-sanatlari-ve-ekipmanlari-fuari",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e1e",
+      "name": "OFF-ROAD YARIŞLARI",
+      "slug": "off-road-yarislari",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e1f",
+      "name": "BABAYANİ TİYATROSU - TEBDİL-İ DİYAR",
+      "slug": "babayani-ti-yatrosu-tebdi-l-i-di-yar",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e20",
+      "name": "ZİRVEDE MÜZİK GÖKYÜZÜNDE EĞLENCE",
+      "slug": "zi-rvede-muzi-k-gokyuzunde-eglence",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e21",
+      "name": "VİLLA HOLİDAY",
+      "slug": "vi-lla-holi-day",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325026199",
+      "instagramUsername": "villaholiday",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e22",
+      "name": "SAPANCA VİLLA SAKURA",
+      "slug": "sapanca-vi-lla-sakura",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308575986",
+      "instagramUsername": "sapancavillasakura",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e23",
+      "name": "VİLLA POLİ SAPANCA KIRKPINAR",
+      "slug": "vi-lla-poli-sapanca-kirkpinar",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323995587",
+      "instagramUsername": "villapolikirkpinar",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e24",
+      "name": "VİLLA ARİF BEY SAPANCA",
+      "slug": "vi-lla-ari-f-bey-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05532220364",
+      "instagramUsername": "villaarifbeysapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e25",
+      "name": "RÜYA SAPANCA",
+      "slug": "ruya-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05319296899",
+      "instagramUsername": "ruyasapanca1",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e27",
+      "name": "VİLLA MANOLYA EDO PANSİYON",
+      "slug": "vi-lla-manolya-edo-pansi-yon",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05327337116",
+      "instagramUsername": "villamanolya",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e28",
+      "name": "VİLLA İN NATURE SAPANCA",
+      "slug": "vi-lla-i-n-nature-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05350481882",
+      "instagramUsername": "villa_in_nature",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e29",
+      "name": "GÜZEL EVLER SAPANCA",
+      "slug": "guzel-evler-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905452546454",
+      "instagramUsername": "guzelevlersapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e2a",
+      "name": "SAPANCA MAVİ YEŞİL KÖY EVİ",
+      "slug": "sapanca-mavi-yesi-l-koy-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05385502704",
+      "instagramUsername": "sapancamaviyesilkoyevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e2b",
+      "name": "ARI VİLLALARI SAPANCA",
+      "slug": "ari-vi-llalari-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322701808",
+      "instagramUsername": "arivillalarisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e2c",
+      "name": "EREN-MANZARA 1-MANZARA 2-GRAND VADİ-WHİTE ROSE VİLLA",
+      "slug": "eren-manzara-1-manzara-2-grand-vadi-whi-te-rose-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905326517105",
+      "instagramUsername": "sapancaerenvilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e2d",
+      "name": "BONANA VİLLALARI",
+      "slug": "bonana-vi-llalari",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304960189",
+      "instagramUsername": "bonana.villalari",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e2f",
+      "name": "VİLLA FRAPAN SAPANCA",
+      "slug": "vi-lla-frapan-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05366734707",
+      "instagramUsername": "villafrapan",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e30",
+      "name": "MEGA VİLLAGE SAPANCA",
+      "slug": "mega-vi-llage-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335169558",
+      "instagramUsername": "mega.village.sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e31",
+      "name": "SAPANCA WHİTE HOME KONAKLAMA",
+      "slug": "sapanca-whi-te-home-konaklama",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05058558954",
+      "instagramUsername": "whitehomesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e32",
+      "name": "VİLLA MAHAL SAPANCA",
+      "slug": "vi-lla-mahal-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326490254",
+      "instagramUsername": "villamahalsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e34",
+      "name": "SAPANCA KOKİNA SUİT",
+      "slug": "sapanca-koki-na-sui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05382283054",
+      "instagramUsername": "sapancakokinasuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e36",
+      "name": "SELVİ LİFE VİLLAS",
+      "slug": "selvi-li-fe-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05346029506",
+      "instagramUsername": "lifeselvivillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e37",
+      "name": "MARBELLA VİLLAM",
+      "slug": "marbella-vi-llam",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05412543071",
+      "instagramUsername": "marbellavillam",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e38",
+      "name": "SEVİMLİ VİLLA",
+      "slug": "sevi-mli-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323858003",
+      "instagramUsername": "sapancavillasevimli",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e39",
+      "name": "MCLİFE VİLLAS",
+      "slug": "mcli-fe-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "08504200302",
+      "instagramUsername": "mclifevillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e3a",
+      "name": "KOÇBEY BUTİK OTEL SAPANCA",
+      "slug": "kocbey-buti-k-otel-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905332323374",
+      "instagramUsername": "kocbeybutikotelsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e3b",
+      "name": "SAPANCA PİNK HOUSE",
+      "slug": "sapanca-pi-nk-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05524419230",
+      "instagramUsername": "sapancapinkhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e3c",
+      "name": "VİLLA PİNE SAPANCA",
+      "slug": "vi-lla-pi-ne-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05455718873",
+      "instagramUsername": "privatevillasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e3d",
+      "name": "VİLLA BAHAR SAPANCA | TATİL | OTEL | KONAKLAMA",
+      "slug": "vi-lla-bahar-sapanca-tati-l-otel-konaklama",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05398850270",
+      "instagramUsername": "villabaharsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e3e",
+      "name": "İKİZ VİLLALAR",
+      "slug": "i-ki-z-vi-llalar",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05392529248",
+      "instagramUsername": "ikiz_villalar54",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e3f",
+      "name": "VİLLA UĞUR &BUNGALOV",
+      "slug": "vi-lla-ugur-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05316821155",
+      "instagramUsername": "villaugur",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e40",
+      "name": "SAPANCA DOĞAL YAŞAM KÖYÜ",
+      "slug": "sapanca-dogal-yasam-koyu",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05350560854",
+      "instagramUsername": "sapancadogalyasamkoyu",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e41",
+      "name": "SİNDOMA MOUNTAİN HOUSE",
+      "slug": "si-ndoma-mountai-n-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05385460023",
+      "instagramUsername": "sindomasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e43",
+      "name": "NİBRAS VİLLA RESORT",
+      "slug": "ni-bras-vi-lla-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05528322488",
+      "instagramUsername": "nibrasvillaresort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e45",
+      "name": "KİWİ SAPANCA",
+      "slug": "ki-wi-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05313602930",
+      "instagramUsername": "kiwiisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e49",
+      "name": "VİLLA ULUSOY SAPANCA",
+      "slug": "vi-lla-ulusoy-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05356869524",
+      "instagramUsername": "villaulusoysapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e4a",
+      "name": "BARİA SAPANCA SUNSET VİLLAS",
+      "slug": "bari-a-sapanca-sunset-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05336122112",
+      "instagramUsername": "bariasapancasunsetvillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e4b",
+      "name": "VİLLA FAZİ",
+      "slug": "vi-lla-fazi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05305258868",
+      "instagramUsername": "villafazi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e4c",
+      "name": "VİLLA POLENTE  VİLLA GRANDE ALBERO SAPANCA",
+      "slug": "vi-lla-polente-vi-lla-grande-albero-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05330137202",
+      "instagramUsername": "villa_grande_albero",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e4d",
+      "name": "SAPANCA İNCİ SUİT",
+      "slug": "sapanca-i-nci-sui-t",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05357851754",
+      "instagramUsername": "sapancaincisuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e4f",
+      "name": "GİNKGO VİLLAS",
+      "slug": "gi-nkgo-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05446585858",
+      "instagramUsername": "ginkgovillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e50",
+      "name": "SAPANCA MONTANA VİLLA",
+      "slug": "sapanca-montana-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05547750660",
+      "instagramUsername": "sapancamontanavilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e52",
+      "name": "HİGH GARDEN VİLLAS",
+      "slug": "hi-gh-garden-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05538726740",
+      "instagramUsername": "highgardensapancavillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e53",
+      "name": "SAPANCA VİLLA KLASS",
+      "slug": "sapanca-vi-lla-klass",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05380373111",
+      "instagramUsername": "sapancavillaklass",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e54",
+      "name": "VİLLA AYIŞIĞI",
+      "slug": "vi-lla-ayisigi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05382246349",
+      "instagramUsername": "villaayisigisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e55",
+      "name": "SAPANCA VİLLA ŞEN",
+      "slug": "sapanca-vi-lla-sen",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05413959919",
+      "instagramUsername": "sapancavillasen",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e56",
+      "name": "VİLLA B PRİVATE SAPANCA",
+      "slug": "vi-lla-b-pri-vate-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335643256",
+      "instagramUsername": "villabprivate",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e57",
+      "name": "VİLLAM SAPANCA",
+      "slug": "vi-llam-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05380700558",
+      "instagramUsername": "villamsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e58",
+      "name": "SAPANCA VİLLA EYFEL",
+      "slug": "sapanca-vi-lla-eyfel",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05362519787",
+      "instagramUsername": "villa_eyfell",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e5b",
+      "name": "EFE KÖY EVİ",
+      "slug": "efe-koy-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05336406884",
+      "instagramUsername": "efekoyevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e5c",
+      "name": "SASİRİUS SHİNE SAPANCA",
+      "slug": "sasi-ri-us-shi-ne-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05462590101",
+      "instagramUsername": "sasiriusshine",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e5d",
+      "name": "NİHANE VİLLA",
+      "slug": "ni-hane-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05071471307",
+      "instagramUsername": "nihane.villa",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e5e",
+      "name": "SAPANCA VİLLA PALAS",
+      "slug": "sapanca-vi-lla-palas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05318963154",
+      "instagramUsername": "sapancavillapalas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e60",
+      "name": "ŞEVKİBEY SERENİTY  ŞEVKİBEY KONAĞI",
+      "slug": "sevki-bey-sereni-ty-sevki-bey-konagi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05353668893",
+      "instagramUsername": "sevkibeyserenity",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e63",
+      "name": "VİLLA BLUE SAPANCA",
+      "slug": "vi-lla-blue-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05444374331",
+      "instagramUsername": "villabluesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e64",
+      "name": "VİLLA GREEN",
+      "slug": "vi-lla-green",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05530875319",
+      "instagramUsername": "sapancavillagreen",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e65",
+      "name": "REAL LOVE VİLLAS",
+      "slug": "real-love-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05340736347",
+      "instagramUsername": "reallovevillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e66",
+      "name": "VİLLA NORTH SAPANCA",
+      "slug": "vi-lla-north-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322122501",
+      "instagramUsername": "villanorthsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e68",
+      "name": "VİLLA WONKA SAPANCA",
+      "slug": "vi-lla-wonka-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05332266879",
+      "instagramUsername": "villawonkasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e69",
+      "name": "VİLLA NİLÜFER SAPANCA",
+      "slug": "vi-lla-ni-lufer-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05444489496",
+      "instagramUsername": "villanilufersapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e6a",
+      "name": "HAME PİRA SUİTES",
+      "slug": "hame-pi-ra-sui-tes",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905335837281",
+      "instagramUsername": "hame_pira",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e6b",
+      "name": "SAPANCA BUNGOVİLLA",
+      "slug": "sapanca-bungovi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905325409281",
+      "instagramUsername": "sapancabungovilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e6c",
+      "name": "LA VİTA VİLLA",
+      "slug": "la-vi-ta-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05337006655",
+      "instagramUsername": "la_vita_villa",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e6d",
+      "name": "SAWSANA VİLLALARI",
+      "slug": "sawsana-vi-llalari",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05302990941",
+      "instagramUsername": "sawsanavillalari",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e6e",
+      "name": "SÜMBÜL HOUSE",
+      "slug": "sumbul-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05466253540",
+      "instagramUsername": "sumbulhouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e70",
+      "name": "SHİNİNGORE SAPANCA",
+      "slug": "shi-ni-ngore-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323694149",
+      "instagramUsername": "shiningoresapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e71",
+      "name": "MİNA HOUSE SAPANCA",
+      "slug": "mi-na-house-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05465231540",
+      "instagramUsername": "minahousesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e72",
+      "name": "VİLLA CHERRY SAPANCA",
+      "slug": "vi-lla-cherry-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308700871",
+      "instagramUsername": "villa_cherry_sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e73",
+      "name": "SAFİR SAPANCA VİLLAS",
+      "slug": "safi-r-sapanca-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05491005400",
+      "instagramUsername": "safirsapancavillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e74",
+      "name": "NAİLİYE DAĞ EVLERİ SAPANCA",
+      "slug": "nai-li-ye-dag-evleri-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05321130388",
+      "instagramUsername": "nailiyedagevlerisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e78",
+      "name": "VİTAL HOME SAPANCA",
+      "slug": "vi-tal-home-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323530885",
+      "instagramUsername": "vitalhomesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e7a",
+      "name": "SAPANCA VİLLA İPEKYOL",
+      "slug": "sapanca-vi-lla-i-pekyol",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05370430402",
+      "instagramUsername": "sapancavillaipekyol",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e7b",
+      "name": "ZİRVE KONAK RESORT",
+      "slug": "zi-rve-konak-resort",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05344472238",
+      "instagramUsername": "zirve_konak_resort",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e7c",
+      "name": "MJORASTE SAPANCA BOUTİGUE VİLLAS",
+      "slug": "mjoraste-sapanca-bouti-gue-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905326487454",
+      "instagramUsername": "mjorastesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e7d",
+      "name": "SAPANCA ATLI KÖŞK VİLLA",
+      "slug": "sapanca-atli-kosk-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "08503089552",
+      "instagramUsername": "atlikoskvilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e7e",
+      "name": "SAPANCA TANURA VİLLA",
+      "slug": "sapanca-tanura-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05347161364",
+      "instagramUsername": "sapancatanuravilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e7f",
+      "name": "SAPANCA HOT ICE VİLLA BUNGALOV",
+      "slug": "sapanca-hot-ice-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05528130510",
+      "instagramUsername": "sapancahot_icehouse",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e80",
+      "name": "VİLLA YAZ SAPANCA",
+      "slug": "vi-lla-yaz-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05330876809",
+      "instagramUsername": "villayazsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e81",
+      "name": "MEHMET BEY VİLLALARI",
+      "slug": "mehmet-bey-vi-llalari",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05434901061",
+      "instagramUsername": "mehmetbeybungovilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e83",
+      "name": "SAPANCA KİANA KONAKLAMA",
+      "slug": "sapanca-ki-ana-konaklama",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322909143",
+      "instagramUsername": "sapancakianakonaklama",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e84",
+      "name": "SAPANCA SEYRU SEFA VİLLA",
+      "slug": "sapanca-seyru-sefa-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326988541",
+      "instagramUsername": "sapancaseyrusefavilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e85",
+      "name": "SAPANCA ROYAL PALACE VİLLA",
+      "slug": "sapanca-royal-palace-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": null,
+      "instagramUsername": "sapanca_royalpalace",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e86",
+      "name": "SAPANCA AYNALI VİLLA",
+      "slug": "sapanca-aynali-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05075344154",
+      "instagramUsername": "sapancaaynalivilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e89",
+      "name": "YILDIZ FAMİLY VİLLAGE SAPANCA- AİLELERE ÖZEL",
+      "slug": "yildiz-fami-ly-vi-llage-sapanca-ai-lelere-ozel",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05079675626",
+      "instagramUsername": "yildizvillage",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e8b",
+      "name": "VİLLA ABUÇ SAPANCA",
+      "slug": "vi-lla-abuc-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05075675451",
+      "instagramUsername": "villaabuc",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e8c",
+      "name": "VİLLA LAKE HARMONY SAPANCA  NİLYS HOUSE",
+      "slug": "vi-lla-lake-harmony-sapanca-ni-lys-house",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905331352694",
+      "instagramUsername": "lake_harmony",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e8f",
+      "name": "VİLLA GÜNEŞ SAPANCA",
+      "slug": "vi-lla-gunes-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05363757417",
+      "instagramUsername": "villagunessapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e90",
+      "name": "VİLLA BAHÇE",
+      "slug": "vi-lla-bahce",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326951698",
+      "instagramUsername": "villabahce",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e91",
+      "name": "MY NATURAL VİLLA",
+      "slug": "my-natural-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05332714977",
+      "instagramUsername": "mynaturalvilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e93",
+      "name": "MOHTİVİLLA BUNGALOV",
+      "slug": "mohti-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05315851043",
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e94",
+      "name": "ÖZ VİLLA SAPANCA",
+      "slug": "oz-vi-lla-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05547205461",
+      "instagramUsername": "ozvillasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e97",
+      "name": "CHERRY HİLL VİLLAS",
+      "slug": "cherry-hi-ll-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "908508501054",
+      "instagramUsername": "cherryhillvillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e98",
+      "name": "PAGO VİLLA SAPANCA",
+      "slug": "pago-vi-lla-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05550341100",
+      "instagramUsername": "pagovilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e99",
+      "name": "SAPANCA VİLLA WHİTE & İNDİA BUNGALOV",
+      "slug": "sapanca-vi-lla-whi-te-i-ndi-a-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05308782784",
+      "instagramUsername": "sapancavillawhite",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e9a",
+      "name": "SAPANCA MELİH VİLLA",
+      "slug": "sapanca-meli-h-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05066389460",
+      "instagramUsername": "sapanca_melih.villa",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e9b",
+      "name": "SAPANCA IŞIKLI BAHÇE VİLLA & BUNGALOV",
+      "slug": "sapanca-isikli-bahce-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05078564121",
+      "instagramUsername": "sapancaisiklibahce",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e9c",
+      "name": "MERCAN VİLLAM",
+      "slug": "mercan-vi-llam",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326810646",
+      "instagramUsername": "mercanvillam",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e9d",
+      "name": "KIRKPINAR GÖL YOLU EVLERİ",
+      "slug": "kirkpinar-gol-yolu-evleri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05309327141",
+      "instagramUsername": "golyoluevleri",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e9e",
+      "name": "YAKUT VİLLAS",
+      "slug": "yakut-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05327237706",
+      "instagramUsername": "yakutvillas",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93e9f",
+      "name": "SAPANCABA VİLLAS",
+      "slug": "sapancaba-vi-llas",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325515441",
+      "instagramUsername": "sapancaba",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ea1",
+      "name": "SAPANCA AŞİYAN KONAKLAMA",
+      "slug": "sapanca-asi-yan-konaklama",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324318014",
+      "instagramUsername": "sapancasiyan54",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ea3",
+      "name": "SAPANCA VİLLA KİVİ",
+      "slug": "sapanca-vi-lla-ki-vi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05336396254",
+      "instagramUsername": "sapancavillakivi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ea4",
+      "name": "TROPİCAL SAPANCA",
+      "slug": "tropi-cal-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05332032823",
+      "instagramUsername": "tropicalsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ea5",
+      "name": "VİLLA SEU",
+      "slug": "vi-lla-seu",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05427944414",
+      "instagramUsername": "villa.seu",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ea6",
+      "name": "SEÇKİN VİLLA BUNGALOV",
+      "slug": "secki-n-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05339628754",
+      "instagramUsername": "seckinvillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ea8",
+      "name": "HOUSE OF TRİBECA HOTEL",
+      "slug": "house-of-tri-beca-hotel",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325753054",
+      "instagramUsername": "houseoftribecahotel",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eaa",
+      "name": "YAKUT VİLLAM",
+      "slug": "yakut-vi-llam",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05333806973",
+      "instagramUsername": "yakut.villam",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eac",
+      "name": "SAPANCA NATUREL STONE VİLLALARI",
+      "slug": "sapanca-naturel-stone-vi-llalari",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05469421637",
+      "instagramUsername": "sapancanaturelstonevillalari",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ead",
+      "name": "SUNSET VİLLA BUNGALOV",
+      "slug": "sunset-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05542532779",
+      "instagramUsername": "sunsetvillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eae",
+      "name": "VİLLA KEYİF SAPANCA",
+      "slug": "vi-lla-keyi-f-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05547015381",
+      "instagramUsername": "villakeyifsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb1",
+      "name": "VİLLA LİYA",
+      "slug": "vi-lla-li-ya",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05336683837",
+      "instagramUsername": "villaliya2022",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb3",
+      "name": "VİLLA VADİ",
+      "slug": "vi-lla-vadi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05525344154",
+      "instagramUsername": "sapancavillavadi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb4",
+      "name": "VİLLA MİMOZA SAPANCA",
+      "slug": "vi-lla-mi-moza-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335574165",
+      "instagramUsername": "sapancavillamimoza",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb5",
+      "name": "BEGONVİL KONAKLAMA",
+      "slug": "begonvi-l-konaklama",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05010703125",
+      "instagramUsername": "begonvilkonaklama",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb6",
+      "name": "SAPANCA DEMİR DAĞ EVİ",
+      "slug": "sapanca-demi-r-dag-evi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05326046702",
+      "instagramUsername": "sapancademirdagevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb7",
+      "name": "LOTUS VİLLA BUNGALOV",
+      "slug": "lotus-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05333395098",
+      "instagramUsername": "lotusvillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eb8",
+      "name": "VİLLA EGE SAPANCA",
+      "slug": "vi-lla-ege-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05418008088",
+      "instagramUsername": "villa_ege_sapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ebb",
+      "name": "KIRKPINAR LİFE VİLLA",
+      "slug": "kirkpinar-li-fe-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05370114348",
+      "instagramUsername": "kirkpinar_life",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ebc",
+      "name": "SAPANCA VİLLA VADİ",
+      "slug": "sapanca-vi-lla-vadi",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05333590886",
+      "instagramUsername": "ssvillavadi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ebd",
+      "name": "YEL DEĞİRMENİ VİLLALARI SAPANCA",
+      "slug": "yel-degi-rmeni-vi-llalari-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05524605409",
+      "instagramUsername": "villayeldegirmeni",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ebe",
+      "name": "SAPANCA MAVİ VİLLA",
+      "slug": "sapanca-mavi-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05332572027",
+      "instagramUsername": "sapancamavi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ebf",
+      "name": "4 MEVSİM DAĞ EVİ SAPANCA",
+      "slug": "4-mevsi-m-dag-evi-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05367959480",
+      "instagramUsername": "4mevsimdagevisapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec0",
+      "name": "VİLLA ARAS",
+      "slug": "vi-lla-aras",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05353999998",
+      "instagramUsername": "villa.arass",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec1",
+      "name": "VİLLA HERMES SAPANCA",
+      "slug": "vi-lla-hermes-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05399704797",
+      "instagramUsername": "villahermessapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec2",
+      "name": "BEGONVİL-LA&BUNGALOV",
+      "slug": "begonvi-l-la-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05325921043",
+      "instagramUsername": "sapancabegonvilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec3",
+      "name": "SAPANCA VİLLA FİVESTAR",
+      "slug": "sapanca-vi-lla-fi-vestar",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05541159784",
+      "instagramUsername": "sapancavilla_fivestar",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec4",
+      "name": "SAPANCA SUNRİSE VİLLA - SUNRİSE BUNGALOW",
+      "slug": "sapanca-sunri-se-vi-lla-sunri-se-bungalow",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05464273209",
+      "instagramUsername": "sapancasunrisevilla_",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec5",
+      "name": "SAPANCA VİLLA MOONLİGHT",
+      "slug": "sapanca-vi-lla-moonli-ght",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05462460556",
+      "instagramUsername": "sapancavillamoonlight",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec7",
+      "name": "CASA MİA AĞAÇ EVLERİ",
+      "slug": "casa-mi-a-agac-evleri",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05304218017",
+      "instagramUsername": "sapancacasamiasuit",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ec8",
+      "name": "BOSS VİLLA GARDEN",
+      "slug": "boss-vi-lla-garden",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05307854554",
+      "instagramUsername": "bossvillagarden",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ecb",
+      "name": "VİLLA SAPANCA SARI EV",
+      "slug": "vi-lla-sapanca-sari-ev",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05057854546",
+      "instagramUsername": "sapancakonukevi",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ecc",
+      "name": "ŞENGÜL KONAKLAMA",
+      "slug": "sengul-konaklama",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05302043461",
+      "instagramUsername": "sengulkonaklama",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ecd",
+      "name": "VİLLA AZUL & VERDE",
+      "slug": "vi-lla-azul-verde",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05014804954",
+      "instagramUsername": "villaazulverdesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ece",
+      "name": "EİGHT SAPANCA",
+      "slug": "ei-ght-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05424200088",
+      "instagramUsername": "eightsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ecf",
+      "name": "SAPANCA BİZİM EV",
+      "slug": "sapanca-bi-zi-m-ev",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05334311918",
+      "instagramUsername": "sapancabizimev",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed0",
+      "name": "NİL KONAKLAMA SAPANCA",
+      "slug": "ni-l-konaklama-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05323798597",
+      "instagramUsername": "nilkonaklamasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed1",
+      "name": "ERDİL VİLLA",
+      "slug": "erdi-l-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05331641043",
+      "instagramUsername": "erdilvilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed3",
+      "name": "SAPANCA ŞELALE VİLLA BUNGALOV",
+      "slug": "sapanca-selale-vi-lla-bungalov",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05316299135",
+      "instagramUsername": "sapancaselalevillabungalov",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed4",
+      "name": "VİLLA BND SAPANCA",
+      "slug": "vi-lla-bnd-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05300149884",
+      "instagramUsername": "villabndsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed5",
+      "name": "VİLLA ALİ ASAF",
+      "slug": "vi-lla-ali-asaf",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05346019505",
+      "instagramUsername": "villaaliasaf",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed7",
+      "name": "HİDDEN GARDEN VİLLA",
+      "slug": "hi-dden-garden-vi-lla",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05335010454",
+      "instagramUsername": "hiddengardenvilla",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed8",
+      "name": "VİLLA MOYO",
+      "slug": "vi-lla-moyo",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05324141770",
+      "instagramUsername": "sapancavillamoyo",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ed9",
+      "name": "OPİA SAPANCA",
+      "slug": "opi-a-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05320543775",
+      "instagramUsername": "opiasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93edc",
+      "name": "HERMANOS GLAMPİNG DOME",
+      "slug": "hermanos-glampi-ng-dome",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05540100054",
+      "instagramUsername": "hermanosglamping",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93edf",
+      "name": "SAPANCA GLAMPİNG",
+      "slug": "sapanca-glampi-ng",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05435362533",
+      "instagramUsername": "sapanca_glamping",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee0",
+      "name": "SAPANCA LAHZA GLAMPİNG",
+      "slug": "sapanca-lahza-glampi-ng",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05321343303",
+      "instagramUsername": null,
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee2",
+      "name": "PHALESİA GLAMPİNG HOTEL & MEDİTATİON",
+      "slug": "phalesi-a-glampi-ng-hotel-medi-tati-on",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05421010008",
+      "instagramUsername": "phalesiasapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee3",
+      "name": "WHİTEMOON",
+      "slug": "whi-temoon",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05453665454",
+      "instagramUsername": "sapancawhitemoon",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee4",
+      "name": "NONİVA RESORT SAPANCA",
+      "slug": "noni-va-resort-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322090658",
+      "instagramUsername": "nonivaresortsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee5",
+      "name": "ROLEDA GLAMPİNG",
+      "slug": "roleda-glampi-ng",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05322521854",
+      "instagramUsername": "roledaglamping",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee6",
+      "name": "ÖZLİFE SAPANCA",
+      "slug": "ozli-fe-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05315002794",
+      "instagramUsername": "ozlifesapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee7",
+      "name": "S'MORE SAPANCA GLAMPİNG HOTEL",
+      "slug": "s-more-sapanca-glampi-ng-hotel",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "905318637261",
+      "instagramUsername": "smoresapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee8",
+      "name": "NİL'S DOME SAPANCA",
+      "slug": "ni-l-s-dome-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05309103030",
+      "instagramUsername": "nilsdome",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93ee9",
+      "name": "SAPANCA DOME GLAMPİNG",
+      "slug": "sapanca-dome-glampi-ng",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "02646450141",
+      "instagramUsername": "sapancadome",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eec",
+      "name": "EVASİON SAPANCA",
+      "slug": "evasi-on-sapanca",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05301846979",
+      "instagramUsername": "evasionsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    },
+    {
+      "_id": "690e02740b9deb654ef93eed",
+      "name": "MEGA GLAMPİNG",
+      "slug": "mega-glampi-ng",
+      "city": "Sapanca",
+      "type": "bungalov",
+      "status": "approved",
+      "source": "savibu",
+      "phone": "05379795333",
+      "instagramUsername": "megaglampingsapanca",
+      "gallery": [
+        "/defaults/edogrula-default.webp.png"
+      ]
+    }
+  ],
+  "noGallery": []
+}
