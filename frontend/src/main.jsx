@@ -33,7 +33,7 @@ const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Businesses = React.lazy(() => import("./pages/Businesses"));
 const Applications = React.lazy(() => import("./pages/Applications"));
 const Archive = React.lazy(() => import("./pages/Archive"));
-const Reports = React.lazy(() => import("./pages/Reports"));
+const Reports = React.lazy(() => import("./pages/Reports.page"));
 const Blacklist = React.lazy(() => import("./pages/Blacklist"));
 const Featured = React.lazy(() => import("./pages/Featured"));
 const Supw = React.lazy(() => import("./pages/Supw"));
