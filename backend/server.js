@@ -16,7 +16,6 @@ import fs from "fs";
 
 // Routes
 import authRoutes from "./routes/auth.js";
-// ✅ DOSYA ADIN SINGULAR İSE HATASIZ OLAN BU:
 import businessRoutes from "./routes/business.js";
 import applyRoutes from "./routes/apply.js";
 import reportRoutes from "./routes/report.js";
@@ -60,7 +59,7 @@ function normalizeAssetBase(raw) {
 
 const ASSET_BASE = normalizeAssetBase(process.env.ASSET_BASE);
 
-// Vercel’de kalıcı disk yok → /tmp kullan
+// UPLOADS dir
 const UPLOADS_DIR = (() => {
   const raw = process.env.UPLOADS_DIR;
   if (raw) {
@@ -124,7 +123,7 @@ app.disable("x-powered-by");
 app.set("trust proxy", 1);
 app.set("etag", false);
 
-/* -------- Uploads klasörü -------- */
+/* -------- Create uploads folder -------- */
 try {
   if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -173,21 +172,18 @@ app.use(
 app.use((req, _res, next) => {
   const before = req.url;
   let u = before.replace(/\/{2,}/g, "/");
-  u = u.replace(/^\/api\/(?:api\/)+/i, "/api/");
   if (u !== before && !isProd) console.warn(`[normalize] ${before} -> ${u}`);
   req.url = u;
   next();
 });
 
 /* -------- CORS -------- */
-
 const baseAllowed = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5174",
   "https://edogrula.org",
   "https://www.edogrula.org",
+  "https://edogrula-api.onrender.com",
 ];
 
 const envAllowed = (process.env.CLIENT_URL || "")
@@ -195,29 +191,10 @@ const envAllowed = (process.env.CLIENT_URL || "")
   .map((s) => s.trim())
   .filter(Boolean);
 
-function isPrivateLan(origin) {
-  try {
-    const h = new URL(origin).hostname || "";
-    return (
-      /^localhost$/i.test(h) ||
-      /^127\./.test(h) ||
-      /^10\./.test(h) ||
-      /^192\.168\./.test(h) ||
-      /^172\.(1[6-9]|2\d|3[0-1])\./.test(h)
-    );
-  } catch {
-    return false;
-  }
-}
-
 function isAllowed(origin) {
   if (!origin) return true;
   if (baseAllowed.includes(origin) || envAllowed.includes(origin)) return true;
-  try {
-    const h = new URL(origin).hostname;
-    if (h === "edogrula.org" || h.endsWith(".edogrula.org")) return true;
-  } catch {}
-  return !isProd && isPrivateLan(origin);
+  return !isProd;
 }
 
 const corsOptions = {
@@ -235,31 +212,8 @@ const corsOptions = {
     "X-Request-Id",
   ],
   exposedHeaders: ["X-Asset-Base", "X-Request-Id"],
-  optionsSuccessStatus: 204,
   maxAge: 86400,
 };
-
-app.use((req, res, next) => {
-  res.setHeader(
-    "Vary",
-    "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
-  );
-  if (req.method !== "OPTIONS") return next();
-
-  const origin = req.headers.origin;
-  if (!isAllowed(origin)) return res.sendStatus(403);
-
-  const reqHeaders =
-    req.header("Access-Control-Request-Headers") ||
-    corsOptions.allowedHeaders.join(",");
-
-  res.setHeader("Access-Control-Allow-Origin", origin || "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
-  res.setHeader("Access-Control-Allow-Headers", reqHeaders);
-  res.setHeader("Access-Control-Max-Age", "86400");
-  return res.sendStatus(204);
-});
 
 app.use(cors(corsOptions));
 
@@ -276,22 +230,18 @@ app.use(
     etag: true,
     lastModified: true,
     maxAge: isProd ? "1d" : 0,
-    setHeaders: (res) => {
-      res.setHeader("Access-Control-Expose-Headers", "X-Asset-Base");
-    },
   })
 );
 
 /* -------- Rate limits -------- */
-
-const ipSafeKey = (req) => ipKeyGenerator(req);
+const safeKey = (req) => ipKeyGenerator(req);
 
 const standardLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 120,
+  keyGenerator: safeKey,
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: ipSafeKey,
   skip: (req) =>
     req.method === "OPTIONS" ||
     req.path === "/health" ||
@@ -300,38 +250,24 @@ const standardLimiter = rateLimit({
   message: { success: false, message: "RATE_LIMITED" },
 });
 
-const adminLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  limit: 60,
-  standardHeaders: true,
-  legacyHeaders: false,
-  keyGenerator: ipSafeKey,
-  skip: (req) => req.method === "OPTIONS",
-  message: { success: false, message: "ADMIN_RATE_LIMITED" },
-});
-
 app.use("/api", standardLimiter);
 
 /* -------- Health -------- */
-
 const noCache = (_req, res, next) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set("Cache-Control", "no-store");
   res.set("Pragma", "no-cache");
   res.set("Expires", "0");
   next();
 };
 
-app.get("/api/ping", noCache, (_req, res) => res.json({ ok: true, where: "server" }));
-
+app.get("/api/ping", noCache, (_req, res) => res.json({ ok: true }));
 app.get("/api/health", noCache, (_req, res) =>
   res.json({
     ok: true,
-    env: process.env.NODE_ENV || "development",
     uptime: process.uptime(),
     now: new Date().toISOString(),
   })
 );
-
 app.get("/api/version", noCache, (_req, res) =>
   res.json({ version: APP_VERSION, commit: GIT_COMMIT })
 );
@@ -339,6 +275,16 @@ app.get("/api/version", noCache, (_req, res) =>
 /* =====================================================
    Routes
    ===================================================== */
+
+// ROOT → Render’da boş cevap yerine düzgün mesaj
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "e-Doğrula API aktif 🚀",
+    version: APP_VERSION,
+    env: isProd ? "production" : "development",
+  });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/businesses", businessRoutes);
@@ -352,36 +298,23 @@ app.use("/api/featured", publicFeaturedRouter);
 app.use("/api/knowledge", knowledgeRoutes);
 app.use("/api/cms", cmsRouter);
 
-app.get("/api/auth/ping", (_req, res) => res.json({ ok: true, where: "auth" }));
+app.get("/api/auth/ping", (_req, res) => res.json({ ok: true }));
 
 app.get("/api/admin/_whoami", authenticate, requireAdmin, (req, res) => {
   res.json({
-    you: { id: req.user?._id, email: req.user?.email, role: req.user?.role || "admin" },
+    you: {
+      id: req.user?._id,
+      email: req.user?.email,
+      role: req.user?.role || "admin",
+    },
   });
 });
 
-app.use("/api/admin", adminLimiter, authenticate, requireAdmin, adminRoutes);
+app.use("/api/admin", authenticate, requireAdmin, adminRoutes);
 
 if (!isProd) app.use("/api/dev", devSupwRoutes);
 
-/* -------- SPA static (prod, opsiyonel) -------- */
-if (isProd && FRONTEND_DIST) {
-  const dist = path.isAbsolute(FRONTEND_DIST)
-    ? FRONTEND_DIST
-    : path.join(__dirname, FRONTEND_DIST);
-
-  app.use(express.static(dist, { index: false }));
-
-  app.get("*", (req, res, next) => {
-    if (!req.path.startsWith("/api")) {
-      return res.sendFile(path.join(dist, "index.html"));
-    }
-    next();
-  });
-}
-
-/* -------- 404 & Error handler -------- */
-
+/* -------- 404 -------- */
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -390,6 +323,7 @@ app.use((req, res) => {
   });
 });
 
+/* -------- Error handler -------- */
 app.use((err, req, res, _next) => {
   const status = err.status || 500;
   const payload = {
@@ -397,14 +331,6 @@ app.use((err, req, res, _next) => {
     message: status === 500 ? "INTERNAL_ERROR" : err?.message || "Hata",
   };
   if (!isProd) payload.stack = err.stack;
-
-  console.error("ERROR:", {
-    path: req?.originalUrl,
-    method: req?.method,
-    status,
-    message: err?.message,
-  });
-
   res.status(status).json(payload);
 });
 
@@ -414,42 +340,24 @@ app.use((err, req, res, _next) => {
 
 function startServer() {
   let server;
-
   if (ENABLE_SSL) {
     try {
       const credentials = {
         key: fs.readFileSync(process.env.SSL_KEY_PATH, "utf8"),
         cert: fs.readFileSync(process.env.SSL_CERT_PATH, "utf8"),
-        ...(process.env.SSL_CA_PATH
-          ? { ca: fs.readFileSync(process.env.SSL_CA_PATH, "utf8") }
-          : {}),
       };
-
       server = https.createServer(credentials, app);
-      server.listen(PORT, () => console.log(`🚀 Server (HTTPS) PORT: ${PORT}`));
+      server.listen(PORT, () => console.log(`🚀 (HTTPS) PORT ${PORT}`));
     } catch (err) {
       console.error("SSL Hatası:", err.message);
       process.exit(1);
     }
   } else {
     server = http.createServer(app);
-    server.listen(PORT, () => console.log(`🚀 Server (HTTP) PORT: ${PORT}`));
+    server.listen(PORT, () => console.log(`🚀 (HTTP) PORT ${PORT}`));
   }
 
   server.setTimeout(120 * 1000);
-
-  const shutdown = () => {
-    console.log("\n⏳ Graceful shutdown...\n");
-    Promise.resolve()
-      .then(() => mongoose.connection.close())
-      .then(() => server.close(() => process.exit(0)))
-      .catch(() => process.exit(1));
-
-    setTimeout(() => process.exit(0), 5000).unref();
-  };
-
-  process.on("SIGINT", shutdown);
-  process.on("SIGTERM", shutdown);
 }
 
 /* =====================================================
@@ -459,16 +367,16 @@ function startServer() {
 async function boot() {
   try {
     const conn = await connectMongo();
-    if (conn) console.log("✅ Veri tabanı bağlandı");
+    if (conn) console.log("✅ MongoDB bağlı");
 
     try {
       await User.ensureAdminSeed();
     } catch (e) {
-      console.warn("[bootstrap] ensureAdminSeed uyarısı:", e?.message);
+      console.warn("[ensureAdminSeed]:", e?.message);
     }
 
     if (!isVercel) startServer();
-    else console.log("⚙️ Vercel ortamı: Express app hazır, server.listen yok.");
+    else console.log("⚙️ Vercel ortamı: Express app hazır (server.listen yok).");
   } catch (err) {
     console.error("MongoDB bağlantı hatası:", err.message);
     if (!isVercel) process.exit(1);
@@ -478,10 +386,6 @@ async function boot() {
 if (!globalThis.__EDOGRULA_BOOT__) {
   globalThis.__EDOGRULA_BOOT__ = boot();
 }
-
-/* =====================================================
-   Export
-   ===================================================== */
 
 export default app;
 export { app };
