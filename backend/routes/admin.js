@@ -1,9 +1,75 @@
 // backend/routes/admin.js — Admin API (PRO / LIVE READY, models-uyumlu)
 import express from "express";
 import mongoose from "mongoose";
+import path from "path";
+import multer from "multer";
 import { authenticate, requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
+
+/* ====================== Upload / Media Helpers ====================== */
+
+const uploadDir =
+  process.env.UPLOADS_DIR || path.resolve(process.cwd(), "uploads");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const original = file.originalname || "file";
+    const ext = path.extname(original);
+    const base = path
+      .basename(original, ext)
+      .replace(/\s+/g, "_")
+      .replace(/[^\w.-]/g, "")
+      .toLowerCase();
+    cb(null, `${Date.now()}_${base}${ext}`);
+  },
+});
+
+const upload = multer({ storage });
+
+function applyCoverToBusinessDoc(doc, url) {
+  if (!doc || !url) return doc;
+
+  const schema = doc.constructor?.schema;
+
+  // Önce kapak alanları
+  if (schema?.path("coverImage")) {
+    doc.coverImage = url;
+  } else if (schema?.path("coverImageUrl")) {
+    doc.coverImageUrl = url;
+  } else {
+    // Şema katı olsa bile çoğu durumda sorun çıkarmaz; fallback
+    doc.coverImage = url;
+  }
+
+  // Olası galeri alanları
+  const galleryFields = [
+    "images",
+    "gallery",
+    "galleryImages",
+    "documents",
+    "docs",
+    "files",
+    "evidenceFiles",
+  ];
+
+  for (const f of galleryFields) {
+    const p = schema?.path(f);
+    if (!p) continue;
+
+    if (!Array.isArray(doc[f])) {
+      doc[f] = [];
+    }
+    if (!doc[f].includes(url)) {
+      doc[f].push(url);
+    }
+  }
+
+  return doc;
+}
 
 /* ====================== Helpers / Context ====================== */
 function attachAdminContext(req, _res, next) {
@@ -256,12 +322,18 @@ function buildUpdateFromBody(body = {}, allowSet = new Set()) {
 /* ------------ slug helpers (TR fix + unique) ------------ */
 function slugifyTR(s = "") {
   const map = {
-    ş: "s", Ş: "s",
-    ı: "i", İ: "i",
-    ğ: "g", Ğ: "g",
-    ü: "u", Ü: "u",
-    ö: "o", Ö: "o",
-    ç: "c", Ç: "c",
+    ş: "s",
+    Ş: "s",
+    ı: "i",
+    İ: "i",
+    ğ: "g",
+    Ğ: "g",
+    ü: "u",
+    Ü: "u",
+    ö: "o",
+    Ö: "o",
+    ç: "c",
+    Ç: "c",
   };
   return String(s)
     .replace(/[ŞşİıĞğÜüÖöÇç]/g, (ch) => map[ch] || ch)
@@ -723,6 +795,64 @@ router.patch("/businesses/:idOrSlug", ...protect, async (req, res) => {
   }
 });
 
+// Kapak / görsel upload
+router.post(
+  "/businesses/:idOrSlug/cover",
+  ...protect,
+  upload.single("file"), // field name = "file"
+  async (req, res) => {
+    try {
+      const Business = await getBusinessModel();
+      if (!Business)
+        return res.status(404).json({ success: false, message: "Model yok" });
+
+      const key = req.params.idOrSlug;
+      const filter = isObjectIdLike(key) ? { _id: key } : { slug: key };
+      const doc = await Business.findOne(filter);
+      if (!doc)
+        return res
+          .status(404)
+          .json({ success: false, message: "Kayıt bulunamadı" });
+
+      console.log("🏢 [API ADMIN/BUSINESSES] COVER upload", {
+        idOrSlug: key,
+        id: doc._id?.toString(),
+        hasFile: !!req.file,
+        file: req.file && {
+          filename: req.file.filename,
+          originalname: req.file.originalname,
+          size: req.file.size,
+          mimetype: req.file.mimetype,
+        },
+      });
+
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Dosya bulunamadı" });
+      }
+
+      const base = (process.env.ASSET_BASE || "/uploads").replace(/\/+$/, "");
+      const url = `${base}/${req.file.filename}`;
+
+      applyCoverToBusinessDoc(doc, url);
+      await doc.save();
+
+      res.json({
+        success: true,
+        business: doc.toObject(),
+        file: {
+          url,
+          filename: req.file.filename,
+        },
+      });
+    } catch (err) {
+      console.error("Admin businesses cover error:", err);
+      res.status(500).json({ success: false, message: "Sunucu hatası" });
+    }
+  }
+);
+
 // Sil
 router.delete("/businesses/:idOrSlug", ...protect, async (req, res) => {
   try {
@@ -1031,7 +1161,9 @@ router.post("/applications/bulk", ...protect, async (req, res) => {
 
     if (op === "approve") {
       const docs = await Apply.find({ _id: { $in: ids } });
-      let created = 0, updated = 0, processed = 0;
+      let created = 0,
+        updated = 0,
+        processed = 0;
       const results = [];
 
       for (const d of docs) {

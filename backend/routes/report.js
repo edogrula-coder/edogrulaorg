@@ -1,4 +1,4 @@
-// backend/routes/report.js — Ultra Pro (live-ready, verify-token guarded, safe uploads)
+// backend/routes/report.js — Ultra Pro (debug-friendly, verify optional in dev)
 import { Router } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
@@ -14,7 +14,9 @@ const ok = (res, data = {}, status = 200) =>
   res.status(status).json({ success: true, ...data });
 
 const fail = (res, message = "Hata", status = 400, code) =>
-  res.status(status).json({ success: false, message, ...(code ? { code } : {}) });
+  res
+    .status(status)
+    .json({ success: false, message, ...(code ? { code } : {}) });
 
 /* ===================== küçük utils ===================== */
 const escapeRegex = (s = "") =>
@@ -33,18 +35,16 @@ const clampInt = (v, def, min, max) => {
 };
 
 /* ===================== Admin tespiti ===================== */
-/**
- * - x-admin-key == ADMIN_KEY
- * - Authorization: Bearer <jwt> (payload.role === "admin")
- * - ?admin=1 (dev kısayolu)
- */
 function isAdminRequest(req) {
   try {
     const adminKey = req.headers["x-admin-key"];
     const needKey = process.env.ADMIN_KEY;
     if (needKey && String(adminKey) === String(needKey)) return true;
 
-    const bearer = (req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+    const bearer = (req.headers.authorization || "").replace(
+      /^Bearer\s+/i,
+      ""
+    );
     if (bearer && process.env.JWT_SECRET) {
       const payload = jwt.verify(bearer, process.env.JWT_SECRET);
       if (payload?.role === "admin" || payload?.isAdmin === true) return true;
@@ -66,7 +66,6 @@ router.use((req, _res, next) => {
 });
 
 /* ===================== Upload config ===================== */
-// uploads/report altında tut
 const UPLOADS_ROOT =
   process.env.UPLOADS_DIR || path.join(process.cwd(), "uploads");
 const UPLOADS_DIR = path.join(UPLOADS_ROOT, "report");
@@ -86,7 +85,8 @@ const ALLOWED_MIME = new Set([
 ]);
 
 const MAX_FILES = clampInt(process.env.REPORT_MAX_FILES, 10, 1, 20);
-const MAX_SIZE = clampInt(process.env.REPORT_MAX_MB, 10, 1, 25) * 1024 * 1024;
+const MAX_SIZE =
+  clampInt(process.env.REPORT_MAX_MB, 10, 1, 25) * 1024 * 1024;
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
@@ -127,13 +127,23 @@ const getClientIp = (req) => {
   );
 };
 
-// Verify token guard:
-// - Header: x-verify-token
-// - JWT_SECRET varsa doğrular (sub: "email-verify")
-// - Secret yoksa sadece varlık kontrolü (dev uyumluluk)
+/* ============ Verify token guard (DEV'te esnek) ============ */
+
+const VERIFY_REQUIRED =
+  String(process.env.REPORT_REQUIRE_VERIFY ?? "0").trim() === "1";
+
 function requireVerifyToken(req, res, next) {
   const vt = String(req.headers["x-verify-token"] || "").trim();
+
   if (!vt) {
+    if (!VERIFY_REQUIRED) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          "[REPORT] x-verify-token header YOK, fakat REPORT_REQUIRE_VERIFY != 1 → DEV MOD: izin verildi."
+        );
+      }
+      return next();
+    }
     return fail(
       res,
       "Doğrulama gerekli. Lütfen e-posta doğrulamasını tamamlayın.",
@@ -147,12 +157,27 @@ function requireVerifyToken(req, res, next) {
     try {
       const payload = jwt.verify(vt, secret);
       if (payload?.sub !== "email-verify") {
-        return fail(res, "Doğrulama tokeni geçersiz.", 401, "VERIFY_INVALID");
+        return fail(
+          res,
+          "Doğrulama tokeni geçersiz.",
+          401,
+          "VERIFY_INVALID"
+        );
       }
       req.verifyPayload = payload;
-    } catch {
-      return fail(res, "Doğrulama tokeni süresi dolmuş veya geçersiz.", 401, "VERIFY_INVALID");
+    } catch (e) {
+      console.warn("[REPORT] verify token decode error:", e?.message);
+      return fail(
+        res,
+        "Doğrulama tokeni süresi dolmuş veya geçersiz.",
+        401,
+        "VERIFY_INVALID"
+      );
     }
+  } else if (process.env.NODE_ENV !== "production") {
+    console.warn(
+      "[REPORT] JWT_SECRET tanımlı değil, x-verify-token sadece varlık bazlı kabul ediliyor."
+    );
   }
 
   req.verifyToken = vt;
@@ -161,12 +186,9 @@ function requireVerifyToken(req, res, next) {
 
 /* ===================== POST /api/report ===================== */
 /**
- * Public ihbar oluşturma
- * Body: multipart/form-data
- * - name, instagramUsername, instagramUrl, phone, desc
- * - reporterEmail, reporterName, reporterPhone (opsiyonel)
- * - consent ("true"), policyVersion, userAgent
- * - evidence: dosyalar
+ * Public ihbar:
+ * - JSON veya multipart/form-data
+ * - evidence: dosya alanı (çoklu)
  */
 router.post(
   "/",
@@ -177,6 +199,16 @@ router.post(
       const { body } = req;
       const files = req.files || [];
 
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[REPORT] POST hit; body.keys =", Object.keys(body || {}));
+        console.log(
+          "[REPORT] files count =",
+          files.length,
+          "UPLOADS_DIR =",
+          UPLOADS_DIR
+        );
+      }
+
       const evidenceFiles = files.map((f) => `${ASSET_BASE}/${f.filename}`);
 
       const payload = {
@@ -184,11 +216,61 @@ router.post(
         evidenceFiles,
         createdByIp: body.createdByIp || getClientIp(req),
         userAgent: body.userAgent || req.headers["user-agent"],
-        // opsiyonel: verify email payload'ını model isterse kullanabilir
         verifiedEmail: req.verifyPayload?.email || body.verifiedEmail,
       };
 
-      const data = Report.fromPayload(payload);
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[REPORT] normalized payload preview =", {
+          ...payload,
+          evidenceFilesCount: evidenceFiles.length,
+        });
+      }
+
+      // fromPayload varsa kullan, yoksa raw fallback
+      let data;
+      try {
+        if (typeof Report.fromPayload === "function") {
+          data = Report.fromPayload(payload);
+        } else {
+          console.warn(
+            "[REPORT] Report.fromPayload bulunamadı, raw payload'tan sade obje üretiliyor."
+          );
+          data = {
+            name: payload.name,
+            instagramUsername: payload.instagramUsername,
+            instagramUrl: payload.instagramUrl,
+            phone: payload.phone,
+            desc: payload.desc,
+            reporterEmail: payload.reporterEmail,
+            reporterName: payload.reporterName,
+            reporterPhone: payload.reporterPhone,
+            consent:
+              payload.consent === true ||
+              payload.consent === "true" ||
+              payload.consent === "1" ||
+              payload.consent === 1,
+            policyVersion: payload.policyVersion,
+            evidenceFiles: payload.evidenceFiles || [],
+            createdByIp: payload.createdByIp,
+            userAgent: payload.userAgent,
+            verifiedEmail: payload.verifiedEmail,
+            status: "open",
+          };
+        }
+      } catch (e) {
+        console.error(
+          "[REPORT] fromPayload hata verdi, raw payload kullanılacak:",
+          e
+        );
+        data = {
+          ...payload,
+          consent:
+            payload.consent === true ||
+            payload.consent === "true" ||
+            payload.consent === "1" ||
+            payload.consent === 1,
+        };
+      }
 
       if (!data.consent) {
         return fail(
@@ -209,6 +291,11 @@ router.post(
       }
 
       const doc = await Report.create(data);
+
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[REPORT] created report _id =", doc._id);
+      }
+
       return ok(res, { id: doc._id, report: doc }, 201);
     } catch (err) {
       // Multer error mapping
@@ -229,6 +316,7 @@ router.post(
           "BAD_FILE_TYPE"
         );
       }
+      console.error("[REPORT] POST / error", err);
       return next(err);
     }
   }
@@ -267,6 +355,14 @@ router.get("/", async (req, res, next) => {
       ];
     }
 
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[REPORT] GET / admin list filter =", filter, {
+        page,
+        limit,
+        sort,
+      });
+    }
+
     const [items, total] = await Promise.all([
       Report.find(filter)
         .sort(sort)
@@ -284,15 +380,44 @@ router.get("/", async (req, res, next) => {
       hasMore: page * limit < total,
     });
   } catch (e) {
+    console.error("[REPORT] GET / admin list error", e);
     return next(e);
   }
 });
 
-/* ===================== GET /api/report/:id ===================== */
+/* ===================== DEV: hızlı test için seed ===================== */
 /**
- * - Admin: tam detay
- * - Public: hassas izleri gizler
+ * Sadece development'ta aktif.
+ * GET /api/report/dev-seed?admin=1
+ * → Mongo'ya 1 adet test raporu yazar.
  */
+if (process.env.NODE_ENV !== "production") {
+  router.get("/dev-seed", async (req, res, next) => {
+    try {
+      const doc = await Report.create({
+        name: "Test İşletme (dev-seed)",
+        instagramUsername: "testaccount",
+        instagramUrl: "https://instagram.com/testaccount",
+        phone: "0555 555 55 55",
+        desc: "Bu kayıt sadece report hattını test etmek için eklendi.",
+        consent: true,
+        status: "open",
+        createdByIp: getClientIp(req),
+        userAgent: req.headers["user-agent"] || "",
+        evidenceFiles: [],
+      });
+
+      console.log("[REPORT] DEV SEED created report _id =", doc._id);
+
+      return ok(res, { report: doc }, 201);
+    } catch (e) {
+      console.error("[REPORT] DEV SEED error", e);
+      return next(e);
+    }
+  });
+}
+
+/* ===================== GET /api/report/:id ===================== */
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -316,6 +441,7 @@ router.get("/:id", async (req, res, next) => {
 
     return ok(res, { report: doc });
   } catch (e) {
+    console.error("[REPORT] GET /:id error", e);
     return next(e);
   }
 });

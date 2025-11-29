@@ -1,4 +1,4 @@
-// backend/server.js — Ultra Pro Final (features preserved)
+// backend/server.js — Ultra Pro Final + Upload + /api/api uyumluluk + DEBUG LOG
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
@@ -28,6 +28,9 @@ import { publicFeaturedRouter } from "./routes/admin.featured.js";
 import devSupwRoutes from "./routes/dev.supw.js";
 import cmsRouter from "./routes/cms.js";
 
+// ⬇️ Upload router: /api/uploads/business + /api/admin/uploads/business
+import uploadRoutes from "./routes/upload.js";
+
 import User from "./models/User.js";
 import { authenticate, requireAdmin } from "./middleware/auth.js";
 
@@ -40,24 +43,26 @@ const isVercel = Boolean(process.env.VERCEL);
 const isProd = process.env.NODE_ENV === "production" || isVercel;
 
 const PORT = Number(process.env.PORT || 5000);
-const ENABLE_SSL = String(process.env.ENABLE_SSL || "").toLowerCase() === "true";
+const ENABLE_SSL =
+  String(process.env.ENABLE_SSL || "").toLowerCase() === "true";
 
 const APP_VERSION = process.env.APP_VERSION || "1.0.0";
 const GIT_COMMIT = process.env.GIT_COMMIT || null;
 
 /* =====================================================
-   ASSET_BASE & UPLOADS_DIR (THE FIX)
+   ASSET_BASE & UPLOADS_DIR
 ===================================================== */
 
-// STATIC URL PREFIX (HER ZAMAN /uploads OLMALI)
+// STATIC URL PREFIX (FRONTEND İÇİN HEP /uploads KALACAK)
 const ASSET_BASE = "/uploads";
 
-// REAL PATH (LOCAL → uploads/, RENDER → /tmp/uploads)
+// GERÇEK FİZİKSEL DİZİN
+// - Local: <project-root>/uploads
+// - Vercel/Render (read-only FS): /tmp/uploads
 const UPLOADS_DIR = isVercel
   ? path.join("/tmp", "uploads")
   : path.join(process.cwd(), "uploads");
 
-// ensure directory exists
 try {
   if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -65,6 +70,15 @@ try {
 } catch (e) {
   console.warn("[uploads] klasör oluşturulamadı:", e.message);
 }
+
+// Ortak router'lar için env'e de yaz (report.js, upload.js vs)
+process.env.ASSET_BASE = process.env.ASSET_BASE || ASSET_BASE;
+process.env.UPLOADS_DIR = process.env.UPLOADS_DIR || UPLOADS_DIR;
+
+// 💬 Boot log
+console.log("📦 [BOOT] ASSET_BASE =", ASSET_BASE);
+console.log("📦 [BOOT] UPLOADS_DIR =", UPLOADS_DIR);
+console.log("📦 [BOOT] NODE_ENV =", process.env.NODE_ENV, "isProd =", isProd);
 
 /* =====================================================
    MongoDB
@@ -94,8 +108,11 @@ app.set("trust proxy", 1);
 
 /* Request ID */
 app.use((req, res, next) => {
-  const rid = req.headers["x-request-id"] ||
-    `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  const rid =
+    req.headers["x-request-id"] ||
+    `${Date.now().toString(36)}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
   req.id = rid;
   res.setHeader("X-Request-Id", rid);
   next();
@@ -111,15 +128,15 @@ app.use(
 );
 
 app.use(compression());
-app.use(express.json({ limit: "1mb" }));
-app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+app.use(express.json({ limit: "8mb" }));
+app.use(express.urlencoded({ extended: true, limit: "8mb" }));
 app.use(cookieParser());
 
 /* Logger */
 morgan.token("rid", (req) => req.id);
 app.use(morgan(isProd ? "combined" : "dev"));
 
-/* URL normalize */
+/* URL normalize (çifte / engelle) */
 app.use((req, res, next) => {
   req.url = req.url.replace(/\/{2,}/g, "/");
   next();
@@ -129,6 +146,8 @@ app.use((req, res, next) => {
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
   "https://edogrula.org",
   "https://www.edogrula.org",
   "https://edogrula-api.onrender.com",
@@ -136,22 +155,39 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
+    origin: (origin, cb) =>
+      cb(null, !origin || allowedOrigins.includes(origin)),
     credentials: true,
   })
 );
 
-/* Asset Base header */
+/* Asset Base header (frontend bu header'dan /uploads bilgisini görebilir) */
 app.use((req, res, next) => {
   res.setHeader("X-Asset-Base", ASSET_BASE);
   next();
 });
 
 /* =====================================================
-   STATIC UPLOAD SERVE  (FINAL FIX)
+   STATIC UPLOAD SERVE + DEBUG
 ===================================================== */
+
+// /uploads/... → fiziksel UPLOADS_DIR içeriğini servis et
 app.use(
   ASSET_BASE,
+  (req, res, next) => {
+    const fsPath = path.join(
+      UPLOADS_DIR,
+      String(req.url || "").replace(/^\/+/, "")
+    );
+    console.log(
+      "📂 [STATIC UPLOAD]",
+      req.method,
+      req.originalUrl,
+      "→",
+      fsPath
+    );
+    next();
+  },
   express.static(UPLOADS_DIR, {
     etag: true,
     lastModified: true,
@@ -162,6 +198,7 @@ app.use(
 /* =====================================================
    DEBUG
 ===================================================== */
+
 app.get("/debug/uploads", (req, res) => {
   try {
     const exists = fs.existsSync(UPLOADS_DIR);
@@ -181,7 +218,7 @@ app.get("/debug/uploads", (req, res) => {
 });
 
 /* =====================================================
-   ROUTES
+   ROOT PING
 ===================================================== */
 
 app.get("/", (req, res) =>
@@ -189,27 +226,110 @@ app.get("/", (req, res) =>
     success: true,
     message: "e-Doğrula API aktif 🚀",
     version: APP_VERSION,
+    git: GIT_COMMIT,
     env: isProd ? "production" : "development",
   })
 );
 
-app.use("/api/auth", authRoutes);
-app.use("/api/businesses", businessRoutes);
-app.use("/api/apply", applyRoutes);
-app.use("/api/report", reportRoutes);
-app.use("/api/reviews", reviewsRoutes);
-app.use("/api/explore", exploreRoutes);
-app.use("/api/google", googleRoutes);
-app.use("/api/blacklist", blacklistRoutes);
-app.use("/api/featured", publicFeaturedRouter);
-app.use("/api/knowledge", knowledgeRoutes);
-app.use("/api/cms", cmsRouter);
+/* =====================================================
+   API ROUTER  (/api ve /api/api alias)
+===================================================== */
 
-app.use("/api/admin", authenticate, requireAdmin, adminRoutes);
+const apiRouter = express.Router();
 
-if (!isProd) app.use("/api/dev", devSupwRoutes);
+/* API level rate limit (özellikle prod için) */
+if (isProd) {
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 dakika
+    limit: 2000, // IP başına 15 dakikada 2000 istek
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: ipKeyGenerator,
+  });
+  apiRouter.use(apiLimiter);
+}
 
-/* 404 */
+/* === DEBUG MIDDLEWARELERİ ===
+   - Upload isteklerini
+   - Admin/business patch & get isteklerini
+   konsola basıyoruz.
+*/
+apiRouter.use((req, res, next) => {
+  if (req.path.startsWith("/uploads")) {
+    console.log(
+      "🧵 [API UPLOAD]",
+      req.method,
+      req.originalUrl,
+      "query=",
+      req.query,
+      "body.keys=",
+      Object.keys(req.body || {})
+    );
+  }
+
+  if (req.path.startsWith("/admin/businesses")) {
+    console.log(
+      "🏢 [API ADMIN/BUSINESSES]",
+      req.method,
+      req.originalUrl,
+      "query=",
+      req.query,
+      "body.keys=",
+      Object.keys(req.body || {})
+    );
+  }
+
+  next();
+});
+
+// Basit health
+apiRouter.get("/health", (req, res) => {
+  res.json({ ok: true, ts: Date.now() });
+});
+
+// Ana API’ler
+apiRouter.use("/auth", authRoutes);
+apiRouter.use("/businesses", businessRoutes);
+apiRouter.use("/apply", applyRoutes);
+apiRouter.use("/report", reportRoutes);
+apiRouter.use("/reviews", reviewsRoutes);
+apiRouter.use("/explore", exploreRoutes);
+apiRouter.use("/google", googleRoutes);
+apiRouter.use("/blacklist", blacklistRoutes);          // public + admin logic
+apiRouter.use("/featured", publicFeaturedRouter);
+apiRouter.use("/knowledge", knowledgeRoutes);
+apiRouter.use("/cms", cmsRouter);
+
+// ⬇️ Upload rotaları doğrudan /api altına bağlanıyor:
+// - POST /api/uploads/business
+// - POST /api/admin/uploads/business
+apiRouter.use(uploadRoutes);
+
+// Admin kara liste alias: /api/admin/blacklist → blacklistRoutes
+apiRouter.use(
+  "/admin/blacklist",
+  authenticate,
+  requireAdmin,
+  blacklistRoutes
+);
+
+// Admin korumalı genel router
+apiRouter.use("/admin", authenticate, requireAdmin, adminRoutes);
+
+// Dev util (sadece dev ortamında)
+if (!isProd) {
+  apiRouter.use("/dev", devSupwRoutes);
+}
+
+// Normal prefix
+app.use("/api", apiRouter);
+// Yanlış yazımları affeden alias → /api/api/...
+app.use("/api/api", apiRouter);
+
+/* =====================================================
+   404 & ERROR HANDLER
+===================================================== */
+
 app.use((req, res) =>
   res.status(404).json({
     success: false,
@@ -218,8 +338,9 @@ app.use((req, res) =>
   })
 );
 
-/* Error handler */
-app.use((err, req, res) => {
+// 4 argümanlı olmak zorunda
+app.use((err, req, res, next) => {
+  console.error("🔥 API error:", err);
   res.status(err.status || 500).json({
     success: false,
     message: err.message || "INTERNAL_ERROR",
@@ -233,14 +354,16 @@ app.use((err, req, res) => {
 
 async function boot() {
   await connectMongo();
-  await User.ensureAdminSeed();
+  await User.ensureAdminSeed?.();
 
   if (!isVercel) {
+    // Local / Render tarzı ortamlarda klasik listen
     http.createServer(app).listen(PORT, () =>
       console.log(`🚀 API ready → http://localhost:${PORT}`)
     );
   } else {
-    console.log("⚙️ Vercel ortamı: server.listen yok.");
+    // Vercel: framework kendi server instance'ını oluşturuyor
+    console.log("⚙️ Vercel ortamı: server.listen yok (edge/serverless).");
   }
 }
 
