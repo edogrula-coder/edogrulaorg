@@ -1,4 +1,4 @@
-// backend/routes/businesses.js — Public + Legacy Admin (Ultra Pro, phones-safe, live-ready)
+// backend/routes/businesses.js — Public + Legacy Admin (Ultra Pro, phones-safe, live-ready + smart search)
 import express from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -15,6 +15,54 @@ const toArray = (v) => (Array.isArray(v) ? v : v ? [v] : []).filter(Boolean);
 const escapeRegex = (s = "") =>
   String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+// rakam kırpıcı
+const digitsOnly = (s = "") => String(s).replace(/\D/g, "");
+
+// "+905069990554", "0506 999 05 54", "5069990554" -> "5069990554" (son 10)
+const normalizePhoneDigitsTR = (raw = "") => {
+  const d = digitsOnly(raw);
+  if (!d) return "";
+  if (d.length >= 10) return d.slice(-10);
+  return d;
+};
+
+// "5069990554" -> 5\D*0\D*6\D*9...
+const buildLoosePhoneRegex = (digits = "") => {
+  const d = digitsOnly(digits);
+  if (!d) return null;
+  if (d.length < 7) return null;
+  const pattern = d
+    .split("")
+    .map((ch) => escapeRegex(ch))
+    .join("\\D*");
+  return new RegExp(pattern, "i");
+};
+
+// hostCore ("kulesapanca") -> k[-_\s]*u[-_\s]*l[-_\s]*e...
+// böylece "Kule Sapanca", "kule-sapanca" gibi varyantları yakalar
+const buildLooseNameRegexFromHostCore = (hostCore = "") => {
+  const core = String(hostCore || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (!core || core.length < 4) return null;
+  const pattern = core
+    .split("")
+    .map((ch) => escapeRegex(ch))
+    .join("[-_\\s]*");
+  return new RegExp(pattern, "i");
+};
+
+// "kulesapanca.com", "www.kulesapanca.com", "https://www.kulesapanca.com/x" -> "kulesapanca.com"
+const extractHost = (raw = "") => {
+  let s = clean(raw);
+  if (!s) return "";
+  if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+  try {
+    const u = new URL(s);
+    return u.hostname.replace(/^www\./i, "").toLowerCase();
+  } catch {
+    return "";
+  }
+};
+
 // ReDoS + aşırı uzun query koruması
 const safeRegex = (input, maxLen = 120) => {
   const s = clean(String(input || "")).slice(0, maxLen);
@@ -22,7 +70,7 @@ const safeRegex = (input, maxLen = 120) => {
   return new RegExp(escapeRegex(s), "i");
 };
 
-// güvenli sayı (virgüllü stringleri de çevirir)
+// güvenli sayı
 const toNum = (v) => {
   if (v == null) return 0;
   const n = Number(String(v).replace(",", "."));
@@ -32,18 +80,24 @@ const toNum = (v) => {
 /* ------------ slug helpers (TR uyumlu) ------------ */
 function slugifyTR(s = "") {
   const map = {
-    ş: "s", Ş: "s",
-    ı: "i", İ: "i",
-    ğ: "g", Ğ: "g",
-    ü: "u", Ü: "u",
-    ö: "o", Ö: "o",
-    ç: "c", Ç: "c",
+    ş: "s",
+    Ş: "s",
+    ı: "i",
+    İ: "i",
+    ğ: "g",
+    Ğ: "g",
+    ü: "u",
+    Ü: "u",
+    ö: "o",
+    Ö: "o",
+    ç: "c",
+    Ç: "c",
   };
 
   return String(s || "")
     .replace(/[ŞşİıĞğÜüÖöÇç]/g, (ch) => map[ch] || ch)
     .toLowerCase()
-    .normalize("NFD")                 // ekstra accent temizliği
+    .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s-]/g, "")
     .trim()
@@ -66,7 +120,6 @@ const normIgUrl = (u = "", handle = "") => {
   if (!s) return "";
   if (/^https?:\/\//i.test(s)) return s;
 
-  // "instagram.com/xxx" gibi verilirse de toparla
   const m = s.match(/(instagram\.com|instagr\.am)\/([^/?#]+)/i);
   if (m && m[2]) return `https://instagram.com/${cleanUsername(m[2])}`;
 
@@ -120,7 +173,7 @@ function classifyQuery(qRaw = "", hintedType = "") {
     return { ok: true, type: "website", value: url };
   }
 
-  // Otomatik (mevcut davranışı bozmuyoruz)
+  // otomatik fallback
   if (igUrlRe.test(q)) {
     const username = q.replace(igUrlRe, "$4");
     return {
@@ -143,14 +196,12 @@ function classifyQuery(qRaw = "", hintedType = "") {
     return { ok: true, type: "phone", value: e164 };
   }
 
-  // plain text → name/slug/handle denenecek
   return { ok: true, type: "text", value: q };
 }
 
 /* ----------------------------- tiny in-memory cache ----------------------------- */
-// Basit, süreç içi, TTL cache (prod’da Redis tercih edin)
 const CACHE_TTL = Number(process.env.BUSINESS_SEARCH_TTL_MS || 15_000); // 15 sn
-const _cache = new Map(); // key -> { ts, data }
+const _cache = new Map();
 const cacheKey = (q, type, limit) => `search|${type}|${q}|${limit}`;
 function cacheGet(key) {
   const rec = _cache.get(key);
@@ -166,12 +217,10 @@ function cacheSet(key, data) {
 }
 
 /* ---------------------------------- admin auth --------------------------------- */
-// JWT (payload.role === "admin") veya ADMIN_KEY ile erişim
 function requireAdmin(req, res, next) {
   try {
     const needed = process.env.ADMIN_KEY;
 
-    // JWT
     const bearer = (req.headers.authorization || "").replace(/^Bearer\s+/i, "");
     if (bearer) {
       try {
@@ -180,13 +229,14 @@ function requireAdmin(req, res, next) {
       } catch {}
     }
 
-    // ADMIN_KEY
     const sent = req.headers["x-admin-key"] || bearer;
     if (needed && sent && String(sent) === String(needed)) return next();
 
     return res.status(401).json({ success: false, message: "Yetkisiz" });
   } catch {
-    return res.status(401).json({ success: false, message: "Yetkilendirme hatası" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Yetkilendirme hatası" });
   }
 }
 
@@ -197,7 +247,7 @@ router.get("/filter", async (req, res) => {
       address = "",
       type = "",
       onlyVerified = "false",
-      sort = "rating", // "rating" | "reviews"
+      sort = "rating",
       page = "1",
       perPage = "20",
     } = req.query;
@@ -243,7 +293,6 @@ router.get("/filter", async (req, res) => {
       "reviewsCount",
       "gallery",
       "photo",
-      // google varyantları
       "google",
       "google_rate",
       "google_rating",
@@ -310,7 +359,10 @@ router.get("/filter", async (req, res) => {
     return res.json({ items, total, page: pageNum, perPage: limitNum });
   } catch (err) {
     console.error("filter_error", err);
-    return res.status(500).json({ error: "filter_failed", message: err.message });
+    return res.status(500).json({
+      error: "filter_failed",
+      message: err.message,
+    });
   }
 });
 
@@ -331,71 +383,184 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    const key = cacheKey(cls.value, cls.type, limit);
-    const cached = cacheGet(key);
+    const valueText = clean(cls.value || raw) || raw;
+    const host = extractHost(valueText || raw);
+    const hostCore = host ? host.split(".")[0] : "";
+
+    // isim / slug / handle için kullanılacak base anahtar
+    let nameKey = "";
+    if ((cls.type === "ig_url" || cls.type === "ig_username") && cls.username) {
+      nameKey = cls.username;
+    } else if (cls.type === "website" && hostCore) {
+      nameKey = hostCore;
+    } else {
+      nameKey = valueText;
+    }
+    nameKey = clean(nameKey);
+
+    const rxName =
+      nameKey && nameKey.length >= 2 ? safeRegex(nameKey, 80) : null;
+    const rxHostCoreName =
+      hostCore && hostCore.length >= 4
+        ? buildLooseNameRegexFromHostCore(hostCore)
+        : null;
+
+    const slugKey = nameKey ? makeSlug(nameKey) : "";
+    const rxSlugExact = slugKey
+      ? new RegExp(`^${escapeRegex(slugKey)}$`, "i")
+      : null;
+
+    const handleKey = cls.username
+      ? normHandle(cls.username)
+      : nameKey
+      ? normHandle(nameKey)
+      : "";
+    const rxHandleExact = handleKey
+      ? new RegExp(`^${escapeRegex(handleKey)}$`, "i")
+      : null;
+    const rxIgUser = handleKey
+      ? new RegExp(`^@?${escapeRegex(handleKey)}$`, "i")
+      : null;
+
+    const rxUrl = valueText ? safeRegex(valueText, 140) : null;
+    const hostRegex = host
+      ? new RegExp(escapeRegex(host).replace(/\./g, "\\."), "i")
+      : null;
+
+    const phoneDigits = normalizePhoneDigitsTR(valueText || raw);
+    const phoneLooseRegex =
+      phoneDigits && phoneDigits.length >= 7
+        ? buildLoosePhoneRegex(phoneDigits)
+        : null;
+
+    console.log("[BUSINESSES_SEARCH] incoming", {
+      raw,
+      hintedType,
+      cls,
+      valueText,
+      host,
+      hostCore,
+      nameKey,
+      phoneDigits,
+    });
+
+    const cache_key = cacheKey(valueText || raw, cls.type, limit);
+    const cached = cacheGet(cache_key);
     if (cached) return res.json(cached);
 
-    const qText = clean(cls.value || "");
-    const qSlug = makeSlug(qText);
-    const qHandle = normHandle(cls.username || qText);
+    /* -------- VERIFIED (Business) filtreleri -------- */
+    const orVerified = [];
 
-    const rxAny = safeRegex(qText, 140) || /$^/; // boşsa hiç eşleşmesin
-    const rxSlugExact = qSlug ? new RegExp(`^${escapeRegex(qSlug)}$`, "i") : null;
-    const rxHandleExact = qHandle ? new RegExp(`^${escapeRegex(qHandle)}$`, "i") : null;
-    const rxIgUser = qHandle ? new RegExp(`^@?${escapeRegex(qHandle)}$`, "i") : null;
-
-    const phone = cls.type === "phone" ? normPhone(qText) : "";
-
-    const or = [
-      { name: rxAny },
-      ...(rxSlugExact ? [{ slug: rxSlugExact }] : []),
-      ...(rxHandleExact ? [{ handle: rxHandleExact }] : []),
-      ...(rxIgUser ? [{ instagramUsername: rxIgUser }] : []),
-    ];
-
-    if (cls.type === "ig_url" || cls.type === "website" || cls.type === "text") {
-      or.push({ instagramUrl: rxAny }, { website: rxAny });
+    if (rxName) {
+      orVerified.push({ name: rxName });
+      orVerified.push({ address: rxName });
+      orVerified.push({ summary: rxName });
+      orVerified.push({ description: rxName });
     }
 
-    if (cls.type === "phone") {
-      if (phone) {
-        or.push({ phone: new RegExp(escapeRegex(phone), "i") });
-        const digits = phone.replace(/\D/g, "");
-        if (digits) or.push({ phone: new RegExp(digits.slice(-10)) });
-      }
+    if (rxHostCoreName) {
+      orVerified.push({ name: rxHostCoreName });
+      orVerified.push({ slug: rxHostCoreName });
     }
 
-    const verified = await Business.find({ $or: or }).limit(limit).lean();
+    if (rxSlugExact) {
+      orVerified.push({ slug: rxSlugExact });
+    }
 
-    if (verified.length) {
-      const payload = {
+    if (rxHandleExact) {
+      orVerified.push({ handle: rxHandleExact });
+    }
+    if (rxIgUser) {
+      orVerified.push({ instagramUsername: rxIgUser });
+    }
+
+    if (rxUrl) {
+      orVerified.push({ instagramUrl: rxUrl });
+      orVerified.push({ website: rxUrl });
+    }
+    if (hostRegex) {
+      orVerified.push({ website: hostRegex });
+    }
+
+    if (phoneLooseRegex) {
+      orVerified.push({ phone: phoneLooseRegex });
+      orVerified.push({ phones: phoneLooseRegex }); // olası array field
+    }
+
+    const verifiedFilter = orVerified.length ? { $or: orVerified } : null;
+
+    /* -------- BLACKLIST filtreleri -------- */
+    const orBlack = [];
+
+    if (rxName) {
+      orBlack.push({ name: rxName });
+      orBlack.push({ address: rxName });
+    }
+    if (rxHostCoreName) {
+      orBlack.push({ name: rxHostCoreName });
+    }
+    if (rxIgUser) {
+      orBlack.push({ instagramUsername: rxIgUser });
+    }
+
+    if (rxUrl) {
+      orBlack.push({ instagramUrl: rxUrl });
+      orBlack.push({ website: rxUrl });
+    }
+    if (hostRegex) {
+      orBlack.push({ website: hostRegex });
+    }
+
+    if (phoneLooseRegex) {
+      orBlack.push({ phone: phoneLooseRegex });
+      orBlack.push({ phones: phoneLooseRegex });
+    }
+
+    const blackFilter = orBlack.length ? { $or: orBlack } : null;
+
+    const [black, verified] = await Promise.all([
+      blackFilter ? Blacklist.findOne(blackFilter).lean() : null,
+      verifiedFilter
+        ? Business.find(verifiedFilter).limit(limit).lean()
+        : [],
+    ]);
+
+    let payload;
+
+    // kara liste her zaman öncelikli
+    if (black) {
+      payload = {
+        success: true,
+        status: "blacklist",
+        business: black,
+      };
+      console.log("[BUSINESSES_SEARCH] result BLACKLIST", {
+        id: black._id?.toString?.(),
+      });
+    } else if (verified && verified.length) {
+      payload = {
         success: true,
         status: "verified",
         business: verified[0],
         businesses: verified,
       };
-      cacheSet(key, payload);
-      return res.json(payload);
+      console.log("[BUSINESSES_SEARCH] result VERIFIED", {
+        count: verified.length,
+        firstId: verified[0]?._id?.toString?.(),
+      });
+    } else {
+      payload = {
+        success: true,
+        status: "not_found",
+        businesses: [],
+      };
+      console.log("[BUSINESSES_SEARCH] result NOT_FOUND");
     }
 
-    const blOr = [
-      { name: rxAny },
-      ...(rxIgUser ? [{ instagramUsername: rxIgUser }] : []),
-      { instagramUrl: rxAny },
-      ...(phone ? [{ phone: new RegExp(escapeRegex(phone), "i") }] : []),
-    ];
-
-    const black = await Blacklist.findOne({ $or: blOr }).lean();
-    if (black) {
-      const payload = { success: true, status: "blacklist", business: black };
-      cacheSet(key, payload);
-      return res.json(payload);
-    }
-
-    const payload = { success: true, status: "not_found", businesses: [] };
-    cacheSet(key, payload);
+    cacheSet(cache_key, payload);
     return res.json(payload);
   } catch (err) {
+    console.error("[BUSINESSES_SEARCH] ERROR", err);
     return res.status(500).json({
       success: false,
       status: "error",
@@ -542,8 +707,13 @@ router.get("/", requireAdmin, async (req, res) => {
 
     const sort = {};
     const sortParam = String(req.query.sort || "-createdAt");
-    for (const part of sortParam.split(",").map((s) => s.trim()).filter(Boolean)) {
-      sort[part.startsWith("-") ? part.slice(1) : part] = part.startsWith("-") ? -1 : 1;
+    for (const part of sortParam
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)) {
+      sort[part.startsWith("-") ? part.slice(1) : part] = part.startsWith("-")
+        ? -1
+        : 1;
     }
 
     let fields;
@@ -605,7 +775,8 @@ router.post("/", requireAdmin, async (req, res) => {
     if (!body.slug && body.name) body.slug = makeSlug(body.name);
     if (body.slug) body.slug = makeSlug(body.slug);
 
-    if (body.instagramUsername) body.instagramUsername = cleanUsername(body.instagramUsername);
+    if (body.instagramUsername)
+      body.instagramUsername = cleanUsername(body.instagramUsername);
     if (body.handle || body.instagramUsername)
       body.handle = cleanUsername(body.handle || body.instagramUsername);
     if (body.instagramUrl || body.handle || body.instagramUsername)
@@ -614,10 +785,8 @@ router.post("/", requireAdmin, async (req, res) => {
       );
 
     if (body.phone) body.phone = normPhone(body.phone);
-    // phones alanına dokunmuyoruz (complex schema ihtimali)
 
-    if (body.gallery)
-      body.gallery = toArray(body.gallery).filter(Boolean);
+    if (body.gallery) body.gallery = toArray(body.gallery).filter(Boolean);
 
     const created = await new Business(body).save();
     res.status(201).json({ success: true, business: created.toObject() });
@@ -646,11 +815,9 @@ router.put("/:id", requireAdmin, async (req, res) => {
 
     const body = { ...(req.body || {}) };
 
-    // slug
     if (body.slug) body.slug = makeSlug(body.slug);
     else if (!doc.slug && body.name) body.slug = makeSlug(body.name);
 
-    // instagram
     if (body.instagramUsername)
       body.instagramUsername = cleanUsername(body.instagramUsername);
     if (body.handle || body.instagramUsername)
@@ -660,17 +827,15 @@ router.put("/:id", requireAdmin, async (req, res) => {
         body.instagramUrl || body.handle || body.instagramUsername
       );
 
-    // phone normalize, phones'e dokunma
     if (Object.prototype.hasOwnProperty.call(body, "phone")) {
       body.phone = normPhone(body.phone);
     }
-    delete body.phones; // phones-safe
+    delete body.phones;
 
     if (Object.prototype.hasOwnProperty.call(body, "gallery")) {
       body.gallery = toArray(body.gallery).filter(Boolean);
     }
 
-    // sistem alanlarını yanlışlıkla ezmesin
     const DENY_KEYS = new Set(["_id", "__v", "createdAt", "updatedAt"]);
     for (const [k, v] of Object.entries(body)) {
       if (DENY_KEYS.has(k)) continue;
