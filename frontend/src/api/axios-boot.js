@@ -1,17 +1,9 @@
-// frontend/src/api/axios-boot.js — Ultra Pro (Live/Vercel Ready)
+// frontend/src/api/axios-boot.js — Ultra Pro Final (Cloudflare R2 Ready)
 import axios from "axios";
 
-/**
- * Ultra Pro axios bootstrap
- * - Env toleranslı: VITE_API_URL / VITE_API_ROOT / origin / :5000 / .../api
- * - API_ROOT her zaman "<origin>/api" olur
- * - Authorization: Bearer <token> (authToken veya token)
- * - Legacy x-auth-token header'ını her ihtimale karşı SİLER
- * - Relative URL'lerde /api çoğaltmasını engeller (/api/api => /api)
- * - Asset path fix: /uploads/... → backend origin ile birleştirir
- */
-
-/* ----------------------------- base url normalize ----------------------------- */
+/* ======================================================
+   ORIGIN NORMALIZATION
+====================================================== */
 function normalizeOrigin(raw) {
   const RAW = String(raw || "").trim();
 
@@ -32,10 +24,7 @@ const ORIGIN = normalizeOrigin(
   import.meta.env?.VITE_API_URL || import.meta.env?.VITE_API_ROOT
 );
 
-// 🔥 Backend ORIGIN export
 export const API_ORIGIN = ORIGIN;
-
-// API_ROOT MUST end with /api
 export const API_ROOT = `${ORIGIN}/api`.replace(/\/{2,}api$/i, "/api");
 
 const isDev =
@@ -47,14 +36,16 @@ if (isDev) {
   console.log("[axios-boot] API_ROOT =", API_ROOT);
 }
 
-/* ----------------------------- axios instance ----------------------------- */
+/* ======================================================
+   INSTANCE
+====================================================== */
 export const api = axios.create({
   baseURL: API_ROOT,
   timeout: 20000,
   withCredentials: true,
 });
 
-// Güvence: global/instance legacy header temizliği
+/* Legacy token temizliği */
 try {
   delete axios.defaults?.headers?.common?.["x-auth-token"];
   delete axios.defaults?.headers?.common?.["X-Auth-Token"];
@@ -62,7 +53,9 @@ try {
   delete api.defaults?.headers?.common?.["X-Auth-Token"];
 } catch {}
 
-/* ----------------------------- Token helper ----------------------------- */
+/* ======================================================
+   TOKEN
+====================================================== */
 function getToken() {
   try {
     if (typeof localStorage === "undefined") return "";
@@ -76,48 +69,40 @@ function getToken() {
   }
 }
 
-/* ----------------------------- ASSET URL FIX ----------------------------- */
-// 🔥🔥🔥 Canlıda görüntülerin çıkmasını sağlayan sihir burada 🔥🔥🔥
+/* ======================================================
+   ASSET URL FIX
+====================================================== */
 function fixAssetUrl(url) {
   if (!url) return url;
   const s = String(url).trim();
 
-  // Full http/https ise dokunma
   if (/^https?:\/\//i.test(s)) return s;
 
-  // /uploads/... → backend origin ile birleştir
-  if (s.startsWith("/uploads")) {
-    return `${API_ORIGIN}${s}`;
-  }
-
-  // Vercel yanlış çözerse (uploads/... → /uploads/...)
-  if (s.startsWith("uploads/")) {
-    return `${API_ORIGIN}/${s}`;
-  }
+  if (s.startsWith("/uploads")) return `${API_ORIGIN}${s}`;
+  if (s.startsWith("uploads/")) return `${API_ORIGIN}/${s}`;
 
   return s;
 }
 
-/* ----------------------------- relative path normalize ----------------------------- */
+/* ======================================================
+   RELATIVE URL FIX
+====================================================== */
 function normalizeRelativeUrl(url) {
   let u = String(url || "");
 
-  // guarantee leading slash
   if (u && !u.startsWith("/")) u = "/" + u;
 
-  // strip duplicated API prefix (avoid /api/api)
   if (/^\/api(\/|$)/i.test(u)) {
     u = u.replace(/^\/api/i, "");
     if (!u.startsWith("/")) u = "/" + u;
   }
 
-  // collapse accidental double slashes
-  u = u.replace(/([^:]\/)\/+/g, "$1");
-
-  return u;
+  return u.replace(/([^:]\/)\/+/g, "$1");
 }
 
-/* ----------------------------- request interceptor ----------------------------- */
+/* ======================================================
+   REQUEST INTERCEPTOR
+====================================================== */
 api.interceptors.request.use((config) => {
   config.headers = config.headers || {};
 
@@ -127,15 +112,30 @@ api.interceptors.request.use((config) => {
   delete config.headers["x-auth-token"];
   delete config.headers["X-Auth-Token"];
 
-  if (!config.headers.Accept) config.headers.Accept = "application/json";
+  /* ===========================
+     🔥 ÖNEMLİ: Upload Fix
+     Eğer config.isUpload = true ise:
+     - JSON content-type devre dışı
+     - URL normalize edilmez
+     - Axios FormData’yı bozmadan yollar
+  ============================ */
+  const isUpload = config.isUpload === true;
 
-  // 🔥 Asset Fix
+  if (isUpload) {
+    config.headers["Content-Type"] = "multipart/form-data";
+    return config;
+  }
+
+  /* Asset Fix */
   if (typeof config.url === "string") {
     config.url = fixAssetUrl(config.url);
   }
 
-  // Relative URL normalize (/api/api fix)
-  if (typeof config.url === "string" && !/^https?:\/\//i.test(config.url)) {
+  /* Relative Normalize */
+  if (
+    typeof config.url === "string" &&
+    !/^https?:\/\//i.test(config.url)
+  ) {
     config.url = normalizeRelativeUrl(config.url);
   }
 
@@ -150,7 +150,9 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-/* ----------------------------- response interceptor ----------------------------- */
+/* ======================================================
+   RESPONSE INTERCEPTOR
+====================================================== */
 api.interceptors.response.use(
   (res) => res,
   (error) => {

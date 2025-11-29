@@ -16,12 +16,10 @@ import axios from "axios";
 
 function getEnvSafe() {
   try {
-    // Vite ortamında import.meta.env var
     if (typeof import.meta !== "undefined" && import.meta.env) {
       return import.meta.env;
     }
   } catch {}
-  // Vite dışı SSR/Node için boş env
   return {};
 }
 
@@ -95,6 +93,27 @@ export function setOnUnauthorized(fn) {
   onUnauthorized = typeof fn === "function" ? fn : null;
 }
 
+/* ========================= Asset URL helper =========================
+   - /uploads/... veya "uploads/..." → API_ORIGIN + path
+   - absolute URL ise dokunma
+====================================================================== */
+
+export function fixAssetUrl(url) {
+  if (!url) return url;
+  let s = String(url).trim();
+
+  // absolute ise aynen bırak
+  if (/^https?:\/\//i.test(s)) return s;
+
+  // uploads path → backend origin
+  if (API_ORIGIN && (s.startsWith("/uploads") || s.startsWith("uploads/"))) {
+    const path = s.startsWith("/") ? s : `/${s}`;
+    return `${API_ORIGIN}${path}`;
+  }
+
+  return s;
+}
+
 /* ========================= Anti-adblock remap =========================
    /report*     -> /rpt*
    /blacklist*  -> /blk*
@@ -151,6 +170,29 @@ try {
   delete API.defaults?.headers?.common?.["x-auth-token"];
 } catch {}
 
+/* URL normalize + asset fix */
+function normalizeRequestUrl(rawUrl) {
+  let u = String(rawUrl || "").trim();
+
+  // önce asset fix
+  u = fixAssetUrl(u);
+
+  // absolute olduysa (https://...) dokunma
+  if (/^https?:\/\//i.test(u)) {
+    return { url: u, absolute: true };
+  }
+
+  // /api/api double prefix fix (relative url'lerde)
+  if (/\/api$/i.test(API_ROOT) && u.startsWith("/api/")) {
+    u = u.replace(/^\/api\//i, "/");
+  }
+
+  // birden fazla / → tek / (protocol yokken güvenli)
+  u = u.replace(/\/{2,}/g, "/");
+
+  return { url: u, absolute: false };
+}
+
 /* ------------ Request interceptor ------------ */
 API.interceptors.request.use((config = {}) => {
   config.headers = config.headers || {};
@@ -187,22 +229,30 @@ API.interceptors.request.use((config = {}) => {
   const tok = getAuthToken();
   if (tok) config.headers.Authorization = `Bearer ${tok}`;
 
-  // /api/api double prefix fix (relative url'lerde)
-  if (typeof config.url === "string" && !/^https?:\/\//i.test(config.url)) {
-    let u = config.url.trim();
+  // URL normalize + asset fix
+  if (typeof config.url === "string") {
+    const { url: normalized, absolute } = normalizeRequestUrl(config.url);
+    config.url = normalized;
 
-    // baseURL ".../api" ise ve url "/api/..." gelmişse, birini at
-    if (/\/api$/i.test(API_ROOT) && u.startsWith("/api/")) {
-      u = u.replace(/^\/api\//i, "/");
+    // absolute ise baseURL'i boşalt (axios double-join yapmasın)
+    if (absolute) {
+      config.baseURL = "";
     }
-
-    u = u.replace(/\/{2,}/g, "/");
-    config.url = u;
   }
 
-  // absolute URL ise baseURL boş bırak (axios double-join yapmasın)
-  if (typeof config.url === "string" && /^https?:\/\//i.test(config.url)) {
-    config.baseURL = "";
+  // DEV'de küçük log
+  if (ENV && ENV.DEV) {
+    try {
+      const m = String(config.method || "get").toUpperCase();
+      const base = config.baseURL || API_ROOT || "";
+      const url = String(config.url || "");
+      const full =
+        /^https?:\/\//i.test(url) || !base
+          ? url
+          : `${base.replace(/\/+$/, "")}${url.startsWith("/") ? "" : "/"}${url}`;
+      // eslint-disable-next-line no-console
+      console.debug("[axios-boot] →", m, full);
+    } catch {}
   }
 
   return config;
@@ -249,13 +299,9 @@ API.interceptors.response.use(
 
       const remapped = remapForAdblock(urlStr);
       if (remapped !== urlStr) {
-        if (ENV.DEV) {
-          console.debug(
-            "[axios-boot] Adblock remap:",
-            urlStr,
-            "→",
-            remapped
-          );
+        if (ENV && ENV.DEV) {
+          // eslint-disable-next-line no-console
+          console.debug("[axios-boot] Adblock remap:", urlStr, "→", remapped);
         }
         try {
           return await API.request({ ...cfg, url: remapped });
@@ -265,11 +311,28 @@ API.interceptors.response.use(
       }
     }
 
+    if (ENV && ENV.DEV) {
+      try {
+        const m = String(cfg.method || "get").toUpperCase();
+        // eslint-disable-next-line no-console
+        console.warn(
+          "[axios-boot][ERR]",
+          m,
+          urlStr,
+          "status:",
+          status,
+          "code:",
+          err?.code
+        );
+      } catch {}
+    }
+
     return Promise.reject(err);
   }
 );
 
-if (ENV.DEV) {
+if (ENV && ENV.DEV) {
+  // eslint-disable-next-line no-console
   console.log("[axios-boot] API_ROOT =", API_ROOT);
 }
 

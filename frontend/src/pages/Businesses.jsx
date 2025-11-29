@@ -1,9 +1,10 @@
-// src/pages/admin/Businesses.jsx — Ultra Pro Admin List + Detay + Medya Yönetimi (v2)
-import React, { useEffect, useMemo, useState, useCallback } from "react";
-import apiDefault, { api as apiNamed } from "@/api/axios-boot";
+// src/pages/admin/Businesses.jsx — Ultra Pro Admin List + Detay + Medya Yönetimi (v6)
+import React, { useEffect, useMemo, useState } from "react";
+import apiDefault, { api as apiNamed, API_ORIGIN } from "@/api/axios-boot";
 import { ensureAccess } from "@/lib/admin/ensureAccess";
 
 const api = apiNamed || apiDefault;
+const API_BASE = API_ORIGIN || "";
 
 /* ========================================================
    Küçük yardımcılar
@@ -30,6 +31,68 @@ function fmtDate(d) {
     return new Date(d).toLocaleString("tr-TR");
   } catch {
     return "-";
+  }
+}
+
+/** Backend'ten gelen /uploads/... gibi path'leri tam URL'ye çevirir */
+function toAbsUrl(u) {
+  if (!u) return "";
+  let s = typeof u === "string" ? u.trim() : String(u || "").trim();
+  if (!s) return "";
+
+  // Zaten tam URL / data / blob ise aynen bırak
+  if (/^(https?:|data:|blob:)/i.test(s)) return s;
+
+  // //cdn... gibi şeyler için
+  if (s.startsWith("//")) {
+    if (typeof window !== "undefined") {
+      return `${window.location.protocol}${s}`;
+    }
+    return `https:${s}`;
+  }
+
+  const base =
+    API_BASE ||
+    (typeof window !== "undefined" ? window.location.origin : "");
+
+  // /uploads/.. vs
+  if (s.startsWith("/")) {
+    return `${base}${s}`;
+  }
+
+  // uploads/... şeklinde geldiyse
+  return `${base}/${s.replace(/^\/+/, "")}`;
+}
+
+/** Dosya objesi (url/path/location/...) ya da string'i URL'ye indirger */
+function fileToUrl(file) {
+  if (!file) return "";
+  if (typeof file === "string") return toAbsUrl(file);
+
+  const maybeUrl =
+    file.url ||
+    file.location ||
+    file.path ||
+    file.secure_url ||
+    file.filepath ||
+    file.filename ||
+    file.key ||
+    file.Key ||
+    file.src ||
+    "";
+
+  return toAbsUrl(maybeUrl);
+}
+
+/** URL'den dosya adı üret (docs listesinde kullanıyoruz) */
+function fileNameFromUrl(u) {
+  if (!u) return "Belge";
+  try {
+    const clean = String(u).split("#")[0].split("?")[0];
+    const last = clean.split("/").filter(Boolean).pop();
+    return decodeURIComponent(last || "Belge");
+  } catch {
+    return "Belge";
   }
 }
 
@@ -159,16 +222,22 @@ export default function Businesses() {
       let usedAllFallback = false;
 
       try {
+        console.log("[Businesses] list fetch", { prefix, params });
+
         // Önce paginated endpointi dene
         let res;
         try {
-          res = await api.get(`${prefix}/businesses`, { params, _quiet: true });
+          res = await api.get(`${prefix}/businesses`, {
+            params,
+            _quiet: true,
+          });
         } catch {
           usedAllFallback = true;
           res = await api.get(`${prefix}/businesses/all`, { _quiet: true });
         }
 
         const data = res?.data || {};
+        console.log("[Businesses] list response", data);
         let listRaw = normalizeList(data);
 
         // Eğer /all geldiyse veya total/pages yoksa client-side pipeline
@@ -265,6 +334,7 @@ export default function Businesses() {
           }
         }
       } catch (err) {
+        console.error("[Businesses] list error", err);
         if (!cancelled) {
           setError(
             err?.response?.data?.message ||
@@ -297,7 +367,9 @@ export default function Businesses() {
     await callAdminPublic(
       () => api.delete(`/admin/businesses/${row._id}`, { _quiet: false }),
       () => api.delete(`/businesses/${row._id}`, { _quiet: false })
-    ).catch(() => {});
+    ).catch((err) => {
+      console.error("[Businesses] delete error", err);
+    });
     refresh();
   }
 
@@ -314,26 +386,73 @@ export default function Businesses() {
         ),
       () =>
         api.post(`/businesses/bulk`, { ids, op, value }, { _quiet: false })
-    ).catch(() => {});
+    ).catch((err) => {
+      console.error("[Businesses] bulk error", err);
+    });
     refresh();
   }
 
+  // === CSV indirme: axios + blob + admin/public fallback ===
   async function onExportCsv() {
-    const p = new URLSearchParams();
-    if (dq) p.set("q", dq);
-    if (status !== "all") p.set("status", status);
-    if (verified !== "all") p.set("verified", verified);
-    if (type !== "all") p.set("type", type);
-    if (onlyFeatured) p.set("featured", "1");
-    if (from) p.set("from", from);
-    if (to) p.set("to", to);
+    const params = {};
+    if (dq) params.q = dq;
+    if (status !== "all") params.status = status;
+    if (verified !== "all") params.verified = verified;
+    if (type !== "all") params.type = type;
+    if (onlyFeatured) params.featured = 1;
+    if (from) params.from = from;
+    if (to) params.to = to;
 
-    const urlAdmin = `/admin/businesses/export.csv?${p.toString()}`;
-    const urlPub = `/businesses/export.csv?${p.toString()}`;
+    try {
+      const res = await callAdminPublic(
+        () =>
+          api.get(`/admin/businesses/export.csv`, {
+            params,
+            responseType: "blob",
+            _quiet: false,
+          }),
+        () =>
+          api.get(`/businesses/export.csv`, {
+            params,
+            responseType: "blob",
+            _quiet: false,
+          })
+      );
 
-    // admin url açmayı dene, olmazsa public
-    const w = window.open(urlAdmin, "_blank");
-    if (!w) window.open(urlPub, "_blank");
+      const blob = res.data;
+      if (!blob) throw new Error("Boş CSV yanıtı.");
+
+      const disposition =
+        res.headers?.["content-disposition"] ||
+        res.headers?.["Content-Disposition"];
+      let filename = "isletmeler.csv";
+
+      if (disposition) {
+        const match = /filename="?([^"]+)"?/i.exec(disposition);
+        if (match && match[1]) {
+          filename = match[1];
+        }
+      } else {
+        const d = new Date().toISOString().slice(0, 10);
+        filename = `isletmeler-${d}.csv`;
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("[Businesses] CSV error", err);
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "CSV indirilemedi."
+      );
+    }
   }
 
   /* =================== Create / Edit =================== */
@@ -411,7 +530,14 @@ export default function Businesses() {
   return (
     <section style={{ paddingBottom: 24 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 12,
+        }}
+      >
         <h2 style={{ margin: 0 }}>
           İşletmeler{" "}
           <small style={{ color: "#64748b" }}>
@@ -419,8 +545,16 @@ export default function Businesses() {
           </small>
         </h2>
         <div style={{ display: "flex", gap: 8 }}>
-          <button onClick={openCreate} className="btn">+ Yeni İşletme</button>
-          <button onClick={() => setPage(1) || refresh()} className="btn" title="Yenile">↻ Yenile</button>
+          <button onClick={openCreate} className="btn">
+            + Yeni İşletme
+          </button>
+          <button
+            onClick={() => setPage(1) || refresh()}
+            className="btn"
+            title="Yenile"
+          >
+            ↻ Yenile
+          </button>
         </div>
       </div>
 
@@ -440,38 +574,89 @@ export default function Businesses() {
           onChange={(e) => setQ(e.target.value)}
         />
 
-        <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
+        <select
+          value={status}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setPage(1);
+          }}
+        >
           {STATUSES.map((s) => (
-            <option key={s} value={s}>{s}</option>
+            <option key={s} value={s}>
+              {s}
+            </option>
           ))}
         </select>
 
-        <select value={verified} onChange={(e) => { setVerified(e.target.value); setPage(1); }}>
+        <select
+          value={verified}
+          onChange={(e) => {
+            setVerified(e.target.value);
+            setPage(1);
+          }}
+        >
           {VERIFIEDS.map((s) => (
-            <option key={s} value={s}>{s}</option>
+            <option key={s} value={s}>
+              {s}
+            </option>
           ))}
         </select>
 
-        <select value={type} onChange={(e) => { setType(e.target.value); setPage(1); }}>
+        <select
+          value={type}
+          onChange={(e) => {
+            setType(e.target.value);
+            setPage(1);
+          }}
+        >
           {BUSINESS_TYPES.map((t) => (
-            <option key={t} value={t}>{t}</option>
+            <option key={t} value={t}>
+              {t}
+            </option>
           ))}
         </select>
 
-        <input type="date" value={from} onChange={(e) => { setFrom(e.target.value); setPage(1); }} />
-        <input type="date" value={to} onChange={(e) => { setTo(e.target.value); setPage(1); }} />
+        <input
+          type="date"
+          value={from}
+          onChange={(e) => {
+            setFrom(e.target.value);
+            setPage(1);
+          }}
+        />
+        <input
+          type="date"
+          value={to}
+          onChange={(e) => {
+            setTo(e.target.value);
+            setPage(1);
+          }}
+        />
 
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <label style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <label
+            style={{ display: "flex", gap: 6, alignItems: "center" }}
+          >
             <input
               type="checkbox"
               checked={onlyFeatured}
-              onChange={(e) => { setOnlyFeatured(e.target.checked); setPage(1);}}
+              onChange={(e) => {
+                setOnlyFeatured(e.target.checked);
+                setPage(1);
+              }}
             />
-            <span style={{ fontSize: 12, color: "#475569" }}>Öne çıkan</span>
+            <span style={{ fontSize: 12, color: "#475569" }}>
+              Öne çıkan
+            </span>
           </label>
 
-          <button onClick={onExportCsv} className="btn" title="CSV indir">CSV</button>
+          <button
+            onClick={onExportCsv}
+            className="btn"
+            title="CSV indir"
+          >
+            CSV
+          </button>
 
           <button
             onClick={() => {
@@ -493,25 +678,88 @@ export default function Businesses() {
       </div>
 
       {/* Bulk actions */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-        <div style={{ fontSize: 12, color: "#64748b", alignSelf: "center", marginRight: 6 }}>
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          marginBottom: 10,
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            fontSize: 12,
+            color: "#64748b",
+            alignSelf: "center",
+            marginRight: 6,
+          }}
+        >
           Seçili: <b>{selected.size}</b>
         </div>
 
-        <button onClick={() => onBulk("verify")} disabled={!selected.size} className="btn">Doğrula</button>
-        <button onClick={() => onBulk("unverify")} disabled={!selected.size} className="btn btn-light">Doğrulamayı Kaldır</button>
+        <button
+          onClick={() => onBulk("verify")}
+          disabled={!selected.size}
+          className="btn"
+        >
+          Doğrula
+        </button>
+        <button
+          onClick={() => onBulk("unverify")}
+          disabled={!selected.size}
+          className="btn btn-light"
+        >
+          Doğrulamayı Kaldır
+        </button>
 
-        <button onClick={() => onBulk("feature")} disabled={!selected.size} className="btn">Öne Çıkar</button>
-        <button onClick={() => onBulk("unfeature")} disabled={!selected.size} className="btn btn-light">Öne Çıkarmayı Kaldır</button>
+        <button
+          onClick={() => onBulk("feature")}
+          disabled={!selected.size}
+          className="btn"
+        >
+          Öne Çıkar
+        </button>
+        <button
+          onClick={() => onBulk("unfeature")}
+          disabled={!selected.size}
+          className="btn btn-light"
+        >
+          Öne Çıkarmayı Kaldır
+        </button>
 
-        <button onClick={() => onBulk("status", "approved")} disabled={!selected.size} className="btn">Onayla</button>
-        <button onClick={() => onBulk("status", "rejected")} disabled={!selected.size} className="btn btn-light">Reddet</button>
+        <button
+          onClick={() => onBulk("status", "approved")}
+          disabled={!selected.size}
+          className="btn"
+        >
+          Onayla
+        </button>
+        <button
+          onClick={() => onBulk("status", "rejected")}
+          disabled={!selected.size}
+          className="btn btn-light"
+        >
+          Reddet
+        </button>
 
-        <button onClick={() => onBulk("delete")} disabled={!selected.size} className="btn btn-danger">Sil</button>
+        <button
+          onClick={() => onBulk("delete")}
+          disabled={!selected.size}
+          className="btn btn-danger"
+        >
+          Sil
+        </button>
       </div>
 
       {/* Table */}
-      <div className={cls("card")} style={{ border: "1px solid #e5e7eb", borderRadius: 12, overflow: "hidden" }}>
+      <div
+        className={cls("card")}
+        style={{
+          border: "1px solid #e5e7eb",
+          borderRadius: 12,
+          overflow: "hidden",
+        }}
+      >
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead style={{ background: "#f8fafc" }}>
             <tr>
@@ -519,7 +767,9 @@ export default function Businesses() {
                 <input
                   type="checkbox"
                   checked={!!allSelectedOnPage}
-                  onChange={(e) => toggleSelectAllOnPage(e.target.checked)}
+                  onChange={(e) =>
+                    toggleSelectAllOnPage(e.target.checked)
+                  }
                 />
               </th>
 
@@ -527,7 +777,9 @@ export default function Businesses() {
                 label="#"
                 onClick={() => toggleSort("createdAt")}
                 active={sort.replace("-", "") === "createdAt"}
-                desc={sort.startsWith("-") && sort.includes("createdAt")}
+                desc={
+                  sort.startsWith("-") && sort.includes("createdAt")
+                }
               />
 
               <ThSort
@@ -546,7 +798,9 @@ export default function Businesses() {
                 label="Güncellenme"
                 onClick={() => toggleSort("updatedAt")}
                 active={sort.replace("-", "") === "updatedAt"}
-                desc={sort.startsWith("-") && sort.includes("updatedAt")}
+                desc={
+                  sort.startsWith("-") && sort.includes("updatedAt")
+                }
               />
               <th style={th}>İşlem</th>
             </tr>
@@ -555,45 +809,94 @@ export default function Businesses() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={10} style={{ padding: 16, textAlign: "center" }}>Yükleniyor…</td>
+                <td
+                  colSpan={10}
+                  style={{ padding: 16, textAlign: "center" }}
+                >
+                  Yükleniyor…
+                </td>
               </tr>
             ) : rows.length ? (
               rows.map((r) => (
-                <tr key={r._id} style={{ borderTop: "1px solid #eef2f7" }}>
+                <tr
+                  key={r._id}
+                  style={{ borderTop: "1px solid #eef2f7" }}
+                >
                   <td style={td}>
                     <input
                       type="checkbox"
                       checked={selected.has(r._id)}
-                      onChange={(e) => toggleSelect(r._id, e.target.checked)}
+                      onChange={(e) =>
+                        toggleSelect(r._id, e.target.checked)
+                      }
                     />
                   </td>
 
-                  <td style={td} title={r._id}>{r._id?.slice(-6)}</td>
+                  <td style={td} title={r._id}>
+                    {r._id?.slice(-6)}
+                  </td>
 
                   <td style={td}>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
                       <b>{r.name || r.title || "-"}</b>
-                      <small style={{ color: "#6b7280" }}>{r.slug || "-"}</small>
-                      <small style={{ color: "#94a3b8" }}>{r.type || ""}</small>
+                      <small style={{ color: "#6b7280" }}>
+                        {r.slug || "-"}
+                      </small>
+                      <small style={{ color: "#94a3b8" }}>
+                        {r.type || ""}
+                      </small>
 
                       {r.slug && (
-                        <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
-                          <a className="pill" href={`/b/${r.slug}`} target="_blank" rel="noreferrer noopener">Profil</a>
-                          <a className="pill" href={`/kara-liste/${r.slug}`} target="_blank" rel="noreferrer noopener">Kara Liste</a>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: 6,
+                            marginTop: 6,
+                          }}
+                        >
+                          <a
+                            className="pill"
+                            href={`/b/${r.slug}`}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                          >
+                            Profil
+                          </a>
+                          <a
+                            className="pill"
+                            href={`/kara-liste/${r.slug}`}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                          >
+                            Kara Liste
+                          </a>
                         </div>
                       )}
                     </div>
                   </td>
 
-                  <td style={td}><StatusBadge value={r.status} /></td>
+                  <td style={td}>
+                    <StatusBadge value={r.status} />
+                  </td>
                   <td style={td}>{r.verified ? "✔︎" : "—"}</td>
                   <td style={td}>{r.featured ? "⭐" : "—"}</td>
 
-                  <td style={td}>{r.phone || r.mobile || r.phoneMobile || "-"}</td>
+                  <td style={td}>
+                    {r.phone || r.mobile || r.phoneMobile || "-"}
+                  </td>
 
                   <td style={td}>
                     {r.instagramUrl ? (
-                      <a href={r.instagramUrl} target="_blank" rel="noreferrer noopener">
+                      <a
+                        href={r.instagramUrl}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
                         {r.instagramUsername || r.instagramUrl}
                       </a>
                     ) : (
@@ -601,19 +904,40 @@ export default function Businesses() {
                     )}
                   </td>
 
-                  <td style={td}>{fmtDate(r.updatedAt || r.createdAt)}</td>
+                  <td style={td}>
+                    {fmtDate(r.updatedAt || r.createdAt)}
+                  </td>
 
                   <td style={td}>
-                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                      <button className="btn btn-ghost" onClick={() => openEdit(r)}>Düzenle</button>
-                      <button className="btn btn-danger" onClick={() => onDeleteOne(r)}>Sil</button>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 6,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <button
+                        className="btn btn-ghost"
+                        onClick={() => openEdit(r)}
+                      >
+                        Düzenle
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => onDeleteOne(r)}
+                      >
+                        Sil
+                      </button>
                     </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={10} style={{ padding: 16, textAlign: "center" }}>
+                <td
+                  colSpan={10}
+                  style={{ padding: 16, textAlign: "center" }}
+                >
                   {error || "Kayıt yok"}
                 </td>
               </tr>
@@ -623,28 +947,60 @@ export default function Businesses() {
       </div>
 
       {/* Pagination */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: 10,
+        }}
+      >
         <div style={{ color: "#64748b" }}>
           Toplam: {total} • Sayfa {page}/{pages}
         </div>
         <div style={{ display: "flex", gap: 6 }}>
-          <button className="btn" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}>
+          <button
+            className="btn"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page <= 1}
+          >
             ‹ Önceki
           </button>
 
-          <select value={page} onChange={(e) => setPage(parseInt(e.target.value, 10))}>
+          <select
+            value={page}
+            onChange={(e) =>
+              setPage(parseInt(e.target.value, 10) || 1)
+            }
+          >
             {Array.from({ length: pages || 1 }).map((_, i) => (
-              <option key={i} value={i + 1}>{i + 1}</option>
+              <option key={i} value={i + 1}>
+                {i + 1}
+              </option>
             ))}
           </select>
 
-          <button className="btn" onClick={() => setPage((p) => Math.min(pages, p + 1))} disabled={page >= pages}>
+          <button
+            className="btn"
+            onClick={() =>
+              setPage((p) => Math.min(pages, p + 1))
+            }
+            disabled={page >= pages}
+          >
             Sonraki ›
           </button>
 
-          <select value={limit} onChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(1); }}>
+          <select
+            value={limit}
+            onChange={(e) => {
+              setLimit(parseInt(e.target.value, 10) || 20);
+              setPage(1);
+            }}
+          >
             {[10, 20, 50, 100, 200].map((n) => (
-              <option key={n} value={n}>{n}/sayfa</option>
+              <option key={n} value={n}>
+                {n}/sayfa
+              </option>
             ))}
           </select>
         </div>
@@ -688,7 +1044,15 @@ function StatusBadge({ value }) {
   };
   const v = map[value] || { bg: "#eef2ff", fg: "#3730a3", text: value || "-" };
   return (
-    <span style={{ background: v.bg, color: v.fg, padding: "4px 8px", borderRadius: 999, fontSize: 12 }}>
+    <span
+      style={{
+        background: v.bg,
+        color: v.fg,
+        padding: "4px 8px",
+        borderRadius: 999,
+        fontSize: 12,
+      }}
+    >
       {v.text}
     </span>
   );
@@ -745,61 +1109,111 @@ function buildForm(src) {
   };
 }
 
-function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
+function BusinessDetailModal({
+  open,
+  initial,
+  basePath,
+  onClose,
+  onSaved,
+}) {
   const [business, setBusiness] = useState(initial || null);
   const [form, setForm] = useState(() => buildForm(initial));
-  const [loading, setLoading] = useState(!!(initial && !initial._isNew && initial._id));
+  const [loading, setLoading] = useState(
+    !!(initial && !initial._isNew && initial._id)
+  );
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState({ cover: false, gallery: false, docs: false });
+  const [uploading, setUploading] = useState({
+    cover: false,
+    gallery: false,
+    docs: false,
+  });
+
+  const [coverPreview, setCoverPreview] = useState(null);
 
   const [toast, setToast] = useState(null);
   const showToast = (message, type = "success") => {
     const id = Date.now();
     setToast({ id, message, type });
-    setTimeout(() => setToast((prev) => (prev && prev.id === id ? null : prev)), 2600);
+    setTimeout(
+      () =>
+        setToast((prev) => (prev && prev.id === id ? null : prev)),
+      2600
+    );
   };
 
   useEffect(() => {
     setBusiness(initial || null);
     setForm(buildForm(initial));
     setLoading(!!(initial && !initial._isNew && initial._id));
+    setCoverPreview(null);
   }, [initial]);
 
   useEffect(() => {
-    const canFetch = initial && !initial._isNew && initial._id && basePath;
-    if (!canFetch) { setLoading(false); return; }
+    const canFetch =
+      initial && !initial._isNew && initial._id && basePath;
+    if (!canFetch) {
+      setLoading(false);
+      return;
+    }
 
     let cancelled = false;
     (async () => {
       try {
         setLoading(true);
-        const { data } = await api.get(`${basePath}/${initial._id}`, { _quiet: true });
+        console.log("[BusinessDetail] fetch", {
+          url: `${basePath}/${initial._id}`,
+        });
+        const { data } = await api.get(`${basePath}/${initial._id}`, {
+          _quiet: true,
+        });
         const full = data.business || data.item || data;
         if (!cancelled && full) {
           setBusiness(full);
           setForm(buildForm(full));
         }
-      } catch {}
-      finally { if (!cancelled) setLoading(false); }
+      } catch (err) {
+        console.error("[BusinessDetail] fetch error", err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [initial?._id, initial?._isNew, basePath]);
 
   if (!open || !form) return null;
 
-  const cover =
-    business?.coverImage?.url ||
-    business?.coverImage?.path ||
+  const coverRaw =
     business?.coverImage ||
+    business?.cover ||
+    business?.coverUrl ||
+    business?.cover_image ||
     null;
-  const gallery = Array.isArray(business?.gallery) ? business.gallery : [];
-  const docs = business?.docs || business?.documents || business?.files || [];
+  const cover = coverPreview || fileToUrl(coverRaw);
+
+  const galleryRaw = Array.isArray(business?.gallery)
+    ? business.gallery
+    : [];
+  const gallery = galleryRaw.map((g) => fileToUrl(g)).filter(Boolean);
+
+  const docsRaw = Array.isArray(business?.docs)
+    ? business.docs
+    : Array.isArray(business?.documents)
+    ? business.documents
+    : Array.isArray(business?.files)
+    ? business.files
+    : [];
+  const docs = docsRaw.map((d) => fileToUrl(d)).filter(Boolean);
 
   const canUploadMedia = !form._isNew && !!form._id;
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
-    setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
+    setForm((f) => ({
+      ...f,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   }
 
   const handleNameBlur = () => {
@@ -824,7 +1238,9 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
         mobile: form.mobile.trim(),
         email: form.email.trim(),
         instagramUrl: form.instagramUrl.trim(),
-        instagramUsername: form.instagramUsername.trim().replace(/^@+/, ""),
+        instagramUsername: form.instagramUsername
+          .trim()
+          .replace(/^@+/, ""),
         website: form.website.trim(),
         address: form.address.trim(),
         description: form.description.trim(),
@@ -836,11 +1252,22 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
         type: form.type,
       };
 
+      console.log(
+        "[BusinessDetail] submit payload",
+        form._isNew ? "CREATE" : "UPDATE",
+        payload
+      );
+
       let res;
-      if (form._isNew) res = await api.post(basePath, payload, { _quiet: false });
-      else res = await api.patch(`${basePath}/${form._id}`, payload, { _quiet: false });
+      if (form._isNew)
+        res = await api.post(basePath, payload, { _quiet: false });
+      else
+        res = await api.patch(`${basePath}/${form._id}`, payload, {
+          _quiet: false,
+        });
 
       const saved = res?.data?.business || res?.data || payload;
+      console.log("[BusinessDetail] submit response", saved);
       setBusiness(saved);
       setForm(buildForm(saved));
       onSaved?.(saved);
@@ -852,16 +1279,32 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
         showToast("İşletme bilgileri güncellendi.");
       }
     } catch (err) {
-      console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Kaydederken bir hata oluştu.");
+      console.error("[BusinessDetail] submit error", err);
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Kaydederken bir hata oluştu."
+      );
     } finally {
       setSaving(false);
     }
   }
 
   async function patchBusiness(partial, quiet = true) {
-    if (!form._id) return null;
-    const { data } = await api.patch(`${basePath}/${form._id}`, partial, { _quiet: quiet });
+    if (!form._id) {
+      console.warn(
+        "[business.patch] form._id yok, patch iptal",
+        partial
+      );
+      return null;
+    }
+    console.log("[business.patch] PATCH", `${basePath}/${form._id}`, partial);
+    const { data } = await api.patch(
+      `${basePath}/${form._id}`,
+      partial,
+      { _quiet: quiet }
+    );
+    console.log("[business.patch] response", data);
     const updated = data.business || data.item || data;
     setBusiness(updated);
     setForm(buildForm(updated));
@@ -869,45 +1312,217 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
     return updated;
   }
 
+  /* ============ Upload response normalizer ============ */
+  function extractUploadUrls(data) {
+    if (!data) return [];
+
+    // klasik patternler
+    const arrLike =
+      data.files ||
+      data.items ||
+      data.uploads ||
+      data.urls ||
+      null;
+
+    if (Array.isArray(arrLike)) {
+      return arrLike.map((x) => fileToUrl(x)).filter(Boolean);
+    }
+
+    // tekil url
+    if (typeof data.url === "string") {
+      return [fileToUrl(data.url)].filter(Boolean);
+    }
+
+    // raw string array
+    if (Array.isArray(data)) {
+      return data.map((x) => fileToUrl(x)).filter(Boolean);
+    }
+
+    // tekil file object
+    const maybe = fileToUrl(data);
+    if (maybe) return [maybe];
+
+    return [];
+  }
+
+  // Ultra sağlam upload: ESNEK endpoint listesi
   async function uploadFiles(files, kind, uploadKey) {
     if (!files || !files.length) return [];
     setUploading((u) => ({ ...u, [uploadKey]: true }));
+
     try {
       const fd = new FormData();
       Array.from(files).forEach((f) => fd.append("files", f));
+
       if (kind) fd.append("kind", kind);
       if (form._id) fd.append("businessId", form._id);
+      if (form.slug) fd.append("slug", form.slug);
 
-      const prefix = basePath?.startsWith("/admin") ? "/admin" : "";
-      const uploadUrl = `${prefix}/uploads/business`;
+      const isAdmin = basePath?.startsWith("/admin");
 
-      const { data } = await api.post(uploadUrl, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-        _quiet: false,
-      });
+      const candidates = [];
 
-      const raw = data.files || data.items || data.uploads || data;
-      const arr = Array.isArray(raw) ? raw : [raw];
-      return arr.filter(Boolean);
+      // Admin tarafı için daha geniş pattern seti
+      if (isAdmin) {
+        candidates.push("/admin/uploads/business");
+        candidates.push("/admin/uploads");
+        candidates.push("/admin/upload/business");
+        candidates.push("/admin/upload");
+      }
+      // public / generic patternler
+      candidates.push("/uploads/business");
+      candidates.push("/uploads");
+      candidates.push("/upload/business");
+      candidates.push("/upload");
+
+      let lastErr = null;
+      let urls = [];
+
+      for (const url of candidates) {
+        try {
+          console.log("[uploadFiles] POST", url, {
+            kind,
+            files: files.length,
+            formId: form._id,
+            slug: form.slug,
+          });
+          const res = await api.post(url, fd, {
+            headers: { "Content-Type": "multipart/form-data" },
+            _quiet: false,
+          });
+
+          const data = res?.data || {};
+          console.log("[uploadFiles] raw data", data);
+          urls = extractUploadUrls(data);
+          console.log("[uploadFiles] normalized urls", urls);
+
+          if (urls.length) {
+            break; // başarılı oldu
+          } else {
+            // endpoint 200 dönüp boş da dönmüş olabilir; bir sonrakini deneyelim
+            lastErr =
+              lastErr ||
+              new Error("Upload cevabı içinde URL bulunamadı.");
+          }
+        } catch (e) {
+          console.error("[uploadFiles] error on", url, e);
+          lastErr = e;
+        }
+      }
+
+      if (!urls.length) {
+        throw lastErr || new Error("Upload başarısız.");
+      }
+
+      return urls;
     } finally {
       setUploading((u) => ({ ...u, [uploadKey]: false }));
     }
   }
 
+  // Yeni: Kapak için direkt /admin/businesses/:idOrSlug/cover endpoint'i
+  async function uploadCover(file) {
+    if (!file) return null;
+    const idOrSlug = form._id || form.slug;
+    if (!idOrSlug) {
+      console.warn("[cover] idOrSlug yok, yükleme iptal", {
+        id: form._id,
+        slug: form.slug,
+      });
+      return null;
+    }
+
+    const fd = new FormData();
+    fd.append("cover", file);
+    if (form._id) fd.append("businessId", form._id);
+    if (form.slug) fd.append("slug", form.slug);
+
+    const candidates = [
+      `/admin/businesses/${idOrSlug}/cover`,
+      `/businesses/${idOrSlug}/cover`,
+    ];
+
+    let lastErr = null;
+
+    for (const url of candidates) {
+      try {
+        console.log("[cover] POST", url, { idOrSlug });
+        const res = await api.post(url, fd, {
+          headers: { "Content-Type": "multipart/form-data" },
+          _quiet: false,
+        });
+        const data = res?.data || {};
+        console.log("[cover] response", data);
+
+        const full =
+          data.business || data.item || data.updated || data.data || null;
+
+        if (full && full._id) {
+          return {
+            business: full,
+            coverUrl: fileToUrl(
+              full.coverImage ||
+                full.cover ||
+                full.coverUrl ||
+                full.cover_image
+            ),
+          };
+        }
+
+        const rawCover =
+          data.coverImage ||
+          data.cover ||
+          data.url ||
+          data.path ||
+          data.location ||
+          null;
+
+        return {
+          business: null,
+          coverUrl: fileToUrl(rawCover),
+        };
+      } catch (err) {
+        console.error("[cover] error on", url, err);
+        lastErr = err;
+      }
+    }
+
+    throw lastErr || new Error("Kapak yükleme başarısız.");
+  }
+
+  // Kapak görseli seçerken anlık local preview + cover endpoint
   async function handleChangeCoverFile(e) {
     const files = e.target.files;
     e.target.value = "";
     if (!files?.length || !canUploadMedia) return;
+    const file = files[0];
+
+    const localUrl = URL.createObjectURL(file);
+    setCoverPreview(localUrl);
+
     try {
-      const uploaded = await uploadFiles([files[0]], "cover", "cover");
-      const fileObj = uploaded[0];
-      if (fileObj) {
-        await patchBusiness({ coverImage: fileObj }, true);
-        showToast("Kapak görseli güncellendi.");
+      const result = await uploadCover(file);
+      if (result?.business) {
+        setBusiness(result.business);
+        setForm(buildForm(result.business));
+        onSaved?.(result.business);
+      } else if (result?.coverUrl) {
+        setBusiness((prev) => ({
+          ...(prev || {}),
+          coverImage: result.coverUrl,
+        }));
       }
+      showToast("Kapak görseli güncellendi.");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Kapak güncellenemedi.");
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Kapak güncellenemedi."
+      );
+    } finally {
+      URL.revokeObjectURL(localUrl);
+      setCoverPreview(null);
     }
   }
 
@@ -919,7 +1534,11 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
       showToast("Kapak görseli kaldırıldı.");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Kapak kaldırılamadı.");
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Kapak kaldırılamadı."
+      );
     }
   }
 
@@ -934,7 +1553,11 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
       showToast("Galeri güncellendi.");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Galeri güncellenemedi.");
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Galeri güncellenemedi."
+      );
     }
   }
 
@@ -946,7 +1569,11 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
       showToast("Galeri görseli silindi.");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Görsel silinemedi.");
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Görsel silinemedi."
+      );
     }
   }
 
@@ -961,7 +1588,11 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
       showToast("Belgeler güncellendi.");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Belgeler yüklenemedi.");
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Belgeler yüklenemedi."
+      );
     }
   }
 
@@ -974,13 +1605,20 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
       showToast("Belge silindi.");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || err?.message || "Belge silinemedi.");
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Belge silinemedi."
+      );
     }
   }
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal modal-wide"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="modal-header">
           <div>
@@ -989,11 +1627,16 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
             </div>
             {!form._isNew && (
               <div className="modal-subtitle">
-                {business?.name} {business?.slug ? `· ${business.slug}` : ""}
+                {business?.name}{" "}
+                {business?.slug ? `· ${business.slug}` : ""}
               </div>
             )}
           </div>
-          <button type="button" onClick={onClose} className="btn btn-light">
+          <button
+            type="button"
+            onClick={onClose}
+            className="btn btn-light"
+          >
             Kapat
           </button>
         </div>
@@ -1010,18 +1653,57 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
                   <div className="summary-body">
                     <FieldRow label="Ad" value={business?.name} />
                     <FieldRow label="Slug" value={business?.slug} />
-                    <FieldRow label="Telefon" value={business?.phone || business?.mobile || business?.phoneMobile} />
+                    <FieldRow
+                      label="Telefon"
+                      value={
+                        business?.phone ||
+                        business?.mobile ||
+                        business?.phoneMobile
+                      }
+                    />
                     <FieldRow label="E-posta" value={business?.email} />
-                    <FieldRow label="Instagram" value={business?.instagramUrl || business?.instagramUsername} />
+                    <FieldRow
+                      label="Instagram"
+                      value={
+                        business?.instagramUrl ||
+                        business?.instagramUsername
+                      }
+                    />
                     <FieldRow label="Web" value={business?.website} />
-                    <FieldRow label="İl / İlçe" value={[business?.city, business?.district].filter(Boolean).join(" / ")} />
+                    <FieldRow
+                      label="İl / İlçe"
+                      value={[
+                        business?.city,
+                        business?.district,
+                      ]
+                        .filter(Boolean)
+                        .join(" / ")}
+                    />
                     <FieldRow label="Tür" value={business?.type} />
-                    <FieldRow label="Durum" value={business?.status} />
-                    <FieldRow label="Doğrulandı mı?" value={business?.verified ? "Evet" : "Hayır"} />
-                    <FieldRow label="Öne çıkar" value={business?.featured ? "Evet" : "Hayır"} />
-                    <FieldRow label="Açıklama" value={business?.description || business?.desc} />
-                    <FieldRow label="Oluşturma" value={fmtDate(business?.createdAt)} />
-                    <FieldRow label="Son Güncelleme" value={fmtDate(business?.updatedAt)} />
+                    <FieldRow
+                      label="Durum"
+                      value={business?.status}
+                    />
+                    <FieldRow
+                      label="Doğrulandı mı?"
+                      value={business?.verified ? "Evet" : "Hayır"}
+                    />
+                    <FieldRow
+                      label="Öne çıkar"
+                      value={business?.featured ? "Evet" : "Hayır"}
+                    />
+                    <FieldRow
+                      label="Açıklama"
+                      value={business?.description || business?.desc}
+                    />
+                    <FieldRow
+                      label="Oluşturma"
+                      value={fmtDate(business?.createdAt)}
+                    />
+                    <FieldRow
+                      label="Son Güncelleme"
+                      value={fmtDate(business?.updatedAt)}
+                    />
                   </div>
                 )}
               </div>
@@ -1038,22 +1720,39 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
                       <div className="media-actions">
                         <label className="link-button">
                           Değiştir
-                          <input type="file" accept="image/*" hidden onChange={handleChangeCoverFile} />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            hidden
+                            onChange={handleChangeCoverFile}
+                          />
                         </label>
                         {cover && (
-                          <button type="button" className="link-danger" onClick={handleRemoveCover}>
+                          <button
+                            type="button"
+                            className="link-danger"
+                            onClick={handleRemoveCover}
+                          >
                             Kaldır
                           </button>
                         )}
-                        {uploading.cover && <span className="muted">Yükleniyor…</span>}
+                        {uploading.cover && (
+                          <span className="muted">Yükleniyor…</span>
+                        )}
                       </div>
                     )}
                   </div>
 
                   {cover ? (
-                    <img src={cover} alt="Kapak" className="cover-img" />
+                    <img
+                      src={cover}
+                      alt="Kapak"
+                      className="cover-img"
+                    />
                   ) : (
-                    <div className="media-empty">Kapak görseli yok</div>
+                    <div className="media-empty">
+                      Kapak görseli yok
+                    </div>
                   )}
                 </div>
 
@@ -1065,31 +1764,51 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
                       <div className="media-actions">
                         <label className="link-button">
                           Görsel Ekle
-                          <input type="file" multiple accept="image/*" hidden onChange={handleAddGallery} />
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            hidden
+                            onChange={handleAddGallery}
+                          />
                         </label>
-                        {uploading.gallery && <span className="muted">Yükleniyor…</span>}
+                        {uploading.gallery && (
+                          <span className="muted">Yükleniyor…</span>
+                        )}
                       </div>
                     )}
                   </div>
 
                   {gallery.length ? (
                     <div className="gallery-grid">
-                      {gallery.map((g, idx) => {
-                        const url = g.url || g.path || g.location || g;
-                        return (
-                          <div className="gallery-item" key={g._id || idx}>
-                            <img src={url} alt="Galeri" className="gallery-img" />
-                            {canUploadMedia && (
-                              <button type="button" className="gallery-remove" onClick={() => handleRemoveGallery(idx)}>
-                                ✕
-                              </button>
-                            )}
-                          </div>
-                        );
-                      })}
+                      {gallery.map((url, idx) => (
+                        <div
+                          className="gallery-item"
+                          key={idx}
+                        >
+                          <img
+                            src={url}
+                            alt="Galeri"
+                            className="gallery-img"
+                          />
+                          {canUploadMedia && (
+                            <button
+                              type="button"
+                              className="gallery-remove"
+                              onClick={() =>
+                                handleRemoveGallery(idx)
+                              }
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   ) : (
-                    <div className="media-empty">Galeri görseli yok</div>
+                    <div className="media-empty">
+                      Galeri görseli yok
+                    </div>
                   )}
                 </div>
 
@@ -1101,27 +1820,38 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
                       <div className="media-actions">
                         <label className="link-button">
                           Belge Yükle
-                          <input type="file" multiple hidden onChange={handleAddDocs} />
+                          <input
+                            type="file"
+                            multiple
+                            hidden
+                            onChange={handleAddDocs}
+                          />
                         </label>
-                        {uploading.docs && <span className="muted">Yükleniyor…</span>}
+                        {uploading.docs && (
+                          <span className="muted">Yükleniyor…</span>
+                        )}
                       </div>
                     )}
                   </div>
 
                   {Array.isArray(docs) && docs.length ? (
                     <div className="docs-list">
-                      {docs.map((d, idx) => (
-                        <div className="doc-row" key={d._id || idx}>
+                      {docs.map((url, idx) => (
+                        <div className="doc-row" key={idx}>
                           <a
-                            href={d.url || d.path || "#"}
+                            href={url || "#"}
                             target="_blank"
                             rel="noreferrer"
                             className="doc-link"
                           >
-                            📄 {d.originalName || d.name || d.filename || "Belge"}
+                            📄 {fileNameFromUrl(url)}
                           </a>
                           {canUploadMedia && (
-                            <button type="button" className="link-danger" onClick={() => handleRemoveDoc(idx)}>
+                            <button
+                              type="button"
+                              className="link-danger"
+                              onClick={() => handleRemoveDoc(idx)}
+                            >
                               Sil
                             </button>
                           )}
@@ -1138,7 +1868,9 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
 
           {/* Edit Form */}
           <form onSubmit={handleSubmit} className="edit-form">
-            <h3 className="summary-title">İşletme Bilgilerini Güncelle</h3>
+            <h3 className="summary-title">
+              İşletme Bilgilerini Güncelle
+            </h3>
 
             <div className="form-grid">
               <div>
@@ -1174,69 +1906,128 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
 
               <div>
                 <label className="field-caption">Telefon</label>
-                <input name="phone" value={form.phone} onChange={handleChange} />
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">Mobil</label>
-                <input name="mobile" value={form.mobile} onChange={handleChange} />
+                <input
+                  name="mobile"
+                  value={form.mobile}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">E-posta</label>
-                <input type="email" name="email" value={form.email} onChange={handleChange} />
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">Web Sitesi</label>
-                <input name="website" value={form.website} onChange={handleChange} />
+                <input
+                  name="website"
+                  value={form.website}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">Instagram URL</label>
-                <input name="instagramUrl" value={form.instagramUrl} onChange={handleChange} />
+                <input
+                  name="instagramUrl"
+                  value={form.instagramUrl}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
-                <label className="field-caption">Instagram Kullanıcı</label>
-                <input name="instagramUsername" value={form.instagramUsername} onChange={handleChange} />
+                <label className="field-caption">
+                  Instagram Kullanıcı
+                </label>
+                <input
+                  name="instagramUsername"
+                  value={form.instagramUsername}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">İl</label>
-                <input name="city" value={form.city} onChange={handleChange} />
+                <input
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">İlçe</label>
-                <input name="district" value={form.district} onChange={handleChange} />
+                <input
+                  name="district"
+                  value={form.district}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
                 <label className="field-caption">Tür</label>
-                <select name="type" value={form.type} onChange={handleChange}>
-                  {BUSINESS_TYPES.filter((t) => t !== "all").map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
+                <select
+                  name="type"
+                  value={form.type}
+                  onChange={handleChange}
+                >
+                  {BUSINESS_TYPES.filter((t) => t !== "all").map(
+                    (t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
 
               <div>
                 <label className="field-caption">Durum</label>
-                <select name="status" value={form.status} onChange={handleChange}>
+                <select
+                  name="status"
+                  value={form.status}
+                  onChange={handleChange}
+                >
                   {STATUSES.filter((s) => s !== "all").map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div className="checkbox-row">
                 <label className="checkbox-label">
-                  <input type="checkbox" name="verified" checked={!!form.verified} onChange={handleChange} />
+                  <input
+                    type="checkbox"
+                    name="verified"
+                    checked={!!form.verified}
+                    onChange={handleChange}
+                  />
                   Doğrulandı mı?
                 </label>
                 <label className="checkbox-label">
-                  <input type="checkbox" name="featured" checked={!!form.featured} onChange={handleChange} />
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={!!form.featured}
+                    onChange={handleChange}
+                  />
                   Öne çıkar?
                 </label>
               </div>
@@ -1244,16 +2035,32 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
 
             <div className="span2">
               <label className="field-caption">Adres</label>
-              <textarea name="address" value={form.address} onChange={handleChange} rows={2} />
+              <textarea
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                rows={2}
+              />
             </div>
 
             <div className="span2">
               <label className="field-caption">Açıklama</label>
-              <textarea name="description" value={form.description} onChange={handleChange} rows={3} />
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                rows={3}
+              />
             </div>
 
             <div className="actions span2">
-              <button type="button" className="btn btn-light" onClick={onClose}>İptal</button>
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={onClose}
+              >
+                İptal
+              </button>
               <button type="submit" className="btn" disabled={saving}>
                 {saving ? "Kaydediliyor…" : "Kaydet"}
               </button>
@@ -1262,7 +2069,12 @@ function BusinessDetailModal({ open, initial, basePath, onClose, onSaved }) {
         </div>
 
         {toast && (
-          <div className={cls("toast", toast.type === "error" && "toast-error")}>
+          <div
+            className={cls(
+              "toast",
+              toast.type === "error" && "toast-error"
+            )}
+          >
             {toast.message}
           </div>
         )}

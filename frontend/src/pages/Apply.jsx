@@ -1,7 +1,7 @@
 // frontend/src/pages/Apply.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import apiDefault, { api as apiNamed, API_ORIGIN } from "@/api/axios-boot";
 
 /* ====================== Helpers ====================== */
 const PHONE_RE = /(\+90\s?)?0?\s?5\d{2}\s?\d{3}\s?\d{2}\s?\d{2}\b/g;
@@ -51,7 +51,8 @@ async function compressImage(
   if (outBlob.size >= file.size) return file;
 
   const newName =
-    sanitizeName(file.name.replace(/\.(jpe?g|png|webp|gif|bmp|tiff)$/i, "")) + (mime === "image/webp" ? ".webp" : ".jpg");
+    sanitizeName(file.name.replace(/\.(jpe?g|png|webp|gif|bmp|tiff)$/i, "")) +
+    (mime === "image/webp" ? ".webp" : ".jpg");
   return new File([outBlob], newName, { type: outBlob.type, lastModified: Date.now() });
 }
 
@@ -134,43 +135,31 @@ const MAX_IMAGES = 5;
 const MAX_IMG_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_PDF_SIZE = 20 * 1024 * 1024; // 20MB
 
-export default function Apply() {
-  /* ---------------- HTTP instance ---------------- */
-  const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
-  const http = useMemo(() => {
-    const inst = axios.create({
-      baseURL: API_BASE || "",
-      withCredentials: true,
-      timeout: 20000,
-    });
-    inst.interceptors.request.use((cfg) => {
-      const t = localStorage.getItem("emailVerifyToken");
-      if (t) cfg.headers["x-verify-token"] = t;
-      return cfg;
-    });
-    return inst;
-  }, [API_BASE]);
+// Ortak axios instance + origin
+const api = apiNamed || apiDefault;
+const API_BASE = API_ORIGIN || "";
 
+export default function Apply() {
   /* ---------------- State ---------------- */
   const [form, setForm] = useState({
-    name: "",              // İşletme Adı
-    tradeTitle: "",        // Ticari Ünvan
+    name: "", // İşletme Adı
+    tradeTitle: "", // Ticari Ünvan
     type: "",
     instagramUsername: "",
     instagramUrl: "",
     website: "",
-    phone: "",             // Mobil (zorunlu)
-    landline: "",          // Sabit (opsiyonel)
-    city: "",              // İl (zorunlu)
-    district: "",          // İlçe (zorunlu)
+    phone: "", // Mobil (zorunlu)
+    landline: "", // Sabit (opsiyonel)
+    city: "", // İl (zorunlu)
+    district: "", // İlçe (zorunlu)
     note: "",
     terms: false,
   });
   const [biz, setBiz] = useState(null); // {_id, name, slug}
 
   // Belgeler
-  const [taxPdf, setTaxPdf] = useState(null);       // Vergi Levhası (PDF, zorunlu)
-  const [permitPdf, setPermitPdf] = useState(null); // İş Yeri Açma ve Çalıştırma Ruhsatı (PDF, zorunlu)
+  const [taxPdf, setTaxPdf] = useState(null); // Vergi Levhası (PDF, zorunlu)
+  const [permitPdf, setPermitPdf] = useState(null); // İşyeri Açma ve Çalıştırma Ruhsatı (PDF, zorunlu)
 
   // Yalnızca GÖRSEL ve max 5
   const [files, setFiles] = useState([]); // { file: File, note: string, blur: boolean, name?: string, sig?:string }
@@ -248,7 +237,7 @@ export default function Apply() {
     (async () => {
       try {
         if (qId) {
-          const { data } = await http.get(`/api/businesses/${encodeURIComponent(qId)}`);
+          const { data } = await api.get(`/api/businesses/${encodeURIComponent(qId)}`);
           const b = data?.business || data || null;
           if (b) prefillFromBusiness(b);
         } else if (qSlug) {
@@ -259,8 +248,12 @@ export default function Apply() {
           ];
           for (const u of tryUrls) {
             try {
-              const { data } = await http.get(u);
-              const b = data?.business || data?.result || data?.businesses?.[0] || (data?._id ? data : null);
+              const { data } = await api.get(u);
+              const b =
+                data?.business ||
+                data?.result ||
+                data?.businesses?.[0] ||
+                (data?._id ? data : null);
               if (b) {
                 prefillFromBusiness(b);
                 break;
@@ -268,13 +261,13 @@ export default function Apply() {
             } catch {}
           }
         } else if (qName) {
-          const { data } = await http.get(`/api/businesses/search?q=${encodeURIComponent(qName)}`);
+          const { data } = await api.get(`/api/businesses/search?q=${encodeURIComponent(qName)}`);
           const b = data?.businesses?.[0];
           if (b) prefillFromBusiness(b);
         }
       } catch {}
     })();
-  }, [location, http]);
+  }, [location]);
 
   /* ---------------- Taslak yükle / kaydet ---------------- */
   useEffect(() => {
@@ -366,7 +359,8 @@ export default function Apply() {
       if (existingSigs.has(sig)) continue;
 
       const preferWebp = "image/webp";
-      const targetMime = (f.type === "image/jpeg" || f.type === "image/webp") ? f.type : preferWebp;
+      const targetMime =
+        f.type === "image/jpeg" || f.type === "image/webp" ? f.type : preferWebp;
       const compressed = await compressImage(f, {
         maxDim: 2000,
         quality: 0.92,
@@ -385,7 +379,9 @@ export default function Apply() {
       merged = merged.slice(0, MAX_IMAGES);
       setUploadError(`En fazla ${MAX_IMAGES} görsel kabul edilir. Fazlası otomatik çıkarıldı.`);
     } else if (rejectedTypeOrSize) {
-      setUploadError("Sadece uygun boyutta görseller (JPG/WEBP, her biri 10MB'ı geçmemeli) kabul ediliyor.");
+      setUploadError(
+        "Sadece uygun boyutta görseller (JPG/WEBP, her biri 10MB'ı geçmemeli) kabul ediliyor."
+      );
     }
     setFiles(merged);
   }
@@ -474,7 +470,6 @@ export default function Apply() {
         landline: digitsOnly(form.landline || ""),
       };
 
-      let resp;
       // FormData
       const fd = new FormData();
       Object.entries(norm).forEach(([k, v]) => fd.append(k, v == null ? "" : v));
@@ -487,12 +482,22 @@ export default function Apply() {
       const notes = [];
       files.forEach((f, idx) => {
         if (f.file) fd.append("documents", f.file);
-        notes.push({ index: idx, note: f.note || "", blur: !!f.blur, name: f.file?.name || f.name || "" });
+        notes.push({
+          index: idx,
+          note: f.note || "",
+          blur: !!f.blur,
+          name: f.file?.name || f.name || "",
+        });
       });
       fd.append("documentNotes", JSON.stringify(notes));
 
-      resp = await http.post(`/api/apply`, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const verifyToken = localStorage.getItem("emailVerifyToken") || "";
+
+      const resp = await api.post(`/api/apply`, fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          ...(verifyToken ? { "x-verify-token": verifyToken } : {}),
+        },
         onUploadProgress: (pe) => {
           if (!pe.total) return;
           const pct = Math.round((pe.loaded / pe.total) * 100);
@@ -506,7 +511,10 @@ export default function Apply() {
 
       // 🔑 Sunucunun verdiği hazır önizleme URL’leri
       let previews =
-        (resp?.data?.preview && Array.isArray(resp.data.preview.images) && resp.data.preview.images) || [];
+        (resp?.data?.preview &&
+          Array.isArray(resp.data.preview.images) &&
+          resp.data.preview.images) ||
+        [];
 
       // 🔁 Gerekirse /api/img ile üret
       if (!previews.length && Array.isArray(resp?.data?.images)) {
@@ -566,25 +574,71 @@ export default function Apply() {
   return (
     <div
       ref={pasteRef}
-      style={{ padding: 28, maxWidth: 960, margin: "0 auto", fontFamily: "Inter, Segoe UI, system-ui, sans-serif" }}
+      style={{
+        padding: 28,
+        maxWidth: 960,
+        margin: "0 auto",
+        fontFamily: "Inter, Segoe UI, system-ui, sans-serif",
+      }}
     >
       {/* Başlık + Stepper */}
       <div
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 16,
+        }}
         aria-label="Adım göstergesi"
       >
-        <h2 style={{ margin: 0, color: "#111827", fontWeight: 800 }}>İşletme Doğrulama Başvurusu</h2>
+        <h2 style={{ margin: 0, color: "#111827", fontWeight: 800 }}>
+          İşletme Doğrulama Başvurusu
+        </h2>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <button onClick={() => navigate("/")} style={subtleBtn} title="Anasayfaya dön">
             ⟵ Anasayfaya Dön
           </button>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }} role="list" aria-label="Adımlar">
-            <div style={stepDot(step === 1, step > 1)} role="listitem" title="1. İşletme Bilgileri" />
-            <div style={{ width: 50, height: 2, background: step > 1 ? "#6b7280" : "#e5e7eb" }} />
-            <div style={stepDot(step === 2, step > 2)} role="listitem" title="2. İletişim & Sosyal" />
-            <div style={{ width: 50, height: 2, background: step > 2 ? "#6b7280" : "#e5e7eb" }} />
-            <div style={stepDot(step === 3, step > 3)} role="listitem" title="3. Belgeler & Galeri" />
-            <div style={{ width: 50, height: 2, background: step > 3 ? "#6b7280" : "#e5e7eb" }} />
+          <div
+            style={{ display: "flex", alignItems: "center", gap: 8 }}
+            role="list"
+            aria-label="Adımlar"
+          >
+            <div
+              style={stepDot(step === 1, step > 1)}
+              role="listitem"
+              title="1. İşletme Bilgileri"
+            />
+            <div
+              style={{
+                width: 50,
+                height: 2,
+                background: step > 1 ? "#6b7280" : "#e5e7eb",
+              }}
+            />
+            <div
+              style={stepDot(step === 2, step > 2)}
+              role="listitem"
+              title="2. İletişim & Sosyal"
+            />
+            <div
+              style={{
+                width: 50,
+                height: 2,
+                background: step > 2 ? "#6b7280" : "#e5e7eb",
+              }}
+            />
+            <div
+              style={stepDot(step === 3, step > 3)}
+              role="listitem"
+              title="3. Belgeler & Galeri"
+            />
+            <div
+              style={{
+                width: 50,
+                height: 2,
+                background: step > 3 ? "#6b7280" : "#e5e7eb",
+              }}
+            />
             <div style={stepDot(step === 4, false)} role="listitem" title="4. Gönder" />
           </div>
         </div>
@@ -603,11 +657,16 @@ export default function Apply() {
           }}
         >
           <div>
-            <b>Seçili İşletme:</b> {biz.name || "-"} {biz.slug ? <span style={{ opacity: 0.7 }}>({biz.slug})</span> : null}
+            <b>Seçili İşletme:</b> {biz.name || "-"}{" "}
+            {biz.slug ? <span style={{ opacity: 0.7 }}>({biz.slug})</span> : null}
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             {biz.slug && (
-              <a href={`/isletme/${biz.slug}`} className="lnk" style={{ ...subtleBtn, textDecoration: "none" }}>
+              <a
+                href={`/isletme/${biz.slug}`}
+                className="lnk"
+                style={{ ...subtleBtn, textDecoration: "none" }}
+              >
                 Profili Aç
               </a>
             )}
@@ -623,11 +682,21 @@ export default function Apply() {
       )}
 
       {/* Yasal mini uyarı */}
-      <div style={{ ...card, display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 16, background: "#f8fffb" }}>
+      <div
+        style={{
+          ...card,
+          display: "flex",
+          gap: 12,
+          alignItems: "flex-start",
+          marginBottom: 16,
+          background: "#f8fffb",
+        }}
+      >
         <div style={{ fontSize: 20 }}>ℹ️</div>
         <div style={{ fontSize: 14, color: "#374151" }}>
-          Lütfen doğru ve güncel bilgiler girin. Yükleyeceğiniz <b>Vergi Levhası</b> ve <b>İşyeri Açma ve Çalıştırma Ruhsatı</b> PDF
-          formatında olmalıdır. Görseller yalnızca doğrulama amacıyla incelenir.
+          Lütfen doğru ve güncel bilgiler girin. Yükleyeceğiniz <b>Vergi Levhası</b> ve{" "}
+          <b>İşyeri Açma ve Çalıştırma Ruhsatı</b> PDF formatında olmalıdır. Görseller yalnızca
+          doğrulama amacıyla incelenir.
         </div>
       </div>
 
@@ -726,7 +795,11 @@ export default function Apply() {
             >
               Taslağı Temizle
             </button>
-            <button disabled={!canNext1} onClick={() => setStep(2)} style={{ ...btn, opacity: canNext1 ? 1 : 0.5 }}>
+            <button
+              disabled={!canNext1}
+              onClick={() => setStep(2)}
+              style={{ ...btn, opacity: canNext1 ? 1 : 0.5 }}
+            >
               Devam Et ➜
             </button>
           </div>
@@ -762,11 +835,16 @@ export default function Apply() {
               <div style={label}>Instagram Kullanıcı Adı</div>
               <input
                 value={form.instagramUsername}
-                onChange={(e) => setForm({ ...form, instagramUsername: e.target.value.replace(/\s/g, "") })}
+                onChange={(e) =>
+                  setForm({ ...form, instagramUsername: e.target.value.replace(/\s/g, "") })
+                }
                 onBlur={() => {
                   if (!form.instagramUrl && form.instagramUsername.trim()) {
                     const u = form.instagramUsername.replace(/^@/, "");
-                    setForm((prev) => ({ ...prev, instagramUrl: `https://instagram.com/${u}` }));
+                    setForm((prev) => ({
+                      ...prev,
+                      instagramUrl: `https://instagram.com/${u}`,
+                    }));
                   }
                 }}
                 style={inputStyle(true)}
@@ -815,7 +893,11 @@ export default function Apply() {
             <button onClick={() => setStep(1)} style={subtleBtn}>
               ⟵ Geri
             </button>
-            <button disabled={!canNext2} onClick={() => setStep(3)} style={{ ...btn, opacity: canNext2 ? 1 : 0.5 }}>
+            <button
+              disabled={!canNext2}
+              onClick={() => setStep(3)}
+              style={{ ...btn, opacity: canNext2 ? 1 : 0.5 }}
+            >
               Devam Et ➜
             </button>
           </div>
@@ -826,7 +908,14 @@ export default function Apply() {
       {step === 3 && (
         <div style={{ ...card, marginBottom: 16 }}>
           {/* Zorunlu PDF'ler */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 16,
+              marginBottom: 16,
+            }}
+          >
             <div style={{ ...card, padding: 16 }}>
               <div style={{ fontWeight: 800, marginBottom: 6 }}>Vergi Levhası (PDF) *</div>
               <input
@@ -837,14 +926,25 @@ export default function Apply() {
               {taxPdf && (
                 <div style={{ marginTop: 8, fontSize: 13, color: "#374151" }}>
                   Seçildi: <b>{taxPdf.name}</b> ({Math.round(taxPdf.size / 1024)} KB)
-                  <button onClick={() => setTaxPdf(null)} style={{ ...subtleBtn, marginLeft: 10 }}>Kaldır</button>
+                  <button
+                    onClick={() => setTaxPdf(null)}
+                    style={{ ...subtleBtn, marginLeft: 10 }}
+                  >
+                    Kaldır
+                  </button>
                 </div>
               )}
-              {!v.taxPdf && <div style={{ color: "#b91c1c", fontSize: 12, marginTop: 6 }}>Bu alan zorunludur.</div>}
+              {!v.taxPdf && (
+                <div style={{ color: "#b91c1c", fontSize: 12, marginTop: 6 }}>
+                  Bu alan zorunludur.
+                </div>
+              )}
             </div>
 
             <div style={{ ...card, padding: 16 }}>
-              <div style={{ fontWeight: 800, marginBottom: 6 }}>İşyeri Açma ve Çalıştırma Ruhsatı (PDF) *</div>
+              <div style={{ fontWeight: 800, marginBottom: 6 }}>
+                İşyeri Açma ve Çalıştırma Ruhsatı (PDF) *
+              </div>
               <input
                 type="file"
                 accept="application/pdf"
@@ -853,10 +953,19 @@ export default function Apply() {
               {permitPdf && (
                 <div style={{ marginTop: 8, fontSize: 13, color: "#374151" }}>
                   Seçildi: <b>{permitPdf.name}</b> ({Math.round(permitPdf.size / 1024)} KB)
-                  <button onClick={() => setPermitPdf(null)} style={{ ...subtleBtn, marginLeft: 10 }}>Kaldır</button>
+                  <button
+                    onClick={() => setPermitPdf(null)}
+                    style={{ ...subtleBtn, marginLeft: 10 }}
+                  >
+                    Kaldır
+                  </button>
                 </div>
               )}
-              {!v.permitPdf && <div style={{ color: "#b91c1c", fontSize: 12, marginTop: 6 }}>Bu alan zorunludur.</div>}
+              {!v.permitPdf && (
+                <div style={{ color: "#b91c1c", fontSize: 12, marginTop: 6 }}>
+                  Bu alan zorunludur.
+                </div>
+              )}
             </div>
           </div>
 
@@ -883,7 +992,9 @@ export default function Apply() {
               marginBottom: 12,
             }}
           >
-            <div style={{ fontWeight: 700, color: "#111827" }}>İşletme Görselleri (en fazla {MAX_IMAGES} adet)</div>
+            <div style={{ fontWeight: 700, color: "#111827" }}>
+              İşletme Görselleri (en fazla {MAX_IMAGES} adet)
+            </div>
             <div style={{ color: "#6b7280", fontSize: 13, marginTop: 4 }}>
               JPG/WEBP – <b>en fazla {MAX_IMAGES} görsel</b>, her biri maks 10MB
             </div>
@@ -898,7 +1009,11 @@ export default function Apply() {
           </div>
 
           {uploadError && (
-            <div role="alert" aria-live="polite" style={{ color: "#b91c1c", marginBottom: 8, fontWeight: 600 }}>
+            <div
+              role="alert"
+              aria-live="polite"
+              style={{ color: "#b91c1c", marginBottom: 8, fontWeight: 600 }}
+            >
               {uploadError}
             </div>
           )}
@@ -906,15 +1021,27 @@ export default function Apply() {
           {!!files.length && (
             <>
               <div style={{ marginBottom: 6, fontSize: 13, color: "#374151" }}>
-                Seçilen görseller: {files.length}/{MAX_IMAGES} {v.imagesOk ? "✓" : "(en az 1, en fazla 5 görsel)"}
+                Seçilen görseller: {files.length}/{MAX_IMAGES}{" "}
+                {v.imagesOk ? "✓" : "(en az 1, en fazla 5 görsel)"}
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 12 }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))",
+                  gap: 12,
+                }}
+              >
                 {files.map((item, idx) => {
                   const url = item.file ? URL.createObjectURL(item.file) : "";
                   return (
                     <div
                       key={idx}
-                      style={{ border: "1px solid #e5e7eb", borderRadius: 12, overflow: "hidden", background: "#fff" }}
+                      style={{
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 12,
+                        overflow: "hidden",
+                        background: "#fff",
+                      }}
                       aria-label={`Görsel ${idx + 1}`}
                     >
                       <div
@@ -940,25 +1067,53 @@ export default function Apply() {
                             }}
                           />
                         ) : (
-                          <div style={{ color: "#9ca3af", fontSize: 13 }}>Önizleme yok</div>
+                          <div style={{ color: "#9ca3af", fontSize: 13 }}>
+                            Önizleme yok
+                          </div>
                         )}
-                        <div style={{ position: "absolute", top: 8, right: 8, display: "flex", gap: 6 }}>
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            display: "flex",
+                            gap: 6,
+                          }}
+                        >
                           <button
-                            onClick={() => setFiles((p) => p.map((f, i) => (i === idx ? { ...f, blur: !f.blur } : f)))}
+                            onClick={() =>
+                              setFiles((p) =>
+                                p.map((f, i) =>
+                                  i === idx ? { ...f, blur: !f.blur } : f
+                                )
+                              )
+                            }
                             style={subtleBtn}
                             title="Önizlemede bulanıklaştır"
                           >
                             Blur
                           </button>
-                          <button onClick={() => move(idx, -1)} style={subtleBtn} title="Yukarı taşı">
+                          <button
+                            onClick={() => move(idx, -1)}
+                            style={subtleBtn}
+                            title="Yukarı taşı"
+                          >
                             ↑
                           </button>
-                          <button onClick={() => move(idx, +1)} style={subtleBtn} title="Aşağı taşı">
+                          <button
+                            onClick={() => move(idx, +1)}
+                            style={subtleBtn}
+                            title="Aşağı taşı"
+                          >
                             ↓
                           </button>
                           <button
                             onClick={() => removeFile(idx)}
-                            style={{ ...subtleBtn, background: "#fff1f2", borderColor: "#fecdd3" }}
+                            style={{
+                              ...subtleBtn,
+                              background: "#fff1f2",
+                              borderColor: "#fecdd3",
+                            }}
                             title="Kaldır"
                           >
                             Sil
@@ -966,14 +1121,24 @@ export default function Apply() {
                         </div>
                       </div>
                       <div style={{ padding: 10 }}>
-                        <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 6 }}>
+                        <div
+                          style={{
+                            fontSize: 12,
+                            color: "#6b7280",
+                            marginBottom: 6,
+                          }}
+                        >
                           {item.file?.name || item.name || "Görsel"}
                         </div>
                         <textarea
                           placeholder="Kısa not (örn. 'Ön cephe')"
                           value={item.note}
                           onChange={(e) =>
-                            setFiles((prev) => prev.map((f, i) => (i === idx ? { ...f, note: e.target.value } : f)))
+                            setFiles((prev) =>
+                              prev.map((f, i) =>
+                                i === idx ? { ...f, note: e.target.value } : f
+                              )
+                            )
                           }
                           style={{ ...inputStyle(true), minHeight: 70, marginBottom: 0 }}
                         />
@@ -1001,12 +1166,28 @@ export default function Apply() {
         <div style={{ ...card }}>
           <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 16 }}>
             <div>
-              <div style={{ ...card, padding: 16, border: "1px dashed #e5e7eb", background: "#fbfbff" }}>
-                <div style={{ fontWeight: 800, marginBottom: 8, color: "#111827" }}>Özet</div>
+              <div
+                style={{
+                  ...card,
+                  padding: 16,
+                  border: "1px dashed #e5e7eb",
+                  background: "#fbfbff",
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: 800,
+                    marginBottom: 8,
+                    color: "#111827",
+                  }}
+                >
+                  Özet
+                </div>
                 <div style={{ fontSize: 14, color: "#374151", lineHeight: 1.6 }}>
                   {biz && (
                     <>
-                      <b>İşletme Kaydı:</b> {biz.name} {biz.slug ? `(${biz.slug})` : ""}
+                      <b>İşletme Kaydı:</b> {biz.name}{" "}
+                      {biz.slug ? `(${biz.slug})` : ""}
                       <br />
                     </>
                   )}
@@ -1017,7 +1198,8 @@ export default function Apply() {
                   <b>İlçe:</b> {form.district || "-"} <br />
                   <b>Telefon (mobil):</b> {form.phone || "-"} <br />
                   <b>Sabit:</b> {form.landline || "-"} <br />
-                  <b>Instagram:</b> {form.instagramUsername || form.instagramUrl || "-"} <br />
+                  <b>Instagram:</b> {form.instagramUsername || form.instagramUrl || "-"}{" "}
+                  <br />
                   <b>Web:</b> {form.website || "-"} <br />
                   {!!form.note && (
                     <>
@@ -1030,7 +1212,9 @@ export default function Apply() {
               {/* Sunucuya yüklenen belgeler */}
               {serverReqId && (
                 <div style={{ ...card, padding: 16, marginTop: 16 }}>
-                  <div style={{ fontWeight: 800, marginBottom: 8 }}>Sunucuya Yüklenen Belgeler</div>
+                  <div style={{ fontWeight: 800, marginBottom: 8 }}>
+                    Sunucuya Yüklenen Belgeler
+                  </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                     {serverFiles.map((src, i) => (
                       <img
@@ -1056,19 +1240,37 @@ export default function Apply() {
             <div>
               <div style={{ ...card, padding: 16 }}>
                 <div style={{ fontWeight: 800, marginBottom: 8 }}>Son Kontrol</div>
-                <ul style={{ margin: 0, paddingLeft: 18, color: "#374151", fontSize: 14 }}>
+                <ul
+                  style={{
+                    margin: 0,
+                    paddingLeft: 18,
+                    color: "#374151",
+                    fontSize: 14,
+                  }}
+                >
                   <li>Bilgiler doğru ve günceldir.</li>
                   <li>Vergi levhası ve ruhsat PDF olarak eklendi.</li>
-                  <li>İşletme görselleri <b>en fazla 5 adet</b>tir (en az 1 görsel gereklidir).</li>
+                  <li>
+                    İşletme görselleri <b>en fazla 5 adet</b>tir (en az 1 görsel gereklidir).
+                  </li>
                   <li>Gizlilik ve kullanım şartlarını kabul ediyorum.</li>
                 </ul>
 
                 {/* Koşullar onayı */}
-                <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10 }}>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    marginTop: 10,
+                  }}
+                >
                   <input
                     type="checkbox"
                     checked={form.terms}
-                    onChange={(e) => setForm((p) => ({ ...p, terms: e.target.checked }))}
+                    onChange={(e) =>
+                      setForm((p) => ({ ...p, terms: e.target.checked }))
+                    }
                   />
                   <span>
                     <b>Koşulları kabul ediyorum.</b>
@@ -1076,7 +1278,15 @@ export default function Apply() {
                 </label>
 
                 {error && (
-                  <p role="alert" aria-live="assertive" style={{ color: "#b91c1c", marginTop: 12, fontWeight: 700 }}>
+                  <p
+                    role="alert"
+                    aria-live="assertive"
+                    style={{
+                      color: "#b91c1c",
+                      marginTop: 12,
+                      fontWeight: 700,
+                    }}
+                  >
                     {error}
                   </p>
                 )}
@@ -1103,18 +1313,36 @@ export default function Apply() {
                         }}
                       />
                     </div>
-                    <div style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>{progress}%</div>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        color: "#6b7280",
+                        marginTop: 6,
+                      }}
+                    >
+                      {progress}%
+                    </div>
                   </div>
                 )}
 
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 12 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: 8,
+                    marginTop: 12,
+                  }}
+                >
                   <button onClick={() => setStep(3)} style={subtleBtn}>
                     ⟵ Belgeler & Galeriye Dön
                   </button>
                   <button
                     onClick={handleSubmit}
                     disabled={submitting || !canSubmit}
-                    style={{ ...btn, background: submitting ? "#9ca3af" : "#27ae60" }}
+                    style={{
+                      ...btn,
+                      background: submitting ? "#9ca3af" : "#27ae60",
+                    }}
                     aria-disabled={submitting || !canSubmit}
                   >
                     {submitting ? "Gönderiliyor…" : "Başvuruyu Gönder"}
@@ -1132,7 +1360,10 @@ export default function Apply() {
           <div style={popupBox}>
             <h3>Başvurunuz Değerlendirmeye Alınmıştır</h3>
             <p>En kısa sürede değerlendirilip size bilgi verilecektir.</p>
-            <button onClick={() => setShowPopup(false)} style={{ ...btn, padding: "10px 16px" }}>
+            <button
+              onClick={() => setShowPopup(false)}
+              style={{ ...btn, padding: "10px 16px" }}
+            >
               Kapat
             </button>
           </div>
