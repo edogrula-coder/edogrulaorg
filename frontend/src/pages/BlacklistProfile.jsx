@@ -1,4 +1,4 @@
-// src/pages/BlacklistProfile.jsx — Public Kara Liste Profili (Ultra Pro, slug+id destekli)
+// src/pages/BlacklistProfile.jsx — Public Kara Liste Profili (Ultra Pro, id + slug tolerant)
 import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import apiDefault, { api as apiNamed } from "@/api/axios-boot";
@@ -224,13 +224,48 @@ export default function BlacklistProfile() {
   // Lightbox
   const [lightboxIndex, setLightboxIndex] = React.useState(null);
 
+  const devLog = (...args) => {
+    if (import.meta?.env?.DEV) {
+      // eslint-disable-next-line no-console
+      console.log("[BlacklistProfile]", ...args);
+    }
+  };
+
   const tryGet = async (url) => {
     try {
       const res = await api.get(url, { _quiet: true });
+      devLog("GET OK", url, res?.status, res?.data);
       return res?.data || null;
-    } catch {
+    } catch (err) {
+      devLog(
+        "GET FAIL",
+        url,
+        err?.response?.status,
+        err?.response?.data || err?.message
+      );
       return null;
     }
+  };
+
+  const resolveItem = (data) => {
+    if (!data || typeof data !== "object") return null;
+
+    let item =
+      data.item ||
+      data.blacklist ||
+      data.result ||
+      data.data || // bazı API'ler data: {...} dönebilir
+      (data._id ? data : null);
+
+    if (!item) {
+      // İçinde _id olan ilk obje field'ı yakala (ör: { ok:true, entry:{_id:...} })
+      const candidates = Object.values(data).filter(
+        (v) => v && typeof v === "object" && !Array.isArray(v) && v._id
+      );
+      if (candidates.length) item = candidates[0];
+    }
+
+    return item || null;
   };
 
   const loadItem = React.useCallback(async () => {
@@ -246,33 +281,52 @@ export default function BlacklistProfile() {
       return;
     }
 
-    let data = null;
+    const keyStr = String(key).trim();
+    const isId = isObjectId(keyStr);
+    const slug = encodeURIComponent(keyStr);
 
-    if (isObjectId(key)) {
-      data =
-        (await tryGet(`/blacklist/${encodeURIComponent(key)}`)) ||
-        (await tryGet(`/blacklist/by-id/${encodeURIComponent(key)}`)) ||
-        null;
-    } else {
-      const slug = encodeURIComponent(key);
-      const routes = [
-        `/blacklist/by-slug/${slug}`,
-        `/blacklist/slug/${slug}`,
-        `/blacklist/handle/${slug}`,
-        `/blacklist/public/${slug}`,
-        `/blacklist/${slug}`, // legacy
-      ];
-      for (const r of routes) {
-        data = await tryGet(r);
-        if (data) break;
+    // Denenecek endpoint listesi (sıralı)
+    const idRoutes = [
+      `/blacklist/${encodeURIComponent(keyStr)}`,
+      `/blacklists/${encodeURIComponent(keyStr)}`,
+      `/blacklist/by-id/${encodeURIComponent(keyStr)}`,
+      `/blacklists/by-id/${encodeURIComponent(keyStr)}`,
+      `/blacklist/public/${encodeURIComponent(keyStr)}`,
+      `/blacklists/public/${encodeURIComponent(keyStr)}`,
+      `/public/blacklist/${encodeURIComponent(keyStr)}`,
+      `/public/blacklists/${encodeURIComponent(keyStr)}`,
+    ];
+
+    const slugRoutes = [
+      `/blacklist/by-slug/${slug}`,
+      `/blacklist/slug/${slug}`,
+      `/blacklist/handle/${slug}`,
+      `/blacklist/public/${slug}`,
+      `/blacklists/public/${slug}`,
+      `/public/blacklist/${slug}`,
+      `/public/blacklists/${slug}`,
+      `/blacklist/${slug}`, // legacy
+    ];
+
+    const searchRoutes = [];
+    if (isId) searchRoutes.push(...idRoutes);
+    // ID de olsa, slug rotalarını en sona ekleyelim (esneklik için)
+    searchRoutes.push(...slugRoutes);
+
+    devLog("key:", keyStr, "isId:", isId, "routes:", searchRoutes);
+
+    let data = null;
+    for (const r of searchRoutes) {
+      data = await tryGet(r);
+      const itemCandidate = resolveItem(data);
+      if (itemCandidate) {
+        devLog("HIT on route:", r);
+        data = { __route: r, ...data, item: itemCandidate };
+        break;
       }
     }
 
-    const item =
-      data?.item ||
-      data?.blacklist ||
-      data?.result ||
-      (data && data._id ? data : null);
+    const item = resolveItem(data);
 
     if (!item) {
       setState({
@@ -330,7 +384,9 @@ export default function BlacklistProfile() {
 
   const Header = () => (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-      <button onClick={() => navigate(-1)} className="btn btn-light">‹ Geri</button>
+      <button onClick={() => navigate(-1)} className="btn btn-light">
+        ‹ Geri
+      </button>
       <h2 style={{ margin: 0, fontWeight: 800 }}>Kara Liste Profili</h2>
     </div>
   );
@@ -407,8 +463,12 @@ export default function BlacklistProfile() {
         <div style={{ maxWidth: 780 }}>
           <Alert>{error || "Kayıt bulunamadı (404)."}</Alert>
           <div style={{ display: "flex", gap: 8 }}>
-            <button className="btn" onClick={loadItem}>↻ Yeniden Dene</button>
-            <Link to="/" className="btn btn-light">‹ Ana sayfa</Link>
+            <button className="btn" onClick={loadItem}>
+              ↻ Yeniden Dene
+            </button>
+            <Link to="/" className="btn btn-light">
+              ‹ Ana sayfa
+            </Link>
           </div>
         </div>
       </Shell>
@@ -510,7 +570,7 @@ export default function BlacklistProfile() {
 
     setSupportSending(true);
     try {
-      // Backend: POST /blacklist/:id/support
+      // Backend: POST /blacklist/:id/support (public)
       const res = await api.post(
         `/blacklist/${encodeURIComponent(targetId)}/support`,
         { name: sName, comment },
@@ -518,7 +578,7 @@ export default function BlacklistProfile() {
       );
 
       const data = res?.data || {};
-      const base = data.blacklist || data.item || item;
+      const base = data.blacklist || data.item || data.data || item;
       const { supports: normSupports, supportCount: cnt } =
         normalizeSupports(base);
 
@@ -561,13 +621,27 @@ export default function BlacklistProfile() {
 
       {/* Üst blok */}
       <Card>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+          }}
+        >
           <div>
             <h1 style={{ margin: "0 0 6px", fontSize: 26, letterSpacing: 0.2 }}>
               {name}
             </h1>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
               <Badge danger={status !== "removed"}>{statusLabel}</Badge>
 
               {firstReporter && (
@@ -590,7 +664,8 @@ export default function BlacklistProfile() {
             {status === "removed" && (
               <div style={{ marginTop: 8 }}>
                 <span className="muted" style={{ color: "#b45309" }}>
-                  Not: Bu kayıt daha sonra kaldırılmış/sonlandırılmış olabilir. Yine de geçmiş ihbarlar görünür.
+                  Not: Bu kayıt daha sonra kaldırılmış/sonlandırılmış olabilir.
+                  Yine de geçmiş ihbarlar görünür.
                 </span>
               </div>
             )}
@@ -598,12 +673,24 @@ export default function BlacklistProfile() {
 
           <div style={{ display: "flex", gap: 8 }}>
             {igUrl && (
-              <a className="iconBtn" href={igUrl} target="_blank" rel="noreferrer noopener" title="Instagram">
+              <a
+                className="iconBtn"
+                href={igUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                title="Instagram"
+              >
                 IG
               </a>
             )}
             {website && (
-              <a className="iconBtn" href={website} target="_blank" rel="noreferrer noopener" title="Web">
+              <a
+                className="iconBtn"
+                href={website}
+                target="_blank"
+                rel="noreferrer noopener"
+                title="Web"
+              >
                 🌐
               </a>
             )}
@@ -618,7 +705,12 @@ export default function BlacklistProfile() {
           <dt>Web site</dt>
           <dd>
             {website ? (
-              <a className="ext" href={website} target="_blank" rel="noreferrer noopener">
+              <a
+                className="ext"
+                href={website}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 {website.replace(/^https?:\/\/(www\.)?/, "")}
               </a>
             ) : (
@@ -629,7 +721,12 @@ export default function BlacklistProfile() {
           <dt>Instagram</dt>
           <dd>
             {igUrl ? (
-              <a className="ext" href={igUrl} target="_blank" rel="noreferrer noopener">
+              <a
+                className="ext"
+                href={igUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 {igUrl.replace(/^https?:\/\/(www\.)?/, "")}
               </a>
             ) : (
@@ -648,16 +745,34 @@ export default function BlacklistProfile() {
       {/* Kanıtlar */}
       <Card>
         <SectionTitle>Kanıtlar</SectionTitle>
-        <div style={{ color: "#111827", marginBottom: 8, fontSize: 13, fontWeight: 600 }}>
-          {imageProofs.length ? `${imageProofs.length} görsel kanıt` : "Görsel kanıt yok"} •
-          Toplam {proofs.length} kayıt
+        <div
+          style={{
+            color: "#111827",
+            marginBottom: 8,
+            fontSize: 13,
+            fontWeight: 600,
+          }}
+        >
+          {imageProofs.length
+            ? `${imageProofs.length} görsel kanıt`
+            : "Görsel kanıt yok"}{" "}
+          • Toplam {proofs.length} kayıt
         </div>
 
         {/* Etiketler */}
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            flexWrap: "wrap",
+            marginBottom: 10,
+          }}
+        >
           {tags.length ? (
             tags.map((t, i) => (
-              <span key={i} className="chip">{t}</span>
+              <span key={i} className="chip">
+                {t}
+              </span>
             ))
           ) : (
             <span className="muted">Etiketlenmiş kanıt yok</span>
@@ -682,7 +797,9 @@ export default function BlacklistProfile() {
                     src={src}
                     alt={g.note || g.text || `kanıt-${i + 1}`}
                     loading="lazy"
-                    onError={(e) => (e.currentTarget.style.display = "none")}
+                    onError={(e) =>
+                      (e.currentTarget.style.display = "none")
+                    }
                   />
                 </button>
               );
@@ -704,7 +821,10 @@ export default function BlacklistProfile() {
                   {o.text || o.note || o.url || "—"}
                 </div>
                 {o.source && (
-                  <div className="muted" style={{ marginTop: 4, fontSize: 11 }}>
+                  <div
+                    className="muted"
+                    style={{ marginTop: 4, fontSize: 11 }}
+                  >
                     Kaynak: {o.source}
                   </div>
                 )}
@@ -758,7 +878,9 @@ export default function BlacklistProfile() {
                     {fmtDateShort(s.createdAt) || ""}
                   </span>
                 </div>
-                {s.comment && <div className="support-comment">{s.comment}</div>}
+                {s.comment && (
+                  <div className="support-comment">{s.comment}</div>
+                )}
               </div>
             ))}
           </div>
@@ -766,12 +888,26 @@ export default function BlacklistProfile() {
 
         {/* Yeni Destek Formu */}
         <form onSubmit={handleSupportSubmit} className="support-form">
-          <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 4 }}>
-            Deneyimini paylaşarak diğer kullanıcıları bilgilendirebilirsin. Adın kamuya{" "}
-            <b>maskeleme ile</b> gösterilir (örn: <code>A*** Y****</code>).
+          <div
+            style={{
+              fontSize: 12,
+              color: "#6b7280",
+              marginBottom: 4,
+            }}
+          >
+            Deneyimini paylaşarak diğer kullanıcıları bilgilendirebilirsin. Adın
+            kamuya <b>maskeleme ile</b> gösterilir (örn:{" "}
+            <code>A*** Y****</code>).
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 6, marginBottom: 6 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 6,
+              marginBottom: 6,
+            }}
+          >
             <input
               type="text"
               placeholder="Ad Soyad (isteğe bağlı)"
@@ -791,7 +927,10 @@ export default function BlacklistProfile() {
           </div>
 
           {supportError && (
-            <div className="muted" style={{ color: "#b91c1c", marginBottom: 4 }}>
+            <div
+              className="muted"
+              style={{ color: "#b91c1c", marginBottom: 4 }}
+            >
               {supportError}
             </div>
           )}
@@ -805,22 +944,38 @@ export default function BlacklistProfile() {
       {/* Hukuki Not */}
       <Card>
         <SectionTitle>Hukuki Not</SectionTitle>
-        <p style={{ lineHeight: 1.6, color: "#111827", fontSize: 13 }}>
-          Bu sayfa, topluluk ihbarları ve kanıtlara dayalı bilgilendirme amacı taşır.
-          İçerik resmî bir yargı kararı değildir. Mağdur olduğunuzu düşünüyorsanız
-          ilgili kolluk kuvvetlerine ve resmî mercilere başvurun.
+        <p
+          style={{
+            lineHeight: 1.6,
+            color: "#111827",
+            fontSize: 13,
+          }}
+        >
+          Bu sayfa, topluluk ihbarları ve kanıtlara dayalı bilgilendirme amacı
+          taşır. İçerik resmî bir yargı kararı değildir. Mağdur olduğunuzu
+          düşünüyorsanız ilgili kolluk kuvvetlerine ve resmî mercilere
+          başvurun.
         </p>
       </Card>
 
       <div style={{ marginTop: 10 }}>
-        <Link to="/" className="btn btn-light">‹ Ana sayfaya dön</Link>
+        <Link to="/" className="btn btn-light">
+          ‹ Ana sayfaya dön
+        </Link>
       </div>
 
       {/* Lightbox */}
       {currentImage && (
         <div className="lightbox-backdrop" onClick={closeLightbox}>
-          <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="lightbox-close" onClick={closeLightbox}>
+          <div
+            className="lightbox-inner"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="lightbox-close"
+              onClick={closeLightbox}
+            >
               ✕
             </button>
 
