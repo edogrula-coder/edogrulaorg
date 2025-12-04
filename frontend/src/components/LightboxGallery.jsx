@@ -10,10 +10,76 @@ import React, {
 import { createPortal } from "react-dom";
 
 /**
+ * Farklı formatlardaki inputlardan düzgün URL listesi üretir.
+ * - string
+ * - string[]
+ * - { url / src / path / href / location }
+ * - JSON string "[...]" vs.
+ */
+function normalizeImagesInput(...inputs) {
+  const out = [];
+
+  const push = (val) => {
+    if (!val) return;
+
+    // Dizi ise içini gez
+    if (Array.isArray(val)) {
+      val.forEach(push);
+      return;
+    }
+
+    // String ise
+    if (typeof val === "string") {
+      const s = val.trim();
+      if (!s) return;
+
+      // JSON array string
+      try {
+        if (s.startsWith("[") && s.endsWith("]")) {
+          const arr = JSON.parse(s);
+          if (Array.isArray(arr)) {
+            arr.forEach(push);
+            return;
+          }
+        }
+      } catch {
+        // yut
+      }
+
+      // virgül / satır ayrımı
+      if (/[,\n;]\s*/.test(s)) {
+        s.split(/[,\n;]\s*/)
+          .map((x) => x.trim())
+          .forEach(push);
+        return;
+      }
+
+      out.push(s);
+      return;
+    }
+
+    // Object ise
+    if (typeof val === "object") {
+      const cand =
+        val.url || val.src || val.path || val.href || val.location;
+      if (cand) push(String(cand));
+      if (Array.isArray(val.items)) val.items.forEach(push);
+    }
+  };
+
+  inputs.forEach(push);
+
+  // uniq + boş olmayanlar
+  return [...new Set(out.filter(Boolean))];
+}
+
+/**
  * LightboxGallery — Ultra Pro, live-ready, erişilebilir galeri
  *
  * Props (geri uyumlu):
  *  - imagesAbs: string[]
+ *  - images: string[]
+ *  - photos: string[]
  *  - title: string
  *  - heroHeight: CSS length
  *  - startIndex: number
@@ -32,7 +98,10 @@ import { createPortal } from "react-dom";
  *  - prefetchNeighbors: boolean (default true)
  */
 export default function LightboxGallery({
-  imagesAbs = [],
+  imagesAbs,
+  images,
+  photos,
+
   title = "",
   heroHeight = "clamp(220px, 44vw, 420px)",
   startIndex = 0,
@@ -43,7 +112,8 @@ export default function LightboxGallery({
   onIndexChange,
   onOpenChange,
 
-  placeholder = "/placeholder-image.webp",
+  // edogrula default görseli
+  placeholder = "/defaults/edogrula-default.webp.png",
   className = "",
   style,
   thumbSize = { w: 88, h: 62 },
@@ -51,10 +121,11 @@ export default function LightboxGallery({
 }) {
   const galleryId = useId();
 
-  const safeImages = useMemo(() => {
-    const arr = Array.isArray(imagesAbs) ? imagesAbs.filter(Boolean) : [];
-    return arr;
-  }, [imagesAbs]);
+  // imagesAbs + images + photos hepsini tek listede topla (uniq)
+  const safeImages = useMemo(
+    () => normalizeImagesInput(imagesAbs, images, photos),
+    [imagesAbs, images, photos]
+  );
 
   const total = safeImages.length;
   const has = total > 0;
@@ -66,7 +137,9 @@ export default function LightboxGallery({
     (i) => {
       if (!total) return 0;
       const n = i | 0;
-      return loop ? ((n % total) + total) % total : Math.min(Math.max(0, n), total - 1);
+      return loop
+        ? ((n % total) + total) % total
+        : Math.min(Math.max(0, n), total - 1);
     },
     [total, loop]
   );
@@ -75,7 +148,7 @@ export default function LightboxGallery({
   const [open, setOpen] = useState(false);
   const [heroLoaded, setHeroLoaded] = useState(false);
 
-  // imagesAbs / startIndex değişince index'i güvenle güncelle
+  // images / startIndex değişince index'i güvenle güncelle
   useEffect(() => {
     setIdx(clampIndex(startIndex));
   }, [startIndex, clampIndex]);
@@ -180,26 +253,31 @@ export default function LightboxGallery({
     return () => document.removeEventListener("keydown", onKey, true);
   }, [open, go]);
 
-  // Touch swipe
+  // Touch swipe — hero
   const heroTouch = useRef({ x: 0, y: 0 });
   const onHeroTouchStart = (e) => {
     heroTouch.current.x = e.touches?.[0]?.clientX || 0;
     heroTouch.current.y = e.touches?.[0]?.clientY || 0;
   };
   const onHeroTouchEnd = (e) => {
-    const dx = (e.changedTouches?.[0]?.clientX || 0) - heroTouch.current.x;
-    const dy = (e.changedTouches?.[0]?.clientY || 0) - heroTouch.current.y;
+    const dx =
+      (e.changedTouches?.[0]?.clientX || 0) - heroTouch.current.x;
+    const dy =
+      (e.changedTouches?.[0]?.clientY || 0) - heroTouch.current.y;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) go(dx < 0 ? 1 : -1);
   };
 
+  // Touch swipe — lightbox
   const lbTouch = useRef({ x: 0, y: 0 });
   const onLbTouchStart = (e) => {
     lbTouch.current.x = e.touches?.[0]?.clientX || 0;
     lbTouch.current.y = e.touches?.[0]?.clientY || 0;
   };
   const onLbTouchEnd = (e) => {
-    const dx = (e.changedTouches?.[0]?.clientX || 0) - lbTouch.current.x;
-    const dy = (e.changedTouches?.[0]?.clientY || 0) - lbTouch.current.y;
+    const dx =
+      (e.changedTouches?.[0]?.clientX || 0) - lbTouch.current.x;
+    const dy =
+      (e.changedTouches?.[0]?.clientY || 0) - lbTouch.current.y;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) go(dx < 0 ? 1 : -1);
   };
 
@@ -214,7 +292,8 @@ export default function LightboxGallery({
   };
 
   const heroAlt = title || "galeri görseli";
-  const downloadName = safeFileName(title || "image") + "-" + (idx + 1) + ".jpg";
+  const downloadName =
+    safeFileName(title || "image") + "-" + (idx + 1) + ".jpg";
 
   return (
     <>
@@ -440,7 +519,8 @@ function trapFocus(e, root) {
     'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
   );
   const items = Array.from(focusables).filter(
-    (el) => !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden")
+    (el) =>
+      !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden")
   );
 
   if (!items.length) return;
@@ -459,13 +539,15 @@ function trapFocus(e, root) {
 }
 
 function safeFileName(s) {
-  return String(s || "image")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 60) || "image";
+  return (
+    String(s || "image")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60) || "image"
+  );
 }
 
 /* --------- stiller --------- */

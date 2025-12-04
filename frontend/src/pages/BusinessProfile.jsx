@@ -1,5 +1,8 @@
-// frontend/src/pages/BusinessProfile.jsx — Ultra Pro v2 (güncel)
-// Not: Mevcut mimarini bozmaz; sadece özellik + sağlamlık ekler.
+// frontend/src/pages/BusinessProfile.jsx — Ultra Pro v3.3 (R2 fix + no-download hero)
+
+// NOT: Bu dosya, VITE_API_URL içinden backend origin'i türetir ve
+//      /uploads, uploads/, files, images vb. her yolu API_ROOT'a göre absolute hale getirir.
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -29,9 +32,105 @@ function useMedia(query) {
   return matches;
 }
 
-/* --- Google Reviews ayarları (tam yorumlar) --- */
+/* --- Global API ROOT (backend origin) --- */
+const API_BASE_RAW = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+const API_ROOT = API_BASE_RAW.replace(/\/api(?:\/v\d+)?$/i, "");
+
+/* --- R2 public base (ör: https://pub-XXXX.r2.dev/edogrula-uploads ) --- */
+const R2_PUB_BASE = (import.meta.env.VITE_R2_PUBLIC_BASE || "")
+  .toString()
+  .replace(/\/+$/, "");
+
+/* --- Küresel DEFAULT görsel --- */
 const GOOGLE_REVIEWS_LIMIT = 50;
 const DEFAULT_IMAGE = "/defaults/edogrula-default.webp.png";
+
+/* --- R2 URL normalizasyonu -----------------------------------------
+   Amaç:
+   - Mongo'da eski / hatalı base varsa (ör: pub-pub_id.r2.dev/edogrula-uploads/...)
+   - veya sadece "edogrula-uploads/business_photos/..." / "business_photos/..." key geldiyse
+   hepsini VITE_R2_PUBLIC_BASE üzerinden tek formata çekmek.
+-------------------------------------------------------------------- */
+function buildR2FromKey(key = "") {
+  if (!R2_PUB_BASE) return key;
+  const cleanKey = String(key).replace(/^\/+/, "");
+  return `${R2_PUB_BASE}/${cleanKey}`;
+}
+
+function normalizeR2Url(raw = "") {
+  let s = String(raw || "").trim();
+  if (!s || !R2_PUB_BASE) return s;
+
+  // Herhangi bir *.r2.dev host'u ise host'u at, sadece key'i çek
+  const hostMatch = s.match(/^https?:\/\/[^/]*r2\.dev\/(.+)$/i);
+  if (hostMatch) {
+    let key = hostMatch[1]; // "edogrula-uploads/..." veya "business_photos/..."
+    key = key.replace(/^edogrula-uploads\//i, "");
+    return buildR2FromKey(key);
+  }
+
+  // Sadece key geldiyse
+  if (/^(edogrula-uploads\/|business_photos\/)/i.test(s)) {
+    let key = s.replace(/^edogrula-uploads\//i, "");
+    return buildR2FromKey(key);
+  }
+
+  return s;
+}
+
+/* --- URL normalizasyonu: R2 + /uploads + relative hepsi --- */
+function absoluteUrl(u = "") {
+  let url = String(u || "").trim();
+  if (!url) return "";
+
+  // önce R2 sapıtmalarını toparla
+  url = normalizeR2Url(url);
+
+  // data URL olduğu gibi kalsın
+  if (/^data:/i.test(url)) return url;
+
+  // defaults -> frontend origin'den gelsin, dokunma
+  if (url.startsWith("/defaults/")) return url;
+
+  // http(s) veya protokol-relative
+  if (/^(?:https?:)?\/\//i.test(url)) {
+    // //cdn... formatı
+    if (/^\/\//.test(url) && typeof window !== "undefined") {
+      return (window.location?.protocol || "https:") + url;
+    }
+    return url;
+  }
+
+  const base =
+    API_ROOT ||
+    (typeof window !== "undefined"
+      ? window.location.origin.replace(/\/+$/, "")
+      : "");
+
+  // /uploads, /files, /images, /path
+  if (url.startsWith("/")) {
+    if (!base) return url;
+    return `${base}${url}`;
+  }
+
+  // uploads/... files/... images/... public/uploads...
+  if (/^(uploads?|files?|images?|public\/uploads)\b/i.test(url)) {
+    const normalized = url.replace(/^\/+/, "");
+    if (!base) return `/${normalized}`;
+    return `${base}/${normalized}`;
+  }
+
+  // Diğer şeyler: base'e göre resolve etmeyi dene
+  try {
+    if (base) {
+      return new URL(url, base + "/").toString();
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return url;
+}
 
 export default function BusinessProfile() {
   const { slug } = useParams();
@@ -40,12 +139,6 @@ export default function BusinessProfile() {
   const isMobile = useMedia("(max-width: 960px)");
 
   /* ---------------- HTTP instance ---------------- */
-  const RAW = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
-  const API_ROOT = useMemo(
-    () => RAW.replace(/\/api(?:\/v\d+)?$/i, ""),
-    [RAW]
-  );
-
   const http = useMemo(() => {
     const inst = axios.create({
       baseURL: API_ROOT || "",
@@ -61,13 +154,26 @@ export default function BusinessProfile() {
       return cfg;
     });
     return inst;
-  }, [API_ROOT]);
+  }, []);
 
   /* ---------------- state ---------------- */
   const [b, setB] = useState(loc.state?.business || null);
   const [loading, setLoading] = useState(!b);
   const [err, setErr] = useState("");
   const ctrlRef = useRef(null);
+
+  /* DEV log: backend bize ne dönüyor görelim (sadece development’ta) */
+  useEffect(() => {
+    if (import.meta.env.DEV && b) {
+      console.debug("[BusinessProfile] biz", {
+        slug: b.slug,
+        galleryAbs: b.galleryAbs,
+        gallery: b.gallery,
+        photos: b.photos,
+        images: b.images,
+      });
+    }
+  }, [b]);
 
   /* ---------------- business fetch (her zaman API'den taze) ---------------- */
   useEffect(() => {
@@ -147,11 +253,7 @@ export default function BusinessProfile() {
   const name = b?.name || slugToTitle(slug);
 
   const city =
-    b?.city ||
-    b?.il ||
-    b?.location?.city ||
-    b?.location?.il ||
-    null;
+    b?.city || b?.il || b?.location?.city || b?.location?.il || null;
   const district =
     b?.district ||
     b?.ilce ||
@@ -190,122 +292,102 @@ export default function BusinessProfile() {
   }, [b, instagramUsername]);
 
   const website =
-    b?.website ||
-    b?.web ||
-    b?.site ||
-    b?.url ||
-    b?.websiteUrl ||
-    null;
+    b?.website || b?.web || b?.site || b?.url || b?.websiteUrl || null;
 
   const address =
-    b?.address ||
-    b?.fullAddress ||
-    b?.location?.address ||
-    null;
+    b?.address || b?.fullAddress || b?.location?.address || null;
 
   const coords = {
     lat: b?.location?.lat ?? b?.lat,
     lng: b?.location?.lng ?? b?.lng,
   };
 
+  // ✅ google_maps_url / googleMapsUrl normalizasyonu
+  const googleMapsUrl = useMemo(
+    () =>
+      normalizeGoogleMapsUrl(
+        b?.googleMapsUrl ||
+          b?.google_maps_url ||
+          b?.googleMapUrl ||
+          b?.google_url ||
+          b?.googleMapsLink
+      ),
+    [b]
+  );
+
   // ✅ Görseller (absolute, güçlü normalizasyon + default/filtre)
   const imagesAbs = useMemo(() => {
     const out = new Set();
-    const origin =
-      typeof window !== "undefined"
-        ? window.location.origin.replace(/\/+$/, "")
-        : "";
-    const base = API_ROOT || origin;
 
-    const resolve = (s) => {
-      if (!s) return;
-      let v = String(s).trim();
-      if (!v) return;
-
-      if (/^\/\//.test(v)) {
-        out.add(
-          (typeof window !== "undefined"
-            ? window.location.protocol
-            : "https:") + v
-        );
-        return;
-      }
-      if (/^https?:\/\//i.test(v)) {
-        out.add(v);
-        return;
-      }
-
-      try {
-        const parsed = JSON.parse(v);
-        if (Array.isArray(parsed)) return parsed.forEach(resolve);
-      } catch {}
-
-      if (/[,\n;]\s*/.test(v)) {
-        v
-          .split(/[,\n;]\s*/)
-          .map((x) => x.trim())
-          .filter(Boolean)
-          .forEach(resolve);
-        return;
-      }
-
-      if (v.startsWith("/defaults/")) {
-        out.add(v);
-        return;
-      }
-
-      if (
-        v.startsWith("/uploads") ||
-        v.startsWith("/files") ||
-        v.startsWith("/images")
-      ) {
-        out.add(base + v);
-        return;
-      }
-
-      if (v.startsWith("/")) {
-        out.add(v);
-        return;
-      }
-
-      if (/^(uploads?|files?|images?|public\/uploads)\b/i.test(v)) {
-        out.add(`${base}/${v.replace(/^\/+/, "")}`);
-        return;
-      }
-
-      try {
-        out.add(new URL(v, base + "/").toString());
-      } catch {
-        out.add(v);
-      }
-    };
-
-    const push = (val) => {
+    const add = (val) => {
       if (!val) return;
-      if (Array.isArray(val)) return val.forEach(push);
-      if (typeof val === "string") return resolve(val);
+      if (Array.isArray(val)) {
+        val.forEach(add);
+        return;
+      }
+      if (typeof val === "string") {
+        let v = val.trim();
+        if (!v) return;
+
+        // JSON string (["url1","url2"])
+        try {
+          const parsed = JSON.parse(v);
+          if (Array.isArray(parsed)) {
+            parsed.forEach(add);
+            return;
+          }
+        } catch {
+          /* ignore */
+        }
+
+        // CSV / satır / ; ayracı
+        if (/[,\n;]\s*/.test(v)) {
+          v
+            .split(/[,\n;]\s*/)
+            .map((x) => x.trim())
+            .filter(Boolean)
+            .forEach(add);
+          return;
+        }
+
+        out.add(absoluteUrl(v));
+        return;
+      }
+
       if (typeof val === "object") {
-        const candKeys = ["url", "src", "path", "image", "srcUrl", "secure_url"];
-        for (const k of candKeys) if (val[k]) resolve(val[k]);
-        if (val.items) push(val.items);
+        const candKeys = [
+          "url",
+          "src",
+          "path",
+          "image",
+          "srcUrl",
+          "secure_url",
+          "href",
+        ];
+        for (const k of candKeys) {
+          if (val[k]) add(val[k]);
+        }
+        if (val.items) add(val.items);
       }
     };
 
-    push(b?.galleryAbs);
-    push(b?.photos);
-    push(b?.images);
-    push(b?.gallery);
-    push(b?.media);
-    push(b?.pictures);
-    push(b?.albums);
-    push(b?.cover);
-    push(b?.coverUrl);
-    push(b?.image);
-    push(b?.imageUrl);
-    push(b?.featuredImage);
-    push(b?.coverImage);
+    // 🔥 R2 galleryAbs ana kaynak
+    add(b?.galleryAbs);
+    // eski alanlar da hala destekli
+    add(b?.photos);
+    add(b?.images);
+    add(b?.gallery);
+    add(b?.media);
+    add(b?.pictures);
+    add(b?.albums);
+    add(b?.cover);
+    add(b?.coverUrl);
+    add(b?.image);
+    add(b?.imageUrl);
+    add(b?.featuredImage);
+    add(b?.coverImage);
 
-    const all = Array.from(out);
+    const all = Array.from(out).filter(Boolean);
 
     const isDefaultUrl = (url) =>
       String(url || "").toLowerCase().includes("/defaults/edogrula-default");
@@ -314,22 +396,29 @@ export default function BusinessProfile() {
     if (filtered.length) return filtered;
     if (all.length) return all;
     return [DEFAULT_IMAGE];
-  }, [b, API_ROOT]);
+  }, [b]);
 
-  /* ---------------- Belgeler (opsiyonel) ---------------- */
+  /* ---------------- Belgeler (opsiyonel, absolute) ---------------- */
   const docs = useMemo(() => {
     const raw = b?.docs || b?.documents || b?.files || [];
     const arr = Array.isArray(raw) ? raw : [raw];
     return arr
-      .map((d) => ({
-        name:
-          d?.originalName ||
-          d?.name ||
-          d?.filename ||
-          d?.title ||
-          "Belge",
-        url: d?.url || d?.path || d?.href || (typeof d === "string" ? d : ""),
-      }))
+      .map((d) => {
+        const rawUrl =
+          d?.url ||
+          d?.path ||
+          d?.href ||
+          (typeof d === "string" ? d : "");
+        return {
+          name:
+            d?.originalName ||
+            d?.name ||
+            d?.filename ||
+            d?.title ||
+            "Belge",
+          url: absoluteUrl(rawUrl),
+        };
+      })
       .filter((x) => x.url);
   }, [b]);
 
@@ -528,6 +617,15 @@ export default function BusinessProfile() {
   const featured = !!b?.featured;
   const typeLabel = b?.type || b?.businessType || "";
 
+  // 🔗 Yol tarifi linki (önce google_maps_url, sonra koordinat/adres)
+  const directionsUrl =
+    googleMapsUrl ||
+    (Number.isFinite(coords.lat) && Number.isFinite(coords.lng)
+      ? `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}`
+      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+          address || name
+        )}`);
+
   return (
     <div style={st.page}>
       <style>{globalCSS}</style>
@@ -568,7 +666,9 @@ export default function BusinessProfile() {
 
       <main style={st.container}>
         <div style={st.breadcrumb}>
-          <Link to="/" className="lnk">Ana sayfa</Link>
+          <Link to="/" className="lnk">
+            Ana sayfa
+          </Link>
           <span> / </span>
           <span>{name.toLowerCase()}</span>
         </div>
@@ -607,38 +707,38 @@ export default function BusinessProfile() {
                   onClick={() => shareBiz({ name, slug })}
                   title="Paylaş"
                 >
-                  <i className="fa-solid fa-link" />&nbsp; Paylaş
+                  <i className="fa-solid fa-link" />
+                  &nbsp; Paylaş
                 </button>
 
                 <a
                   className="ghost"
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${
-                    Number.isFinite(coords.lat) && Number.isFinite(coords.lng)
-                      ? `${coords.lat},${coords.lng}`
-                      : encodeURIComponent(address || name)
-                  }`}
+                  href={directionsUrl}
                   target="_blank"
                   rel="noreferrer noopener"
                   title="Yol tarifi al"
                 >
-                  <i className="fa-solid fa-location-arrow" />&nbsp; Yol Tarifi Al
+                  <i className="fa-solid fa-location-arrow" />
+                  &nbsp; Yol Tarifi Al
                 </a>
 
                 {address && (
                   <a
                     className="ghost"
-                    href={toMapUrl(address, coords)}
+                    href={toMapUrl(address, coords, googleMapsUrl)}
                     target="_blank"
                     rel="noreferrer noopener"
                     title="Haritada aç"
                   >
-                    <i className="fa-regular fa-map" />&nbsp; Harita
+                    <i className="fa-regular fa-map" />
+                    &nbsp; Harita
                   </a>
                 )}
 
                 {phones[0] && (
                   <a className="ghost" href={`tel:${phones[0]}`} title="Ara">
-                    <i className="fa-solid fa-phone-volume" />&nbsp; Tel
+                    <i className="fa-solid fa-phone-volume" />
+                    &nbsp; Tel
                   </a>
                 )}
 
@@ -648,7 +748,8 @@ export default function BusinessProfile() {
                   className="ghost"
                   title="Şikayet/İhbar"
                 >
-                  <i className="fa-solid fa-triangle-exclamation" />&nbsp; Şikayet Et
+                  <i className="fa-solid fa-triangle-exclamation" />
+                  &nbsp; Şikayet Et
                 </Link>
               </div>
 
@@ -701,6 +802,7 @@ export default function BusinessProfile() {
                   lng={coords.lng}
                   businessName={name}
                   address={address}
+                  googleMapsUrl={googleMapsUrl}
                 />
               </div>
             )}
@@ -783,7 +885,7 @@ export default function BusinessProfile() {
                 </div>
               </div>
 
-              {/* ✅ çocuk yaşları (eksik özellikti, eklendi) */}
+              {/* ✅ çocuk yaşları */}
               {childrenNum > 0 && (
                 <div style={{ marginTop: 6 }}>
                   <label style={{ ...st.label, fontSize: 12, opacity: 0.9 }}>
@@ -832,14 +934,21 @@ export default function BusinessProfile() {
             <section style={st.infoCard}>
               <header style={st.infoHead}>İşletme Bilgileri</header>
 
-              {/* ✅ çoklu telefon listesi */}
+              {/* çoklu telefon listesi */}
               <div style={st.infoRow}>
                 <i className="fa-solid fa-phone-volume" />
                 &nbsp;
                 {phones.length ? (
                   <div style={{ display: "grid", gap: 4 }}>
                     {phones.map((p, i) => (
-                      <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <div
+                        key={i}
+                        style={{
+                          display: "flex",
+                          gap: 8,
+                          alignItems: "center",
+                        }}
+                      >
                         <a href={`tel:${p}`} className="lnk">
                           {prettyPhone(p)}
                         </a>
@@ -930,6 +1039,7 @@ function HeroGallery({ imagesAbs = [], title, isMobile }) {
   return (
     <div
       className="hero"
+      onContextMenu={(e) => e.preventDefault()} // sağ tık menü yok
       style={{
         position: "relative",
         borderRadius: "var(--r-lg)",
@@ -953,7 +1063,7 @@ function HeroGallery({ imagesAbs = [], title, isMobile }) {
 }
 
 /* ---------------- HARİTA ---------------- */
-function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address }) {
+function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address, googleMapsUrl }) {
   const mapRef = useRef(null);
   const [provider, setProvider] = useState(apiKey ? "google" : "yandex");
 
@@ -963,6 +1073,10 @@ function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address }) {
 
   useEffect(() => {
     if (!mapRef.current || !lat || !lng) return;
+
+    const gUrl = normalizeGoogleMapsUrl(googleMapsUrl);
+    const dirUrl =
+      gUrl || `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
     if (provider === "google") {
       if (window.google?.maps) {
@@ -1014,7 +1128,7 @@ function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address }) {
             businessName
           )}</div>
           <div>${escapeHtml(address || "")}</div>
-          <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" rel="noopener noreferrer" style="margin-top:8px;display:inline-block;">Yol Tarifi Al</a>
+          <a href="${dirUrl}" target="_blank" rel="noopener noreferrer" style="margin-top:8px;display:inline-block;">Yol Tarifi Al</a>
         `,
       });
       const marker =
@@ -1057,7 +1171,7 @@ function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address }) {
       map.geoObjects.add(placemark);
       placemark.balloon.open();
     }
-  }, [provider, apiKey, yandexKey, lat, lng, businessName, address]);
+  }, [provider, apiKey, yandexKey, lat, lng, businessName, address, googleMapsUrl]);
 
   if (!lat || !lng) return null;
 
@@ -1337,8 +1451,12 @@ function DateRangePicker({ value, onChange }) {
             })}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-            <button className="ghost" onClick={clear}>Temizle</button>
-            <button className="ghost" onClick={() => setOpen(false)}>Tamam</button>
+            <button className="ghost" onClick={clear}>
+              Temizle
+            </button>
+            <button className="ghost" onClick={() => setOpen(false)}>
+              Tamam
+            </button>
           </div>
         </div>
       )}
@@ -1410,7 +1528,23 @@ function normalizeGoogleReviews(data) {
 
   return { rating, count, reviews, _mode: data.mode };
 }
-function round1(n) { return Math.round(n * 10) / 10; }
+
+function normalizeGoogleMapsUrl(raw) {
+  if (!raw) return null;
+  let s = String(raw).trim();
+  if (!s) return null;
+  // zaten tam URL ise
+  if (/^https?:\/\//i.test(s)) return s;
+  // "maps.google.com/..." veya "goo.gl/maps..." protokolsüz ise
+  if (/^(maps\.google\.|goo\.gl\/maps)/i.test(s)) return "https://" + s;
+  // sadece cid verilmişse
+  if (/^\d{5,}$/.test(s)) return `https://maps.google.com/?cid=${s}`;
+  return s;
+}
+
+function round1(n) {
+  return Math.round(n * 10) / 10;
+}
 function slugToTitle(s) {
   return String(s || "")
     .replace(/[-_]/g, " ")
@@ -1418,8 +1552,12 @@ function slugToTitle(s) {
     .trim()
     .replace(/^./, (c) => c.toUpperCase());
 }
-function toHttps(u) { return /^https?:\/\//i.test(u) ? u : `https://${u}`; }
-function trimAt(h) { return String(h || "").replace(/^@+/, ""); }
+function toHttps(u) {
+  return /^https?:\/\//i.test(u) ? u : `https://${u}`;
+}
+function trimAt(h) {
+  return String(h || "").replace(/^@+/, "");
+}
 function extractInstagramUsername(v) {
   if (!v) return "";
   const s = String(v).trim();
@@ -1440,16 +1578,31 @@ function toDate(ymd) {
   return isNaN(dt) ? null : dt;
 }
 function toYmd(d) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(d.getDate()).padStart(2, "0")}`;
 }
-function stripTime(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
-function addMonths(d, n) { const nd = new Date(d); nd.setMonth(nd.getMonth() + n); return nd; }
+function stripTime(d) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+function addMonths(d, n) {
+  const nd = new Date(d);
+  nd.setMonth(nd.getMonth() + n);
+  return nd;
+}
 function sameDay(a, b) {
-  return a.getFullYear() === b.getFullYear() &&
+  return (
+    a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
+    a.getDate() === b.getDate()
+  );
 }
-function fmtTR(ymd) { const d = toDate(ymd); if (!d) return ""; return d.toLocaleDateString("tr-TR"); }
+function fmtTR(ymd) {
+  const d = toDate(ymd);
+  if (!d) return "";
+  return d.toLocaleDateString("tr-TR");
+}
 function toWa(phone, text) {
   const digits = String(phone || "").replace(/\D/g, "");
   let intl = digits;
@@ -1468,18 +1621,25 @@ function addUtm(u, utm) {
     const params = new URLSearchParams(utm.replace(/^\?/, ""));
     params.forEach((v, k) => url.searchParams.set(k, v));
     return url.toString();
-  } catch { return u; }
+  } catch {
+    return u;
+  }
 }
-function toMapUrl(address, coords) {
+function toMapUrl(address, coords, googleMapsUrl) {
+  const g = normalizeGoogleMapsUrl(googleMapsUrl);
+  if (g) return g;
   if (Number.isFinite(coords.lat) && Number.isFinite(coords.lng)) {
     return `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}`;
   }
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    address
+  )}`;
 }
 function shareBiz({ name, slug }) {
   const url = `${window.location.origin}/isletme/${encodeURIComponent(slug)}`;
   if (navigator.share) {
-    navigator.share({ title: `${name} · E-Doğrula`, url })
+    navigator
+      .share({ title: `${name} · E-Doğrula`, url })
       .catch(() => navigator.clipboard.writeText(url));
   } else {
     navigator.clipboard.writeText(url);
@@ -1515,10 +1675,15 @@ function timeAgoTR(dateIso) {
   return `${yr} yıl önce`;
 }
 function escapeHtml(s = "") {
-  return s.replace(/[&<>"']/g, (m) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;",
-    '"': "&quot;", "'": "&#39;",
-  })[m]);
+  return s.replace(/[&<>"']/g, (m) =>
+    ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    }[m])
+  );
 }
 function Loader() {
   return (
@@ -1865,12 +2030,24 @@ const globalCSS = `
 .dots i{width:10px; height:8px; background:#22c55e; display:block; border-radius:6px}
 .skl{height:16px;border-radius:var(--r-xs);background:linear-gradient(90deg,rgba(0,0,0,.06),rgba(0,0,0,.12),rgba(0,0,0,.06));animation:sh 1.2s infinite;background-size:200% 100%;margin:8px 0}
 @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Galeri + lightbox: görsel drag / select kapalı */
 .lightbox img, .lightbox-gallery img, .gallery img{
   border-radius:var(--r-lg);
   border:1px solid var(--border);
+  -webkit-user-drag:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.hero{
+  -webkit-user-select:none;
+  user-select:none;
 }
 .hero img, .hero picture, .hero video, .hero iframe {
   width: 100%; height: 100%; object-fit: cover;
+  -webkit-user-drag:none;
+  user-select:none;
+  -webkit-user-select:none;
 }
 input, select, textarea{ outline:none; }
 input:hover, select:hover, textarea:hover{ border-color:#c9d1d9; }
@@ -1880,7 +2057,7 @@ input:focus, select:focus, textarea:focus{
 .badge{
   display:inline-flex; align-items:center; gap:6px;
   padding:4px 8px; border-radius:999px; font-size:11px; font-weight:900;
-  border:1px solid var(--border); background:#f8fafc; color:var(--fg-2);
+  border:1px solid var(--border); background:#f8fafc; color:#475569;
   text-transform:uppercase; letter-spacing:.3px;
 }
 .badge.ok{ background:#ecfdf5; border-color:#16a34a33; color:#065f46; }
@@ -1892,7 +2069,7 @@ input:focus, select:focus, textarea:focus{
   border:1px solid #16a34a55; padding:2px 6px; border-radius:999px;
 }
 .waMini:hover{ background:#ecfdf5; }
-`; // backtick kapalı
+`;
 
 function buildMonth(firstDay) {
   const start = new Date(firstDay.getFullYear(), firstDay.getMonth(), 1);

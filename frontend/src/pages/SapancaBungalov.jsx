@@ -1,8 +1,9 @@
-// src/pages/SapancaBungalov.jsx — ULTRA PRO + SEO/Rich Results Uyumlu
+// src/pages/SapancaBungalov.jsx — ULTRA PRO + SEO/Rich Results Uyumlu + R2 galleryAbs/absoluteUrl
 // - Sapanca bungalovlarını çeker (filter endpoint + fallback)
 // - Google puanını backend'den hydrate eder, sessionStorage cache
 // - Mutlak OG/Twitter URL, ItemList + FAQ + Breadcrumb JSON-LD
 // - Stabil hydration (inFlight set) + SSR guard'ları
+// - Liste thumbs: İşletmenin kendi görselleri (galleryAbs / gallery / photos / images / cover ...)
 
 import React, {
   useEffect,
@@ -38,11 +39,74 @@ function normalizeOrigin(raw) {
   return t.replace(/\/+$/, "").replace(/\/api$/i, "");
 }
 
-const ORIGIN = normalizeOrigin(
-  import.meta.env.VITE_API_URL ||
-    import.meta.env.VITE_API_ROOT ||
-    ""
-);
+const ORIGIN =
+  normalizeOrigin(
+    import.meta.env.VITE_API_URL || import.meta.env.VITE_API_ROOT || ""
+  );
+
+// Backend origin (uploads / R2 proxy vs. için)
+const API_ROOT = ORIGIN;
+
+// Global default görsel (public/defaults/ içine koyduğumuz)
+const DEFAULT_IMG = "/defaults/edogrula-default.webp";
+
+// URL normalizasyonu: R2 + /uploads + relative hepsi
+function absoluteUrl(u = "") {
+  const url = String(u || "").trim();
+  if (!url) return "";
+
+  // data URL olduğu gibi kalsın
+  if (/^data:/i.test(url)) return url;
+
+  // defaults -> frontend origin'den gelsin, dokunma
+  if (url.startsWith("/defaults/")) return url;
+
+  // http(s) veya protokol-relative
+  if (/^(?:https?:)?\/\//i.test(url)) {
+    // //cdn... formatı
+    if (/^\/\//.test(url) && typeof window !== "undefined") {
+      return (window.location?.protocol || "https:") + url;
+    }
+    return url;
+  }
+
+  const base =
+    API_ROOT ||
+    (typeof window !== "undefined"
+      ? window.location.origin.replace(/\/+$/, "")
+      : "");
+
+  // Mutlak path (/uploads, /files, /images, /path)
+  if (url.startsWith("/")) {
+    if (!base) return url;
+    return `${base}${url}`;
+  }
+
+  // uploads/... files/... images/... public/uploads...
+  if (/^(uploads?|files?|images?|public\/uploads)\b/i.test(url)) {
+    const normalized = url.replace(/^\/+/, "");
+    if (!base) return `/${normalized}`;
+    return `${base}/${normalized}`;
+  }
+
+  // Sadece dosya adı (photo_1.jpg vb) ise varsayılan /uploads/<name> kabul et
+  if (/\.(?:jpe?g|png|webp|avif|gif)$/i.test(url) && !url.includes("/")) {
+    const normalized = `uploads/${url}`;
+    if (!base) return `/${normalized}`;
+    return `${base}/${normalized}`;
+  }
+
+  // Diğer şeyler: base'e göre resolve etmeyi dene
+  try {
+    if (base) {
+      return new URL(url, base + "/").toString();
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return url;
+}
 
 const api = axios.create({
   baseURL: ORIGIN || undefined, // /api prefixleri path'te kalacak
@@ -139,9 +203,6 @@ export default function SapancaBungalov() {
   // sayfalama
   const PER_PAGE = 20;
   const [page, setPage] = useState(1);
-
-  // görsel fallback
-  const DEFAULT_IMG = "/defaults/edogrula-default.webp.png";
 
   // Google cache state
   const [gCache, setGCache] = useState(() => loadGCache());
@@ -248,11 +309,84 @@ export default function SapancaBungalov() {
           ? `https://${websiteRaw}`
           : "";
 
-      const photo =
-        (Array.isArray(b.gallery) && b.gallery[0]) ||
-        b.photo ||
-        b.cover ||
-        DEFAULT_IMG;
+      // ---- FOTOĞRAFLAR / KAPAK ----
+      const set = new Set();
+
+      const addImg = (val) => {
+        if (!val) return;
+        if (Array.isArray(val)) {
+          val.forEach(addImg);
+          return;
+        }
+        if (typeof val === "string") {
+          let v = val.trim();
+          if (!v) return;
+
+          // JSON string (["url1","url2"])
+          try {
+            const parsed = JSON.parse(v);
+            if (Array.isArray(parsed)) {
+              parsed.forEach(addImg);
+              return;
+            }
+          } catch {
+            /* ignore */
+          }
+
+          // CSV / satır / ; ayracı
+          if (/[,\n;]\s*/.test(v)) {
+            v
+              .split(/[,\n;]\s*/)
+              .map((x) => x.trim())
+              .filter(Boolean)
+              .forEach(addImg);
+            return;
+          }
+
+          set.add(absoluteUrl(v));
+          return;
+        }
+
+        if (typeof val === "object") {
+          const candKeys = [
+            "url",
+            "src",
+            "path",
+            "image",
+            "srcUrl",
+            "secure_url",
+            "href",
+          ];
+          for (const k of candKeys) {
+            if (val[k]) addImg(val[k]);
+          }
+          if (val.items) addImg(val.items);
+        }
+      };
+
+      // Önce R2 galleryAbs, sonra eski alanlar
+      addImg(b.galleryAbs);
+      addImg(b.photos);
+      addImg(b.images);
+      addImg(b.gallery);
+      addImg(b.media);
+      addImg(b.pictures);
+      addImg(b.coverImage);
+      addImg(b.coverUrl);
+      addImg(b.cover);
+      addImg(b.imageUrl);
+      addImg(b.image);
+      addImg(b.featuredImage);
+      addImg(b.photo); // eski single field
+
+      const allImages = Array.from(set).filter(Boolean);
+      const isDefault = (url) =>
+        String(url || "")
+          .toLowerCase()
+          .includes("/defaults/edogrula-default");
+
+      const usable = allImages.filter((u) => !isDefault(u));
+      const photo = usable[0] || allImages[0] || DEFAULT_IMG;
 
       const googlePlaceId =
         b.googlePlaceId ||
@@ -288,7 +422,7 @@ export default function SapancaBungalov() {
         googlePlaceId,
       };
     },
-    [DEFAULT_IMG, gCache]
+    [gCache]
   );
 
   /* ---------- Sunucudan sayfalı çekme ---------- */
@@ -334,57 +468,60 @@ export default function SapancaBungalov() {
   }, [normalize]);
 
   /* ---------- Fallback ---------- */
-  const fetchFallback = useCallback(async () => {
-    const queries = ["sapanca", "sapanca bungalov", "sapanca bungalow"];
+  const fetchFallback = useCallback(
+    async () => {
+      const queries = ["sapanca", "sapanca bungalov", "sapanca bungalow"];
 
-    const buckets = await Promise.all(
-      queries.map((q) =>
-        api
-          .get("/api/businesses/search", {
-            params: { q, type: "text", limit: 500 },
-          })
-          .then((r) =>
-            Array.isArray(r.data?.businesses) ? r.data.businesses : []
-          )
-          .catch(() => [])
-      )
-    );
+      const buckets = await Promise.all(
+        queries.map((q) =>
+          api
+            .get("/api/businesses/search", {
+              params: { q, type: "text", limit: 500 },
+            })
+            .then((r) =>
+              Array.isArray(r.data?.businesses) ? r.data.businesses : []
+            )
+            .catch(() => [])
+        )
+      );
 
-    const map = new Map();
-    for (const b of buckets.flat()) {
-      if (b?._id && !map.has(b._id)) map.set(b._id, b);
-    }
+      const map = new Map();
+      for (const b of buckets.flat()) {
+        if (b?._id && !map.has(b._id)) map.set(b._id, b);
+      }
 
-    const raw = Array.from(map.values());
+      const raw = Array.from(map.values());
 
-    const filtered = raw.filter((b) => {
-      const addr = (b.address || "").toString();
-      const inSapanca = /sapanca/i.test(addr) || /^sapanca$/i.test(addr);
-      const t = (b.type || "").toString().toLowerCase();
-      const isBungalow = /bungalov|bungalow/.test(t);
-      return inSapanca && isBungalow && (!onlyVerified || b.verified);
-    });
+      const filtered = raw.filter((b) => {
+        const addr = (b.address || "").toString();
+        const inSapanca = /sapanca/i.test(addr) || /^sapanca$/i.test(addr);
+        const t = (b.type || "").toString().toLowerCase();
+        const isBungalow = /bungalov|bungalow/.test(t);
+        return inSapanca && isBungalow && (!onlyVerified || b.verified);
+      });
 
-    const normalized = filtered.map(normalize).filter(Boolean);
+      const normalized = filtered.map(normalize).filter(Boolean);
 
-    const score = (x) =>
-      x.rating > 0 ? x.rating : x.googleRating > 0 ? x.googleRating : 0;
-    const rev = (x) =>
-      x.reviews > 0 ? x.reviews : x.googleReviews > 0 ? x.googleReviews : 0;
+      const score = (x) =>
+        x.rating > 0 ? x.rating : x.googleRating > 0 ? x.googleRating : 0;
+      const rev = (x) =>
+        x.reviews > 0 ? x.reviews : x.googleReviews > 0 ? x.googleReviews : 0;
 
-    normalized.sort((a, b) =>
-      sort === "reviews" ? rev(b) - rev(a) : score(b) - score(a)
-    );
+      normalized.sort((a, b) =>
+        sort === "reviews" ? rev(b) - rev(a) : score(b) - score(a)
+      );
 
-    setTotal(normalized.length);
+      setTotal(normalized.length);
 
-    const start = (page - 1) * PER_PAGE;
-    setItems(normalized.slice(start, start + PER_PAGE));
+      const start = (page - 1) * PER_PAGE;
+      setItems(normalized.slice(start, start + PER_PAGE));
 
-    if (page === 1 && featured.length === 0) {
-      setFeatured(normalized.slice(0, 4));
-    }
-  }, [page, onlyVerified, sort, normalize, featured.length]);
+      if (page === 1 && featured.length === 0) {
+        setFeatured(normalized.slice(0, 4));
+      }
+    },
+    [page, onlyVerified, sort, normalize, featured.length]
+  );
 
   /* ---------- Veri yükleyici ---------- */
   const fetchData = useCallback(async () => {
@@ -479,7 +616,9 @@ export default function SapancaBungalov() {
                   params: { placeId: biz.googlePlaceId, limit: 40 },
                 });
               } else {
-                const q = `${biz.name} ${biz.address || "Sapanca"}`.trim();
+                const q = `${biz.name} ${
+                  biz.address || "Sapanca"
+                }`.trim();
                 res = await api.get("/api/google/reviews/search", {
                   params: { query: q, limit: 40 },
                 });
@@ -494,8 +633,10 @@ export default function SapancaBungalov() {
                     it.id === biz.id || it.slug === biz.slug
                       ? {
                           ...it,
-                          googleRating: score.rating || it.googleRating || 0,
-                          googleReviews: score.count || it.googleReviews || 0,
+                          googleRating:
+                            score.rating || it.googleRating || 0,
+                          googleReviews:
+                            score.count || it.googleReviews || 0,
                         }
                       : it
                   )
@@ -854,6 +995,8 @@ export default function SapancaBungalov() {
 
 function SponsoredCard({ business }) {
   const navigate = useNavigate();
+  const imgSrc = business.photo || DEFAULT_IMG;
+
   return (
     <div
       className="sponsored-card"
@@ -863,13 +1006,17 @@ function SponsoredCard({ business }) {
       }
     >
       <div className="sponsored-image-wrapper">
-        {business.photo ? (
+        {imgSrc ? (
           <img
-            src={business.photo}
+            src={imgSrc}
             alt={business.name}
             className="sponsored-image"
             loading="lazy"
             decoding="async"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = DEFAULT_IMG;
+            }}
           />
         ) : (
           <div className="sponsored-image-fallback">
@@ -897,20 +1044,31 @@ function ResultRow({ b }) {
 
   const hasEDogrula = b.rating > 0;
   const hasGoogle = b.googleRating > 0 || b.googleReviews > 0;
+  const imgSrc = b.photo || DEFAULT_IMG;
 
   return (
     <article className="result-row">
       {/* Thumbnail */}
-      <button className="thumb" onClick={onOpen} aria-label={`${b.name} işletmesini aç`}>
-        {b.photo ? (
+      <button
+        className="thumb"
+        onClick={onOpen}
+        aria-label={`${b.name} işletmesini aç`}
+      >
+        {imgSrc ? (
           <img
-            src={b.photo}
+            src={imgSrc}
             alt={`${b.name} bungalov`}
             loading="lazy"
             decoding="async"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = DEFAULT_IMG;
+            }}
           />
         ) : (
-          <div className="thumb-ph"><FaBuilding /></div>
+          <div className="thumb-ph">
+            <FaBuilding />
+          </div>
         )}
       </button>
 
@@ -1495,7 +1653,9 @@ function Pagination({ page, total, onChange }) {
 
       {pages.map((p, i) =>
         p === "..." ? (
-          <span key={`gap-${i}`} className="pager-gap">…</span>
+          <span key={`gap-${i}`} className="pager-gap">
+            …
+          </span>
         ) : (
           <button
             key={p}

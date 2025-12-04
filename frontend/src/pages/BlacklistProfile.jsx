@@ -1,9 +1,10 @@
 // src/pages/BlacklistProfile.jsx — Public Kara Liste Profili (Ultra Pro, id + slug tolerant)
 import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import apiDefault, { api as apiNamed } from "@/api/axios-boot";
+import apiDefault, { api as apiNamed, API_ORIGIN } from "@/api/axios-boot";
 
 const api = apiNamed || apiDefault;
+const API_BASE = (API_ORIGIN || "").replace(/\/+$/, "");
 
 /* ========== Helpers ========== */
 const fmtDate = (d) => {
@@ -34,6 +35,42 @@ const prettyPhone = (p = "") =>
   String(p)
     .replace(/\D/g, "")
     .replace(/^0?(\d{3})(\d{3})(\d{2})(\d{2}).*/, "0$1 $2 $3 $4");
+
+/**
+ * URL'leri normalize eder:
+ * - http/https ise aynen bırakır
+ * - //cdn... formatında ise window.protocol ekler
+ * - /uploads/... veya /something ise API_BASE ile birleştirir
+ * - uploads/... (başında / yoksa) için de API_BASE ekler
+ */
+function absoluteUrl(u = "") {
+  const url = String(u || "").trim();
+  if (!url) return "";
+
+  if (/^data:/i.test(url)) return url;
+
+  // http(s) veya protokol-relative URL
+  if (/^(?:https?:)?\/\//i.test(url)) {
+    if (/^\/\//.test(url) && typeof window !== "undefined") {
+      return (window.location?.protocol || "https:") + url;
+    }
+    return url;
+  }
+
+  // /uploads/... veya genel /path
+  if (url.startsWith("/")) {
+    if (!API_BASE) return url;
+    return `${API_BASE}${url}`;
+  }
+
+  // uploads/... (başında / yok)
+  if (url.startsWith("uploads/")) {
+    if (!API_BASE) return `/${url}`;
+    return `${API_BASE}/${url}`;
+  }
+
+  return url;
+}
 
 /**
  * "Ali Yılmaz" -> "A*** Y****"
@@ -90,9 +127,13 @@ function normalizeProofs(item) {
   const proofs = raw
     .map((p) => {
       if (typeof p === "string") {
-        const isUrl = /^https?:\/\//i.test(p) || p.startsWith("/uploads/");
+        const isUrl =
+          /^https?:\/\//i.test(p) ||
+          p.startsWith("/uploads/") ||
+          p.startsWith("uploads/") ||
+          p.startsWith("/");
         return {
-          url: isUrl ? p : "",
+          url: isUrl ? absoluteUrl(p) : "",
           text: isUrl ? "" : p,
           note: "",
           mimetype: "",
@@ -101,8 +142,9 @@ function normalizeProofs(item) {
         };
       }
       if (typeof p === "object") {
+        const rawUrl = p.url || p.href || p.path || p.src || "";
         return {
-          url: p.url || p.href || p.path || p.src || "",
+          url: absoluteUrl(rawUrl),
           text: p.text || p.note || p.value || "",
           note: p.note || "",
           mimetype: p.mimetype || p.type || "",
@@ -217,7 +259,10 @@ export default function BlacklistProfile() {
     supportCount: 0,
   });
 
-  const [supportForm, setSupportForm] = React.useState({ name: "", comment: "" });
+  const [supportForm, setSupportForm] = React.useState({
+    name: "",
+    comment: "",
+  });
   const [supportSending, setSupportSending] = React.useState(false);
   const [supportError, setSupportError] = React.useState("");
 
@@ -373,7 +418,7 @@ export default function BlacklistProfile() {
       style={{
         padding: 18,
         maxWidth: 1100,
-        margin: "0 auto",
+        margin: "0 auto 32px",
         fontFamily: "Inter, system-ui, Arial",
       }}
     >
@@ -383,7 +428,15 @@ export default function BlacklistProfile() {
   );
 
   const Header = () => (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 10,
+        marginBottom: 12,
+      }}
+    >
       <button onClick={() => navigate(-1)} className="btn btn-light">
         ‹ Geri
       </button>
@@ -481,7 +534,10 @@ export default function BlacklistProfile() {
   const igUrl =
     item.instagramUrl ||
     (item.instagramUsername
-      ? `https://instagram.com/${String(item.instagramUsername).replace(/^@/, "")}`
+      ? `https://instagram.com/${String(item.instagramUsername).replace(
+          /^@/,
+          ""
+        )}`
       : "");
   const phone = prettyPhone(item.phone || item.mobile || "");
   const address =
@@ -552,6 +608,70 @@ export default function BlacklistProfile() {
 
   const currentImage =
     lightboxIndex !== null ? imageProofs[lightboxIndex] : null;
+
+  /* ========== Hero Gallery (üstte büyük galeri) ========== */
+  const HeroGallery = ({ images, onOpenLightbox }) => {
+    const list = Array.isArray(images)
+      ? images.filter((x) => x && x.url)
+      : [];
+    const [active, setActive] = React.useState(0);
+
+    if (!list.length) return null;
+
+    const activeImage = list[active];
+    const mainSrc = activeImage.url || "";
+
+    const handleThumbClick = (idx) => {
+      setActive(idx);
+    };
+
+    const handleMainClick = () => {
+      if (onOpenLightbox) onOpenLightbox(active);
+    };
+
+    return (
+      <div className="heroGallery">
+        <button
+          type="button"
+          className="heroGallery-main"
+          onClick={handleMainClick}
+          title={
+            activeImage.note ||
+            activeImage.text ||
+            `kanıt-${active + 1} (büyütmek için tıkla)`
+          }
+        >
+          <img
+            src={mainSrc}
+            alt={activeImage.note || activeImage.text || "kanıt"}
+            loading="lazy"
+          />
+        </button>
+        {list.length > 1 && (
+          <div className="heroGallery-thumbs">
+            {list.map((img, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={
+                  "heroGallery-thumb" +
+                  (idx === active ? " heroGallery-thumb--active" : "")
+                }
+                onClick={() => handleThumbClick(idx)}
+                title={img.note || img.text || `kanıt-${idx + 1}`}
+              >
+                <img
+                  src={img.url || ""}
+                  alt={img.note || img.text || `kanıt-${idx + 1}`}
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   /* ========== Support Submit ========== */
   const handleSupportSubmit = async (e) => {
@@ -624,13 +744,20 @@ export default function BlacklistProfile() {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between",
+            flexWrap: "wrap",
             gap: 12,
           }}
         >
           <div>
-            <h1 style={{ margin: "0 0 6px", fontSize: 26, letterSpacing: 0.2 }}>
+            <h1
+              style={{
+                margin: "0 0 6px",
+                fontSize: 26,
+                letterSpacing: 0.2,
+              }}
+            >
               {name}
             </h1>
 
@@ -698,6 +825,14 @@ export default function BlacklistProfile() {
         </div>
       </Card>
 
+      {/* Görsel Galeri */}
+      {imageProofs.length > 0 && (
+        <Card>
+          <SectionTitle>Görsel Galeri</SectionTitle>
+          <HeroGallery images={imageProofs} onOpenLightbox={openLightbox} />
+        </Card>
+      )}
+
       {/* Temel Bilgiler */}
       <Card>
         <SectionTitle>Temel Bilgiler</SectionTitle>
@@ -754,7 +889,8 @@ export default function BlacklistProfile() {
           }}
         >
           {imageProofs.length
-            ? `${imageProofs.length} görsel kanıt`
+            ? `${imageProofs.length} görsel kanıt (galeriden
+               büyütebilirsin)`
             : "Görsel kanıt yok"}{" "}
           • Toplam {proofs.length} kayıt
         </div>
@@ -779,31 +915,11 @@ export default function BlacklistProfile() {
           )}
         </div>
 
-        {/* Görseller */}
+        {/* Görsel info */}
         {imageProofs.length ? (
-          <div className="grid">
-            {imageProofs.map((g, i) => {
-              const src = g.url || "";
-              if (!src) return null;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  className="thumb thumb-btn"
-                  onClick={() => openLightbox(i)}
-                  title={g.note || g.text || `kanıt-${i + 1}`}
-                >
-                  <img
-                    src={src}
-                    alt={g.note || g.text || `kanıt-${i + 1}`}
-                    loading="lazy"
-                    onError={(e) =>
-                      (e.currentTarget.style.display = "none")
-                    }
-                  />
-                </button>
-              );
-            })}
+          <div className="muted">
+            Görsel kanıtlar yukarıdaki galeride listelenir. Her birini
+            tıklayarak büyütebilirsiniz.
           </div>
         ) : (
           <div className="muted">Görsel kanıt yüklenmemiş.</div>
@@ -1041,6 +1157,52 @@ const css = `
 }
 .dl dt{ color:#6b7280; }
 .dl dd{ margin:0; color:#111827; }
+
+.heroGallery{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.heroGallery-main{
+  width:100%;
+  border-radius:16px;
+  overflow:hidden;
+  border:none;
+  padding:0;
+  background:#020617;
+  cursor:pointer;
+}
+.heroGallery-main img{
+  width:100%;
+  max-height:360px;
+  object-fit:cover;
+  display:block;
+}
+.heroGallery-thumbs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.heroGallery-thumb{
+  flex:0 0 70px;
+  height:70px;
+  border-radius:12px;
+  overflow:hidden;
+  border:2px solid transparent;
+  cursor:pointer;
+  background:#020617;
+}
+.heroGallery-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.heroGallery-thumb--active{
+  border-color:#3b82f6;
+}
+
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
@@ -1203,9 +1365,11 @@ const css = `
   cursor:pointer;
   font-weight:700;
 }
+
 @media (max-width: 640px){
   .dl{ grid-template-columns:120px 1fr; }
   .timeline li{ grid-template-columns:90px 1fr; }
+  .heroGallery-main img{ max-height:260px; }
   .lightbox-arrow-left{ left:6px; }
   .lightbox-arrow-right{ right:6px; }
 }
