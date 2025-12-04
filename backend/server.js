@@ -75,9 +75,18 @@ try {
 process.env.ASSET_BASE = process.env.ASSET_BASE || ASSET_BASE;
 process.env.UPLOADS_DIR = process.env.UPLOADS_DIR || UPLOADS_DIR;
 
+/* =====================================================
+   BUSINESS_PHOTOS (Google Places / Excel ile indirilenler)
+===================================================== */
+
+// Bu fotoğraflar repo içinde backend/business_photos klasöründe duruyor.
+// Read-only statik asset: Vercel'de de Render'da da __dirname üzerinden erişilir.
+const BUSINESS_PHOTOS_DIR = path.join(__dirname, "business_photos");
+
 // 💬 Boot log
 console.log("📦 [BOOT] ASSET_BASE =", ASSET_BASE);
 console.log("📦 [BOOT] UPLOADS_DIR =", UPLOADS_DIR);
+console.log("📦 [BOOT] BUSINESS_PHOTOS_DIR =", BUSINESS_PHOTOS_DIR);
 console.log("📦 [BOOT] NODE_ENV =", process.env.NODE_ENV, "isProd =", isProd);
 
 /* =====================================================
@@ -168,7 +177,7 @@ app.use((req, res, next) => {
 });
 
 /* =====================================================
-   STATIC UPLOAD SERVE + DEBUG
+   STATIC UPLOAD SERVE + BUSINESS_PHOTOS + DEBUG
 ===================================================== */
 
 // /uploads/... → fiziksel UPLOADS_DIR içeriğini servis et
@@ -195,6 +204,31 @@ app.use(
   })
 );
 
+// /business_photos/... → backend/business_photos içeriğini servis et
+// (repo içindeki read-only foto klasörü; Google Places / Excel script'in yazdığı)
+app.use(
+  "/business_photos",
+  (req, res, next) => {
+    const fsPath = path.join(
+      BUSINESS_PHOTOS_DIR,
+      String(req.url || "").replace(/^\/+/, "")
+    );
+    console.log(
+      "📸 [STATIC BUSINESS_PHOTOS]",
+      req.method,
+      req.originalUrl,
+      "→",
+      fsPath
+    );
+    next();
+  },
+  express.static(BUSINESS_PHOTOS_DIR, {
+    etag: true,
+    lastModified: true,
+    maxAge: isProd ? "7d" : 0,
+  })
+);
+
 /* =====================================================
    DEBUG
 ===================================================== */
@@ -211,6 +245,23 @@ app.get("/debug/uploads", (req, res) => {
       exists,
       fileCount: files.length,
       files,
+    });
+  } catch (e) {
+    res.json({ success: false, error: e.message });
+  }
+});
+
+app.get("/debug/business-photos", (req, res) => {
+  try {
+    const exists = fs.existsSync(BUSINESS_PHOTOS_DIR);
+    const dirs = exists ? fs.readdirSync(BUSINESS_PHOTOS_DIR) : [];
+
+    res.json({
+      success: true,
+      BUSINESS_PHOTOS_DIR,
+      exists,
+      entryCount: dirs.length,
+      entries: dirs,
     });
   } catch (e) {
     res.json({ success: false, error: e.message });
@@ -295,7 +346,7 @@ apiRouter.use("/report", reportRoutes);
 apiRouter.use("/reviews", reviewsRoutes);
 apiRouter.use("/explore", exploreRoutes);
 apiRouter.use("/google", googleRoutes);
-apiRouter.use("/blacklist", blacklistRoutes);          // public + admin logic
+apiRouter.use("/blacklist", blacklistRoutes); // public + admin logic
 apiRouter.use("/featured", publicFeaturedRouter);
 apiRouter.use("/knowledge", knowledgeRoutes);
 apiRouter.use("/cms", cmsRouter);
@@ -361,6 +412,11 @@ async function boot() {
     http.createServer(app).listen(PORT, () =>
       console.log(`🚀 API ready → http://localhost:${PORT}`)
     );
+
+    // İstersen SSL için ayrı bir blokta ENABLE_SSL'e göre https server da eklenebilir.
+    if (ENABLE_SSL) {
+      console.log("⚠️ ENABLE_SSL true ama SSL sertifika ayarları eklenmedi.");
+    }
   } else {
     // Vercel: framework kendi server instance'ını oluşturuyor
     console.log("⚙️ Vercel ortamı: server.listen yok (edge/serverless).");

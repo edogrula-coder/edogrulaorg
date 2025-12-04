@@ -137,6 +137,168 @@ function normPhone(raw) {
   return s.replace(/[^\d+]/g, "");
 }
 
+/* ------------ media helpers (R2 + uploads → absolute URLs) ------------ */
+const MEDIA_BASE =
+  process.env.R2_PUBLIC_BASE_URL ||
+  process.env.R2_BUCKET_URL ||
+  process.env.PUBLIC_BASE_URL ||
+  process.env.SERVER_URL ||
+  "";
+
+function absUrl(u = "") {
+  const raw = String(u || "").trim();
+  if (!raw) return "";
+
+  // tam URL veya data:
+  if (/^data:/i.test(raw)) return raw;
+  if (/^(?:https?:)?\/\//i.test(raw)) return raw;
+
+  const base = (MEDIA_BASE || "").replace(/\/+$/, "");
+
+  // kökten başlayan path
+  if (raw.startsWith("/")) {
+    if (!base) return raw;
+    return `${base}${raw}`;
+  }
+
+  // uploads / images vb.
+  if (/^(uploads?|images?|files?|public\/uploads)\b/i.test(raw)) {
+    const normalized = raw.replace(/^\/+/, "");
+    if (!base) return `/${normalized}`;
+    return `${base}/${normalized}`;
+  }
+
+  // sadece dosya adı
+  if (/\.(?:jpe?g|png|webp|avif|gif)$/i.test(raw) && !raw.includes("/")) {
+    const normalized = `uploads/${raw}`;
+    if (!base) return `/${normalized}`;
+    return `${base}/${normalized}`;
+  }
+
+  // generic relative
+  if (base) {
+    try {
+      return new URL(raw, base + "/").toString();
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return raw;
+}
+
+/**
+ * Medya normalize: galleryAbs / cover / image / photo gibi alanları
+ * tek bir diziye toplar ve ilk elemanı "photo" olarak döner.
+ * Önce R2 / mutlak URL içeren alanlar, sonra eski gallery/filename'ler.
+ */
+function buildGalleryAndPhoto(b = {}) {
+  const set = new Set();
+
+  const push = (val) => {
+    if (!val) return;
+
+    if (Array.isArray(val)) {
+      val.forEach(push);
+      return;
+    }
+
+    if (typeof val === "string") {
+      let s = val.trim();
+      if (!s) return;
+
+      // JSON array string ise
+      if (
+        (s.startsWith("[") && s.endsWith("]")) ||
+        (s.startsWith('"') && s.endsWith('"'))
+      ) {
+        try {
+          const parsed = JSON.parse(s);
+          if (Array.isArray(parsed)) {
+            parsed.forEach(push);
+            return;
+          }
+        } catch {
+          /* ignore */
+        }
+      }
+
+      // virgül / satır / ; ile ayrılmış ise
+      if (/[,\n;]/.test(s)) {
+        s
+          .split(/[,\n;]/)
+          .map((x) => x.trim())
+          .filter(Boolean)
+          .forEach(push);
+        return;
+      }
+
+      set.add(absUrl(s));
+      return;
+    }
+
+    if (typeof val === "object") {
+      const keys = [
+        "url",
+        "src",
+        "path",
+        "image",
+        "imageUrl",
+        "href",
+        "secure_url",
+      ];
+      for (const k of keys) {
+        if (val[k]) push(val[k]);
+      }
+      if (Array.isArray(val.items)) val.items.forEach(push);
+    }
+  };
+
+  // 1) Önce güvenilir / mutlak URL taşıyan alanlar (R2 & cover)
+  push(b.galleryAbs);
+  push(b.coverImage);
+  push(b.coverUrl);
+  push(b.cover);
+  push(b.image);
+  push(b.imageUrl);
+  push(b.featuredImage);
+  push(b.photo);
+
+  // 2) Eski / relatif alanlar en sona (photo_1.jpg vs.)
+  push(b.gallery);
+  push(b.photos);
+  push(b.images);
+  push(b.media);
+  push(b.pictures);
+
+  let all = Array.from(set).filter(Boolean);
+
+  const isDefault = (url) => {
+    const s = String(url || "").toLowerCase();
+    return (
+      s.includes("/defaults/edogrula-default") ||
+      s.includes("edogrula-default.webp") ||
+      s.includes("/defaults/edogrula")
+    );
+  };
+
+  const filtered = all.filter((u) => !isDefault(u));
+  const gallery = filtered.length ? filtered : all;
+  const photo = gallery[0] || null;
+
+  return { gallery, photo };
+}
+
+function hydrateBusinessMediaPlain(b) {
+  const media = buildGalleryAndPhoto(b || {});
+  return {
+    ...b,
+    gallery: media.gallery,
+    galleryAbs: media.gallery,
+    photo: media.photo,
+  };
+}
+
 /* -------------------------- classify incoming query ----------------------- */
 function classifyQuery(qRaw = "", hintedType = "") {
   const q = clean(qRaw);
@@ -292,6 +454,16 @@ router.get("/filter", async (req, res) => {
       "rating",
       "reviewsCount",
       "gallery",
+      "galleryAbs",
+      "photos",
+      "images",
+      "media",
+      "cover",
+      "coverImage",
+      "coverUrl",
+      "image",
+      "imageUrl",
+      "featuredImage",
       "photo",
       "google",
       "google_rate",
@@ -324,8 +496,9 @@ router.get("/filter", async (req, res) => {
           0
       );
 
-      const gallery = Array.isArray(b.gallery) ? b.gallery.slice(0, 5) : [];
-      const photo = gallery[0] || b.photo || null;
+      const media = buildGalleryAndPhoto(b);
+      const gallery = media.gallery.slice(0, 5);
+      const photo = media.photo;
 
       return {
         _id: b._id,
@@ -339,6 +512,7 @@ router.get("/filter", async (req, res) => {
         instagramUrl: b.instagramUrl || "",
         type: b.type || "Bungalov",
         gallery,
+        galleryAbs: gallery,
         photo,
         summary: b.summary || b.description || "",
         rating: toNum(b.rating),
@@ -518,7 +692,7 @@ router.get("/search", async (req, res) => {
 
     const blackFilter = orBlack.length ? { $or: orBlack } : null;
 
-    const [black, verified] = await Promise.all([
+    const [black, verifiedRaw] = await Promise.all([
       blackFilter ? Blacklist.findOne(blackFilter).lean() : null,
       verifiedFilter
         ? Business.find(verifiedFilter).limit(limit).lean()
@@ -537,7 +711,8 @@ router.get("/search", async (req, res) => {
       console.log("[BUSINESSES_SEARCH] result BLACKLIST", {
         id: black._id?.toString?.(),
       });
-    } else if (verified && verified.length) {
+    } else if (verifiedRaw && verifiedRaw.length) {
+      const verified = verifiedRaw.map(hydrateBusinessMediaPlain);
       payload = {
         success: true,
         status: "verified",
@@ -582,9 +757,11 @@ router.get("/by-slug/:slug", async (req, res) => {
       });
     }
 
-    const business = await Business.findOne({ slug }).lean();
-    if (!business)
+    const businessRaw = await Business.findOne({ slug }).lean();
+    if (!businessRaw)
       return res.status(404).json({ success: true, status: "not_found" });
+
+    const business = hydrateBusinessMediaPlain(businessRaw);
 
     return res.json({ success: true, status: "verified", business });
   } catch (err) {
@@ -611,15 +788,17 @@ router.get("/handle/:handle", async (req, res) => {
 
     const rxHandleExact = new RegExp(`^${escapeRegex(handle)}$`, "i");
 
-    const business = await Business.findOne({
+    const businessRaw = await Business.findOne({
       $or: [
         { handle: rxHandleExact },
         { instagramUsername: new RegExp(`^@?${escapeRegex(handle)}$`, "i") },
       ],
     }).lean();
 
-    if (!business)
+    if (!businessRaw)
       return res.status(404).json({ success: true, status: "not_found" });
+
+    const business = hydrateBusinessMediaPlain(businessRaw);
 
     return res.json({ success: true, status: "verified", business });
   } catch (err) {
@@ -640,10 +819,11 @@ router.get("/:id", async (req, res) => {
     if (isObjId(id)) {
       const b = await Business.findById(id).lean();
       if (b) {
+        const business = hydrateBusinessMediaPlain(b);
         return res.json({
           success: true,
           status: "verified",
-          business: b,
+          business,
         });
       }
     }
@@ -654,7 +834,7 @@ router.get("/:id", async (req, res) => {
       ? new RegExp(`^${escapeRegex(handle)}$`, "i")
       : null;
 
-    const b2 = await Business.findOne({
+    const b2raw = await Business.findOne({
       $or: [
         slug ? { slug } : null,
         rxHandleExact ? { handle: rxHandleExact } : null,
@@ -664,11 +844,12 @@ router.get("/:id", async (req, res) => {
       ].filter(Boolean),
     }).lean();
 
-    if (b2) {
+    if (b2raw) {
+      const business = hydrateBusinessMediaPlain(b2raw);
       return res.json({
         success: true,
         status: "verified",
-        business: b2,
+        business,
       });
     }
 

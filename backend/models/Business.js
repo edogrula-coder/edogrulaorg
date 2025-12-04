@@ -1,4 +1,4 @@
-// backend/models/Business.js — PRO / LIVE READY
+// backend/models/Business.js — Ultra Pro / LIVE READY
 import mongoose from "mongoose";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
@@ -8,7 +8,6 @@ const clean = (s) => (typeof s === "string" ? s.trim() : "");
 
 /**
  * "Sapanca Kule Bungalov" -> "sapanca-kule-bungalov"
- * (aktif yapıyı bozmamak için aynı slug mantığı korunuyor)
  */
 const slugify = (str = "") =>
   clean(str)
@@ -56,17 +55,26 @@ function normalizeInstagram({ username, url }) {
 
 /**
  * Telefon numarasını E.164 formatına çeker, olmazsa sadeleştirir.
+ * "undefined", "null" gibi çöpleri otomatik olarak atar.
  */
 function normalizePhone(raw) {
-  const s = clean(raw);
-  if (!s) return undefined;
-  try {
-    const p = parsePhoneNumberFromString(s, "TR");
-    if (p?.isValid?.()) return p.number;
-  } catch {
-    // yut
+  const s0 =
+    raw === null || raw === undefined ? "" : String(raw).trim();
+  if (!s0) return undefined;
+
+  const lower = s0.toLowerCase();
+  if (lower === "undefined" || lower === "null" || lower === "nan") {
+    return undefined;
   }
-  const only = s.replace(/[^\d+]/g, "");
+
+  try {
+    const p = parsePhoneNumberFromString(s0, "TR");
+    if (p?.isValid?.()) return p.number; // E.164: +9053...
+  } catch {
+    // sessiz yut
+  }
+
+  const only = s0.replace(/[^\d+]/g, "");
   return only || undefined;
 }
 
@@ -161,7 +169,9 @@ const BusinessSchema = new mongoose.Schema(
     summary: { type: String, trim: true, default: "", maxlength: 800 },
     features: { type: [String], default: [] },
 
-    gallery: { type: [String], default: [] },
+    // R2 key listesi (relative) + public URL listesi (absolute)
+    gallery: { type: [String], default: [] },     // legacy / relative
+    galleryAbs: { type: [String], default: [] },  // public absolute URL
 
     licenceNo: { type: String, trim: true, maxlength: 120 },
 
@@ -175,6 +185,9 @@ const BusinessSchema = new mongoose.Schema(
     googleReviewsCount: { type: Number, default: 0 },
     google: { type: mongoose.Schema.Types.Mixed, default: {} },
 
+    // Excel'deki google_maps_url kolonu için alan
+    googleMapsUrl: { type: String, trim: true, maxlength: 600 },
+
     /* Doğrulama durumu */
     verified: { type: Boolean, default: false },
     status: {
@@ -182,6 +195,9 @@ const BusinessSchema = new mongoose.Schema(
       enum: ["approved", "pending", "rejected"],
       default: "pending",
     },
+
+    // opsiyonel: kaynağı (excel, panel vs.)
+    source: { type: String, trim: true, maxlength: 80 },
   },
   {
     timestamps: true,
@@ -196,16 +212,28 @@ const BusinessSchema = new mongoose.Schema(
 /* ============ virtual aliases (frontend uyumu) ============ */
 
 BusinessSchema.virtual("desc")
-  .get(function () { return this.description; })
-  .set(function (v) { this.description = v; });
+  .get(function () {
+    return this.description;
+  })
+  .set(function (v) {
+    this.description = v;
+  });
 
 BusinessSchema.virtual("photos")
-  .get(function () { return this.gallery; })
-  .set(function (arr) { this.gallery = extractGalleryStrings(arr); });
+  .get(function () {
+    return this.gallery;
+  })
+  .set(function (arr) {
+    this.gallery = extractGalleryStrings(arr);
+  });
 
 BusinessSchema.virtual("images")
-  .get(function () { return this.gallery; })
-  .set(function (arr) { this.gallery = extractGalleryStrings(arr); });
+  .get(function () {
+    return this.gallery;
+  })
+  .set(function (arr) {
+    this.gallery = extractGalleryStrings(arr);
+  });
 
 /* ============ normalization ============ */
 
@@ -254,22 +282,31 @@ function applyNormalization(doc, opts = {}) {
     doc.phones = uniqStrArr([doc.phone, ...normalizedAll]).filter(Boolean);
   }
 
-  // e-posta & linkler (gelen varsa normalize)
+  // e-posta & linkler
   if (doc.email !== undefined && doc.email) doc.email = clean(doc.email);
   if (doc.website !== undefined && doc.website) doc.website = toHttps(doc.website);
   if (doc.bookingUrl !== undefined && doc.bookingUrl) doc.bookingUrl = toHttps(doc.bookingUrl);
 
-  // özellikler (partial'da input yoksa dokunma)
+  // özellikler
   if (!partial || doc.features !== undefined) {
     if (Array.isArray(doc.features)) doc.features = uniqStrArr(doc.features);
   }
 
-  // galeri (partial'da input yoksa dokunma)
+  // galeri (relative) max 8
   if (!partial || doc.gallery !== undefined) {
     doc.gallery = extractGalleryStrings(doc.gallery).slice(0, 8);
   }
+  // galeri absolute (R2) max 16
+  if (!partial || doc.galleryAbs !== undefined) {
+    doc.galleryAbs = extractGalleryStrings(doc.galleryAbs).slice(0, 16);
+  }
 
-  // location/address sync (partial'da sadece ilgili input gelirse)
+  // googleMapsUrl sadece trim
+  if (doc.googleMapsUrl !== undefined && doc.googleMapsUrl) {
+    doc.googleMapsUrl = clean(doc.googleMapsUrl);
+  }
+
+  // location/address sync
   const hasLocInput =
     doc.location !== undefined ||
     doc.address !== undefined ||
@@ -291,7 +328,7 @@ function applyNormalization(doc, opts = {}) {
       doc.district = doc.location.district;
   }
 
-  // Negatif saçma değerleri sadece field geldiyse clamp'le
+  // Negatif saçma değerleri clamp'le
   if (doc.rating !== undefined && doc.rating < 0) doc.rating = 0;
   if (doc.reviewsCount !== undefined && doc.reviewsCount < 0) doc.reviewsCount = 0;
   if (doc.googleRating !== undefined && doc.googleRating < 0) doc.googleRating = 0;
@@ -312,7 +349,7 @@ BusinessSchema.pre("findOneAndUpdate", function (next) {
 
   if (Object.keys($set).length) {
     applyNormalization($set, { partial: true });
-    pruneUndefined($set); // <— live’da alan ezme bug’ını bitirir
+    pruneUndefined($set);
   }
 
   if (Object.keys($setOnInsert).length) {
@@ -320,6 +357,7 @@ BusinessSchema.pre("findOneAndUpdate", function (next) {
     pruneUndefined($setOnInsert);
   }
 
+  // ConflictingUpdateOperators hatasını engellemek için
   this.setUpdate({
     ...update,
     $set,
@@ -331,6 +369,61 @@ BusinessSchema.pre("findOneAndUpdate", function (next) {
 /* ============ statics ============ */
 
 BusinessSchema.statics.fromPayload = function (payload = {}) {
+  // 1) Telefonlar (Excel kolonları + google_telefon)
+  const phoneCandidates = [
+    payload.phone,
+    payload.tel,
+    payload.telefon,
+    payload.telefonNo,
+    payload.telefon_numarasi,
+    payload.telefonNumarasi,
+    payload["telefon numarası"],
+    payload.googlePhone,
+    payload.google_telefon,
+  ];
+
+  const phonesExtra = [
+    ...(Array.isArray(payload.phones) ? payload.phones : []),
+    ...(Array.isArray(payload.whatsapps) ? payload.whatsapps : []),
+  ];
+
+  const allPhones = uniqStrArr([...phoneCandidates, ...phonesExtra]);
+  const primaryPhone = allPhones[0];
+
+  // 2) Website (websitesi + google_websitesi vs.)
+  const websiteCandidates = [
+    payload.website,
+    payload.web,
+    payload.site,
+    payload.url,
+    payload.websitesi,
+    payload.googleWebsite,
+    payload.google_websitesi,
+  ];
+  const website =
+    websiteCandidates.find((x) => clean(x)) || undefined;
+
+  // 3) Adres (google_adres dahil)
+  const addressCandidates = [
+    payload.address,
+    payload.adres,
+    payload.fullAddress,
+    payload.googleAddress,
+    payload.google_adres,
+  ];
+  const address =
+    addressCandidates.find((x) => clean(x)) || undefined;
+
+  // 4) Google Maps URL
+  const googleMapsUrl =
+    payload.googleMapsUrl ??
+    payload.google_maps_url ??
+    payload.googleMapUrl ??
+    payload.mapsUrl ??
+    payload.maps_url ??
+    undefined;
+
+  // 5) Galeri
   const galleryRaw =
     payload.gallery ?? payload.images ?? payload.photos ?? [];
 
@@ -341,28 +434,43 @@ BusinessSchema.statics.fromPayload = function (payload = {}) {
     handle: payload.handle,
     instagramUsername: payload.instagramUsername ?? payload.instagram,
     instagramUrl: payload.instagramUrl,
-    phone: payload.phone,
-    phones: payload.phones,
+
+    phone: primaryPhone,
+    phones: allPhones,
+
     email: payload.email,
-    website: payload.website,
+    website,
     bookingUrl: payload.bookingUrl,
-    address: payload.address,
+
+    address,
     city: payload.city,
     district: payload.district,
     location: payload.location,
+
     description: payload.description ?? payload.desc,
     summary: payload.summary,
     features: payload.features,
+
     gallery: extractGalleryStrings(galleryRaw),
+    galleryAbs: extractGalleryStrings(
+      payload.galleryAbs ??
+        payload.galleryAbsUrls ??
+        []
+    ),
+
     licenceNo: payload.licenceNo,
+
     googlePlaceId: payload.googlePlaceId,
     googleRating: payload.googleRating,
     googleReviewsCount: payload.googleReviewsCount,
     google: payload.google,
+    googleMapsUrl,
+
     rating: payload.rating,
     reviewsCount: payload.reviewsCount,
     verified: payload.verified,
     status: payload.status,
+    source: payload.source,
   };
 
   applyNormalization(carrier, { partial: false });
@@ -390,7 +498,7 @@ BusinessSchema.statics.upsertByNaturalKeys = async function (payload = {}) {
       new: true,
       upsert: true,
       setDefaultsOnInsert: true,
-      runValidators: true,   // <— live’da çöp veri bloklanır
+      runValidators: true,
       context: "query",
     }
   );
