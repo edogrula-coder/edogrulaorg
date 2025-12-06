@@ -1,9 +1,10 @@
-// src/pages/SapancaBungalov.jsx — ULTRA PRO + SEO/Rich Results Uyumlu + R2 galleryAbs/absoluteUrl
+// src/pages/SapancaBungalov.jsx — Ultra Pro v2
 // - Sapanca bungalovlarını çeker (filter endpoint + fallback)
+// - R2 + uploads için absoluteUrl (BusinessProfile ile aynı mantık)
 // - Google puanını backend'den hydrate eder, sessionStorage cache
 // - Mutlak OG/Twitter URL, ItemList + FAQ + Breadcrumb JSON-LD
 // - Stabil hydration (inFlight set) + SSR guard'ları
-// - Liste thumbs: İşletmenin kendi görselleri (galleryAbs / gallery / photos / images / cover ...)
+// - Liste thumbs: İşletmenin kendi görselleri (media.galleryAbs / galleryAbs / gallery / photos / images / cover ...)
 
 import React, {
   useEffect,
@@ -26,34 +27,56 @@ import {
   FaChevronDown,
 } from "react-icons/fa6";
 
-/* ================== API (robust baseURL) ================== */
+/* ================== API ROOT + ABSOLUTE URL (BusinessProfile ile uyumlu) ================== */
 
-// VITE_API_URL bazen ".../api" ile geliyor, bunu origin'e normalize ediyoruz.
-function normalizeOrigin(raw) {
-  const RAW = String(raw || "").trim();
-  let t;
-  if (!RAW) t = "http://localhost:5000";
-  else if (/^https?:\/\//i.test(RAW)) t = RAW;
-  else if (/^:\d+$/.test(RAW)) t = `http://localhost:${RAW.slice(1)}`;
-  else t = `http://${RAW}`;
-  return t.replace(/\/+$/, "").replace(/\/api$/i, "");
+// Backend origin (VITE_API_URL bazen .../api ile geliyor)
+const API_BASE_RAW = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+const API_ROOT = API_BASE_RAW.replace(/\/api(?:\/v\d+)?$/i, "");
+
+// R2 public base (örn: https://pub-XXXX.r2.dev/edogrula-uploads )
+const R2_PUB_BASE = (import.meta.env.VITE_R2_PUBLIC_BASE || "")
+  .toString()
+  .replace(/\/+$/, "");
+
+// Global default görsel
+const DEFAULT_IMG = "/defaults/edogrula-default.webp";
+
+// R2 key → tam public URL
+function buildR2FromKey(key = "") {
+  if (!R2_PUB_BASE) return key;
+  const cleanKey = String(key).replace(/^\/+/, "");
+  return `${R2_PUB_BASE}/${cleanKey}`;
 }
 
-const ORIGIN =
-  normalizeOrigin(
-    import.meta.env.VITE_API_URL || import.meta.env.VITE_API_ROOT || ""
-  );
+// Mongo’daki her türlü r2.dev hostunu normalize et
+function normalizeR2Url(raw = "") {
+  let s = String(raw || "").trim();
+  if (!s || !R2_PUB_BASE) return s;
 
-// Backend origin (uploads / R2 proxy vs. için)
-const API_ROOT = ORIGIN;
+  // https://something.r2.dev/edogrula-uploads/... veya business_photos/...
+  const hostMatch = s.match(/^https?:\/\/[^/]*r2\.dev\/(.+)$/i);
+  if (hostMatch) {
+    let key = hostMatch[1]; // "edogrula-uploads/..." veya "business_photos/..."
+    key = key.replace(/^edogrula-uploads\//i, "");
+    return buildR2FromKey(key);
+  }
 
-// Global default görsel (public/defaults/ içine koyduğumuz)
-const DEFAULT_IMG = "/defaults/edogrula-default.webp";
+  // Sadece key geldiyse
+  if (/^(edogrula-uploads\/|business_photos\/)/i.test(s)) {
+    let key = s.replace(/^edogrula-uploads\//i, "");
+    return buildR2FromKey(key);
+  }
+
+  return s;
+}
 
 // URL normalizasyonu: R2 + /uploads + relative hepsi
 function absoluteUrl(u = "") {
-  const url = String(u || "").trim();
+  let url = String(u || "").trim();
   if (!url) return "";
+
+  // önce R2 sapıtmalarını toparla
+  url = normalizeR2Url(url);
 
   // data URL olduğu gibi kalsın
   if (/^data:/i.test(url)) return url;
@@ -108,8 +131,10 @@ function absoluteUrl(u = "") {
   return url;
 }
 
+/* ================== AXIOS INSTANCE ================== */
+
 const api = axios.create({
-  baseURL: ORIGIN || undefined, // /api prefixleri path'te kalacak
+  baseURL: API_ROOT || undefined, // path tarafında /api/... kalacak
   withCredentials: true,
   timeout: 12000,
   headers: { Accept: "application/json" },
@@ -161,7 +186,7 @@ function extractGoogleScore(data) {
 }
 
 /* -------- sessionStorage cache -------- */
-const GCACHE_KEY = "sapanca_gscore_cache_v1";
+const GCACHE_KEY = "sapanca_gscore_cache_v2";
 
 function loadGCache() {
   if (typeof window === "undefined") return {};
@@ -360,16 +385,42 @@ export default function SapancaBungalov() {
           for (const k of candKeys) {
             if (val[k]) addImg(val[k]);
           }
+          // media benzeri nested yapıları da tara
+          if (val.galleryAbs) addImg(val.galleryAbs);
+          if (val.gallery) addImg(val.gallery);
+          if (val.images) addImg(val.images);
+          if (val.photos) addImg(val.photos);
+          if (val.pictures) addImg(val.pictures);
+          if (val.coverImage) addImg(val.coverImage);
+          if (val.coverUrl) addImg(val.coverUrl);
+          if (val.cover) addImg(val.cover);
+          if (val.thumb) addImg(val.thumb);
+          if (val.main) addImg(val.main);
           if (val.items) addImg(val.items);
         }
       };
 
-      // Önce R2 galleryAbs, sonra eski alanlar
+      // Önce media altındaki tüm galerileri oku (filter endpoint genelde böyle gönderiyor)
+      const media = b.media || {};
+      addImg(media.galleryAbs);
+      addImg(media.gallery);
+      addImg(media.images);
+      addImg(media.photos);
+      addImg(media.pictures);
+      addImg(media.coverImage);
+      addImg(media.coverUrl);
+      addImg(media.cover);
+      addImg(media.thumb);
+      addImg(media.main);
+      addImg(media.url);
+      addImg(media.src);
+
+      // Sonra üst seviye alanlar (eski şema & detay endpoint)
       addImg(b.galleryAbs);
       addImg(b.photos);
       addImg(b.images);
       addImg(b.gallery);
-      addImg(b.media);
+      addImg(b.media); // içindeki url/src için hâlâ işe yarayabilir
       addImg(b.pictures);
       addImg(b.coverImage);
       addImg(b.coverUrl);
@@ -562,10 +613,7 @@ export default function SapancaBungalov() {
     if (typeof document === "undefined") return;
     const onDoc = (e) => {
       if (!sortOpen) return;
-      if (
-        sortMenuRef.current &&
-        !sortMenuRef.current.contains(e.target)
-      ) {
+      if (sortMenuRef.current && !sortMenuRef.current.contains(e.target)) {
         setSortOpen(false);
       }
     };
@@ -907,10 +955,10 @@ export default function SapancaBungalov() {
                   <div>
                     <h2 className="section-title">Tüm Sapanca Bungalovları</h2>
                     <p className="intro">
-                      Sapanca’nın eşsiz doğasında, <strong> göl manzaralı</strong>{" "}
-                      ya da <strong> jakuzili</strong> seçenekleriyle bungalov
+                      Sapanca’nın eşsiz doğasında, <strong>göl manzaralı</strong>{" "}
+                      ya da <strong>jakuzili</strong> seçenekleriyle bungalov
                       tatilinizi planlayın. Aşağıda, E-Doğrula tarafından
-                      doğrulanmış ve <strong> doğrudan iletişim</strong>{" "}
+                      doğrulanmış ve <strong>doğrudan iletişim</strong>{" "}
                       kurabileceğiniz tüm işletmeleri bulabilirsiniz.
                     </p>
                   </div>
@@ -1160,7 +1208,6 @@ function ResultRow({ b }) {
 }
 
 /* ---------- IdeasSection ---------- */
-// (Aynen korunuyor)
 function IdeasSection() {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
@@ -1341,7 +1388,6 @@ function EmptyState() {
 }
 
 /* ---------- KnowledgeHeader ---------- */
-// (Sende olduğu gibi korunuyor, dokunmadım)
 function KnowledgeHeader({ query = "Sapanca", http, showMedia = false }) {
   const [data, setData] = useState(null);
   const apiClient = http || axios;
