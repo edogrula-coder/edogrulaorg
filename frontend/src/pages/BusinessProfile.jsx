@@ -277,7 +277,8 @@ export default function BusinessProfile() {
 
   const instagramUsername = useMemo(() => {
     if (!b) return null;
-    if (b.instagramUsername) return extractInstagramUsername(b.instagramUsername);
+    if (b.instagramUsername)
+      return extractInstagramUsername(b.instagramUsername);
     if (b.handle) return extractInstagramUsername(b.handle);
     if (b.instagram) return extractInstagramUsername(b.instagram);
     return null;
@@ -1063,7 +1064,15 @@ function HeroGallery({ imagesAbs = [], title, isMobile }) {
 }
 
 /* ---------------- HARİTA ---------------- */
-function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address, googleMapsUrl }) {
+function MapDisplay({
+  apiKey,
+  yandexKey,
+  lat,
+  lng,
+  businessName,
+  address,
+  googleMapsUrl,
+}) {
   const mapRef = useRef(null);
   const [provider, setProvider] = useState(apiKey ? "google" : "yandex");
 
@@ -1131,16 +1140,13 @@ function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address, google
           <a href="${dirUrl}" target="_blank" rel="noopener noreferrer" style="margin-top:8px;display:inline-block;">Yol Tarifi Al</a>
         `,
       });
-      const marker =
-        new window.google.maps.marker.AdvancedMarkerElement({
-          position,
-          map,
-          title: businessName,
-        });
+      const marker = new window.google.maps.marker.AdvancedMarkerElement({
+        position,
+        map,
+        title: businessName,
+      });
       infoWindow.open(map, marker);
-      marker.addListener("gmp-click", () =>
-        infoWindow.open(map, marker)
-      );
+      marker.addListener("gmp-click", () => infoWindow.open(map, marker));
     }
 
     function initYandex() {
@@ -1160,9 +1166,7 @@ function MapDisplay({ apiKey, yandexKey, lat, lng, businessName, address, google
           balloonContentHeader: `<strong>${escapeHtml(
             businessName
           )}</strong>`,
-          balloonContentBody: `<div>${escapeHtml(
-            address || ""
-          )}</div>`,
+          balloonContentBody: `<div>${escapeHtml(address || "")}</div>`,
           balloonContentFooter: `<a href="https://yandex.com.tr/harita?whatshere[point]=${lng},${lat}&whatshere[zoom]=16&mode=routes&rtext=~${lat},${lng}" target="_blank" rel="noopener">Yol Tarifi Al</a>`,
           hintContent: escapeHtml(businessName),
         },
@@ -1212,7 +1216,14 @@ function GoogleHeaderBar({
 
   return (
     <div style={st.gBar}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          flexWrap: "wrap",
+        }}
+      >
         <span style={st.gIcon}>G</span>
         <b>Güncel Misafir yorumları Google</b>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -1232,7 +1243,12 @@ function GoogleHeaderBar({
         <button className="btn gbtn" onClick={onToggleMode}>
           {mode === "scroll" ? "Tümünü Listele" : "Yana Kaydır"}
         </button>
-        <a className="btn gbtn" href={writeReviewUrl} target="_blank" rel="noreferrer noopener">
+        <a
+          className="btn gbtn"
+          href={writeReviewUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           Google üzerinde bizi değerlendirin
         </a>
       </div>
@@ -1310,10 +1326,24 @@ function GoogleReviewCard({ r }) {
 
   return (
     <article style={st.gCard}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 8,
+        }}
+      >
         <div style={st.avatar}>{initials}</div>
         <div style={{ minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              flexWrap: "wrap",
+            }}
+          >
             <strong>{r.author || "Kullanıcı"}</strong>
             <span style={st.verified}>✔</span>
           </div>
@@ -1450,7 +1480,13 @@ function DateRangePicker({ value, onChange }) {
               );
             })}
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 8,
+            }}
+          >
             <button className="ghost" onClick={clear}>
               Temizle
             </button>
@@ -1471,8 +1507,7 @@ function normalizeGoogleReviews(data) {
 
   const place = data.place || data.result || {};
 
-  const ratingRaw =
-    place.rating ?? data.rating ?? data.averageRating;
+  const ratingRaw = place.rating ?? data.rating ?? data.averageRating;
   const rating = Number.isFinite(Number(ratingRaw))
     ? Number(ratingRaw)
     : null;

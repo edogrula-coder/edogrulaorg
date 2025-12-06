@@ -305,6 +305,7 @@ export default function LightboxGallery({
         style={{ height: heroHeight, ...style }}
         onTouchStart={onHeroTouchStart}
         onTouchEnd={onHeroTouchEnd}
+        onContextMenu={(e) => e.preventDefault()}
         aria-label="Galeri ana görsel"
       >
         {img ? (
@@ -403,6 +404,7 @@ export default function LightboxGallery({
               onClick={() => setOpen(false)}
               onTouchStart={onLbTouchStart}
               onTouchEnd={onLbTouchEnd}
+              onContextMenu={(e) => e.preventDefault()}
               role="dialog"
               aria-modal="true"
               aria-label="Galeri tam ekran görüntüleyici"
@@ -626,9 +628,12 @@ const css = `
   display: grid; place-items: center; padding: 16px;
 }
 .lg-frame{
-  position: relative; width: min(98vw, 1100px);
-  max-height: 92vh; display: grid;
-  grid-template-rows: auto 1fr; gap: 8px;
+  position: relative;
+  width: min(98vw, 1100px);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .lg-bar{
   display: flex; align-items: center; justify-content: space-between;
@@ -663,13 +668,23 @@ const css = `
 }
 
 .lg-stage{
-  position: relative; border-radius: 12px; overflow:hidden;
-  background: #000; display:grid; place-items:center;
-  height: min(88vh, 70vw);
+  position: relative;
+  flex: 1;
+  border-radius: 12px;
+  overflow:hidden;
+  background: #000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 8px;
 }
 .lg-lightbox-img{
-  max-width: 100%; max-height: 100%;
-  object-fit: contain; user-select:none;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select:none;
 }
 
 /* reduced motion */
